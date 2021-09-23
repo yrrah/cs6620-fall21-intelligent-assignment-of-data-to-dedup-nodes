@@ -30,7 +30,7 @@ Draw conclusions on how to balance computational effort vs storage of duplicate 
 
 ## 2. Users/Personas Of The Project:
 
-Enterprise data storage architects need performance data on proposed improvements to data storage techniques. 
+Enterprise data storage architects need performance data on proposed improvements to data storage techniques.   
 Data center operators need to minimize storage of duplicate data to minimize cost. 
 
 ** **
@@ -59,11 +59,36 @@ This section discusses the implications and reasons of the design decisions made
 
 ## 5. Acceptance criteria
 
-This section discusses the minimum acceptance criteria at the end of the project and stretch goals.
+Deliver a repeatable test configuration that can be used for different algorithms. 
+
+Implement two (stretch goal four) distribution algorithms  
+- Collect data on optimal size of regions for each algorithm  
+- Collect data on rate of duplication for each algorithm
 
 ## 6.  Release Planning:
 
 Release planning section describes how the project will deliver incremental sets of features and functions in a series of releases to completion. Identification of user stories associated with iterations that will ease/guide sprint planning sessions is encouraged. Higher level details for the first iteration is expected.
+
+Detailed user stories and plans are on the Taiga board: https://tree.taiga.io/project/amanbatra-cs6620-fall21-intelligent-assignment-of-data-to-dedup-nodes
+
+Release #1 (due by Week 5):
+
+…
+
+Release #2 (due by Week 7):
+
+…
+
+Release #3 (due by Week 9):
+
+…
+
+Release #4 (due by Week 11):
+
+…
+
+Release #5 (due by Week 13):
+
 
 ** **
 
