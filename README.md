@@ -21,15 +21,17 @@ Project Proposal can be used during the follow-up analysis and design meetings t
 
 ## 1.   Vision and Goals Of The Project:
 
-The vision section describes the final desired state of the project once the project is complete. It also specifies the key goals of the project. This section provides a context for decision-making. A shared vision among all team members can help ensuring that the solution meets the intended goals. A solid vision clarifies perspective and facilitates decision-making.
-
-The vision statement should be specific enough that you can look at a proposed solution and say either "yes, this meets the vision and goals", or "no, it does not".
+Setup a distributed file storage test bed. 
+Collect data on deduplication performance of several configurations of a distributed file storage test bed. 
+- compare algorithms for intelligent assignment of regions to dedup pods 
+  (apply algos tried on cluster computing at cloud scale)
+- compare settings for region size
+Draw conclusions on how to balance computational effort vs storage of duplicate data
 
 ## 2. Users/Personas Of The Project:
 
-This section describes the principal user roles of the project together with the key characteristics of these roles. This information will inform the design and the user scenarios. A complete set of roles helps in ensuring that high-level requirements can be identified in the product backlog.
-
-Again, the description should be specific enough that you can determine whether user A, performing action B, is a member of the set of users the project is designed for.
+Enterprise data storage architects need performance data on proposed improvements to data storage techniques. 
+Data center operators need to minimize storage of duplicate data to minimize cost. 
 
 ** **
 
