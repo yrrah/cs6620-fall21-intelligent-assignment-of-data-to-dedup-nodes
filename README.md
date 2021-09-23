@@ -60,6 +60,7 @@ This section discusses the implications and reasons of the design decisions made
 ## 5. Acceptance criteria
 
 Deliver a repeatable test configuration that can be used for different algorithms. 
+- Scalable for testing cloud workload
 
 Implement two (stretch goal four) distribution algorithms  
 - Collect data on optimal size of regions for each algorithm  
