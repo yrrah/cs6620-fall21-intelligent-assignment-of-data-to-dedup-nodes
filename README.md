@@ -39,9 +39,10 @@ Data center operators need to minimize storage of duplicate data to minimize cos
 
 Out of scope:
 - Data ingestion (segmentation and fingerprinting)
+- Creation of fingerprint trace datasets (will use existing data set)
 
 Within scope: 
-- Selecting size of regions that contain fingerprints
+- Selecting size of regions that group together fingerprints
 - Testing algorithms for intelligent assignment of regions to dedup pods
 
 
