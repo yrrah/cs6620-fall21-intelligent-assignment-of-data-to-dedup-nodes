@@ -37,9 +37,13 @@ Data center operators need to minimize storage of duplicate data to minimize cos
 
 ## 3.   Scope and Features Of The Project:
 
-The Scope places a boundary around the solution by detailing the range of features and functions of the project. This section helps to clarify the solution scope and can explicitly state what will not be delivered as well.
+Out of scope:
+- Data ingestion (segmentation and fingerprinting)
 
-It should be specific enough that you can determine that e.g. feature A is in-scope, while feature B is out-of-scope.
+Within scope: 
+- Selecting size of regions that contain fingerprints
+- Testing algorithms for intelligent assignment of regions to dedup pods
+
 
 ** **
 
