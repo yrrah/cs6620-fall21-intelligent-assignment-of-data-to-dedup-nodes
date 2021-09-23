@@ -51,7 +51,7 @@ Within scope:
 ## 4. Solution Concept
 
 Leverage MOC resources for testing.
-
+![Conceptual Diagram](https://github.com/yrrah/cs6620-fall21-intelligent-assignment-of-data-to-dedup-nodes/blob/main/conceptual-diagram.png)
 First we receive the fingerprint data from https://tracer.filesystems.org/ (Fingerprinting data ingest-traces is not in the scope of the project). The traces are broken up into various segments and these segments are grouped into regions(which contains the metadata of the segments->regions is a metadata of a collection of segments). We will also configure the segment and region sizes for optimal performance. After dividing it up into regions we will smartly assign them into dedup pods, by using various dedup assigning algorithms. We will be comparing various algorithms and evaluate their performance.
 The Dedup pods represent the Deduplication nodes where the region data are stored.
 The Key-Value store contains a collection of fingerprints (which are the keys) which points to the actual chunks of data stored.
