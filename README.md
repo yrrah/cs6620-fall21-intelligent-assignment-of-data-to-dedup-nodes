@@ -9,10 +9,12 @@
 ## 1.   Vision and Goals Of The Project:
 
 Setup a distributed file storage test bed.   
+
 Collect data on deduplication performance of several configurations of a distributed file storage test bed.   
-- compare algorithms for intelligent assignment of regions to dedup pods   
-  (apply algos tried on cluster computing at cloud scale)  
-- compare settings for region size  
+  - compare algorithms for intelligent assignment of regions to dedup pods   
+    (apply algos tried on cluster computing at cloud scale)  
+  - compare settings for region size    
+
 Draw conclusions on how to balance computational effort vs storage of duplicate data
 
 ## 2. Users/Personas Of The Project:
