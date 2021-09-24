@@ -75,7 +75,7 @@ Release planning section describes how the project will deliver incremental sets
 
 Detailed user stories and plans are on the Taiga board: https://tree.taiga.io/project/amanbatra-cs6620-fall21-intelligent-assignment-of-data-to-dedup-nodes
 
-Release #1:  
+Release #1(due by Week 5):  
 Test bed established and validated to be ready for algorithm testing. 
 
 
