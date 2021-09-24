@@ -1,21 +1,8 @@
-# cs6620-fall21-intelligent-assignment-of-data-to-dedup-nodes
-
 
 ** **
 
-## Project Description Template
-
-The purpose of this Project Description is to present the ideas proposed and decisions made during the preliminary envisioning and inception phase of the project. The goal is to analyze an initial concept proposal at a strategic level of detail and attain/compose an agreement between the project team members and the project customer (mentors and instructors) on the desired solution and overall project direction.
-
-This template proposal contains a number of sections, which you can edit/modify/add/delete/organize as you like.  Some key sections we’d like to have in the proposal are:
-
-- Vision: An executive summary of the vision, goals, users, and general scope of the intended project.
-
-- Solution Concept: the approach the project team will take to meet the business needs. This section also provides an overview of the architectural and technical designs made for implementing the project.
-
-- Scope: the boundary of the solution defined by itemizing the intended features and functions in detail, determining what is out of scope, a release strategy and possibly the criteria by which the solution will be accepted by users and operations.
-
-Project Proposal can be used during the follow-up analysis and design meetings to give context to efforts of more detailed technical specifications and plans. It provides a clear direction for the project team; outlines project goals, priorities, and constraints; and sets expectations.
+# Intelligent Assignment of Data to Dedup Nodes  
+## CS6620-Fall21  
 
 ** **
 
@@ -54,11 +41,14 @@ Global Architectural Structure Of the Project:
 
 ![Conceptual Diagram](https://github.com/yrrah/cs6620-fall21-intelligent-assignment-of-data-to-dedup-nodes/blob/main/conceptual-diagram.png)
 
-First we receive the fingerprint data from https://tracer.filesystems.org/ (Fingerprinting data ingest-traces is not in the scope of the project). The traces are broken up into various segments and these segments are grouped into regions(which contains the metadata of the segments->regions is a metadata of a collection of segments). We will also configure the segment and region sizes for optimal performance. After dividing it up into regions we will smartly assign them into dedup pods, by using various dedup assigning algorithms. We will be comparing various algorithms and evaluate their performance.
-The Dedup pods represent the Deduplication nodes where the region data are stored.
-The Key-Value store contains a collection of fingerprints (which are the keys) which points to the actual chunks of data stored.
+We will use fingerprint data from https://tracer.filesystems.org/ representing real world storage of files. The fingerprints are hashes representing a unique segment of data and are used to identify duplicate segments. We will not be manipulating the data itself (data ingest is out of scope of the project).   
 
+Fingerprinted segments are grouped into regions. These regions act as a higher level hash that can be checked once to avoid inspecting each segment fingerprint within the region. Finding duplicated regions is more efficient than finding each duplicated segment separately.   
 
+The Dedup pods represent the Deduplication nodes where the region data are stored.  
+The Key-Value store contains a collection of fingerprints (which are the keys) which points to the actual chunks of data stored.  
+  
+The algorithms we plan to use will be manipulating the fingerprint metadata and the region metadata mapping segments->regions. Algorithms will smartly assign regions to dedup pods, which each contain multiple dedup domains (VMs). It will be necessary to allow some duplication across pods to avoid strictly checking every fingerprint against a single global key store. We will be comparing various algorithms and evaluating the amount of duplication that occurs.  We will also investigate manipulating region size to find the optimal performance. 
 ## 5. Acceptance criteria
 
 Deliver a repeatable test configuration that can be used for different algorithms. 
