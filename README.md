@@ -45,7 +45,7 @@ We will use fingerprint data from https://tracer.filesystems.org/ representing r
 
 Fingerprinted segments are grouped into regions. These regions act as a higher level hash that can be checked once to avoid inspecting each segment fingerprint within the region. Finding duplicated regions is more efficient than finding each duplicated segment separately.   
 
-The Dedup pods represent the Deduplication nodes where the region data are stored.  
+The Dedup pods represent the Deduplication nodes where the region metadata are stored.  
 The Key-Value store contains a collection of fingerprints (which are the keys) which points to the actual chunks of data stored.  
   
 The algorithms we plan to use will be manipulating the fingerprint metadata and the region metadata mapping segments->regions. Algorithms will smartly assign regions to dedup pods, which each contain multiple dedup domains (VMs). It will be necessary to allow some duplication across pods to avoid strictly checking every fingerprint against a single global key store. We will be comparing various algorithms and evaluating the amount of duplication that occurs.  We will also investigate manipulating region size to find the optimal performance. 
