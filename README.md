@@ -1,8 +1,11 @@
 
 ** **
+## CS6620-Fall21 Intelligent Assignment of Data to Dedup Nodes  
 
-# Intelligent Assignment of Data to Dedup Nodes  
-## CS6620-Fall21  
+Data deduplication techniques are crucial for modern enterprise backup storage systems. Key attributes required include:
+- high throughput, typically over 100 MB/sec to complete backup quickly  
+- high compression of data by deduplication to make disk cost equivalent to tape storage  
+- use of commodity hardware (cannot store entire dedup index in RAM)   
 
 ** **
 
