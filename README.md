@@ -52,6 +52,11 @@ Enterprise data storage architects need performance data on proposed improvement
 
 Data center operators need to minimize storage of duplicate data to minimize cost. 
 
+- Team users, the files systems shared by a big team will be benefited from this project. If multiple versions of files are existing, and we want to reduce the memory usage on duplicate data. Also, as data is frequently modified, the inline back of the data is necessary with efficient performance. An intelligent assignment of pods will be helpful for such users for improved performance. 
+- Virtual Desktop Deployment (VDI), the organization which must manage multiple VDI, this project will be applicable as it will automatically scale the VDIs and their data backups. 
+- In virtualized backup applications, such as cloud storage infrastructures, this project will be helpful for such organizations in intelligently backing up the data with better performance. 
+
+
 ** **
 
 ## 4.   Scope and Features Of The Project:
