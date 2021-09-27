@@ -39,6 +39,8 @@ Fingerprinted segments are grouped into regions. These regions act as a higher l
 once to avoid inspecting each segment fingerprint within the region. Finding duplicated regions is more efficient 
 than finding each duplicated segment separately.   
 
+The Key-Value store contains the collection of fingerprints (which are the keys) which points to the actual chunks of data stored.
+
 To increase data throughput, a dedup system can be sharded into multiple nodes. Each node would contain a portion of file 
 metadata and key value store necessary for duplicate checking.
 
@@ -72,14 +74,7 @@ Global Architectural Structure Of the Project:
 
 We will use fingerprint data from https://tracer.filesystems.org/ representing real world storage of files. 
 
-The Dedup pods represent the deduplication nodes where the region metadata are stored.  
-The Key-Value store contains a collection of fingerprints (which are the keys) which points to the actual chunks of data stored.  
-  
-The algorithms we plan to use will be manipulating the fingerprint segment metadata and the region metadata 
-mapping segments->regions. Algorithms will smartly assign regions to dedup pods, which each contain multiple 
-dedup domains. It will be necessary to allow some duplication across pods to avoid strictly checking every 
-fingerprint against a single global key store. We will be comparing various algorithms and evaluating the amount 
-of duplication that occurs.  We will also investigate manipulating region size to find the optimal performance. 
+We will create a containerized, parallel version of the system described in Section 2. 
 
 The storage simulator will be made up of client/server modules...  
 
@@ -94,10 +89,12 @@ Backend (BE) Module
  - Insert into FP index (KV store)
  - gRPC server code
  - instrumentation for performance metrics
-
-
-
-
+ 
+The algorithms we plan to use will be manipulating the fingerprint segment metadata and the region metadata 
+mapping segments->regions. Algorithms will smartly assign regions to dedup pods, which each contain multiple 
+dedup domains. It will be necessary to allow some duplication across pods to avoid strictly checking every 
+fingerprint against a single global key store. We will be comparing various algorithms and evaluating the amount 
+of duplication that occurs.  We will also investigate manipulating region size to find the optimal performance.
 
 ## 6. Acceptance criteria
 
