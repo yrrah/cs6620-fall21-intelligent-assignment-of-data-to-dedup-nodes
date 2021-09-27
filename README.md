@@ -14,7 +14,7 @@ while achieving balanced use of the dedup nodes.
 
 The main output of this project will be collection of performance data. We will collect data on several 
 configurations of our file storage simulator. Deduplication space savings will be measured for each node 
-and across the cluster and compute efficiency will be considered.
+and across the cluster and compute efficiency will be considered. Configuration variations:  
  - scale up to ~1,000 dedup pods
  - implement several algorithms<sup>[1](#bottleneck)</sup> for intelligent assignment of regions to pods
  - compare settings for region size (~1MB-8MB)     
