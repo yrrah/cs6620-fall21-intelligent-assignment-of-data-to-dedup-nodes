@@ -2,27 +2,28 @@
 ** **
 ## CS6620-Fall21 Intelligent Assignment of Data to Dedup Nodes  
 
-Data deduplication techniques are crucial for modern enterprise backup storage systems. Key attributes required include:
-- high throughput, typically over 100 MB/sec to complete backup quickly  
+Data deduplication techniques are crucial for modern cloud-scale storage systems. Key attributes required include:
+- high throughput, typically over 100 MB/sec to complete a backup quickly  
 - high compression of data by deduplication to make disk cost equivalent to tape storage  
 - use of commodity hardware (cannot store entire dedup index in RAM)   
-
-https://www.usenix.org/conference/fast11/tradeoffs-scalable-data-routing-deduplication-clusters
-DataDomain Overview Paper: https://www.usenix.org/conference/fast-08/avoiding-disk-bottleneck-data-domain-deduplication-file-system
-
 
 ** **
 
 ## 1.   Vision and Goals Of The Project:
 
-Setup a distributed file storage test bed.   
+We will create a storage simulator that will run as multiple containers in an orchestration environment. 
+The simulator will process a prepared dataset of hashes (data segment fingerprints). The network of containers 
+forms a distributed key-value store where checking of fingerprints takes place. It is necessary to trade-off 
+leveraging parallelism for throughput of data vs storage of duplicate data. We want to maximize space saving 
+while achieving balanced use of the dedup nodes. 
 
-Collect data on deduplication performance of several configurations of a distributed file storage test bed.   
-  - compare algorithms for intelligent assignment of regions to dedup pods   
-    (apply algos tried on cluster computing at cloud scale)  
-  - compare settings for region size    
+The main output of this project will be collection of performance data. We will collect data on several 
+configurations of our file storage simulator. 
+ - scale up to ~1,000 dedup pods
+ - implement several algorithms<sup>[1](#tradeoffs), [2](#bottleneck)</sup> for intelligent assignment of regions to pods
+ - compare settings for region size (~1MB-8MB)     
 
-Draw conclusions on how to balance computational effort vs storage of duplicate data
+We will draw conclusions on how to balance the trade-offs of data deduplication in a cloud environment. 
 
 ## 2. Users/Personas Of The Project:
 
@@ -92,4 +93,9 @@ Release #5:
 
 
 ** **
+
+## 7. References
+
+<a name="tradeoffs">1</a>: https://www.usenix.org/conference/fast11/tradeoffs-scalable-data-routing-deduplication-clusters
+<a name="bottleneck">2</a>: https://www.usenix.org/conference/fast-08/avoiding-disk-bottleneck-data-domain-deduplication-file-system
 
