@@ -74,7 +74,7 @@ Global Architectural Structure Of the Project:
 
 We will use fingerprint data from https://tracer.filesystems.org/ representing real world storage of files. 
 
-We will create a containerized, parallel version of the system described in Section 2. 
+We will create a containerized, parallel version of the system described in [Section 2](#2-background). 
 
 The storage simulator will be made up of client/server modules...  
 
