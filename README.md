@@ -2,11 +2,6 @@
 ** **
 ## CS6620-Fall21 Intelligent Assignment of Data to Dedup Nodes  
 
-Data deduplication techniques are crucial for modern cloud-scale storage systems. Key attributes required include:
-- high throughput, typically over 100 MB/sec to complete a backup quickly  
-- high compression of data by deduplication to make disk cost equivalent to tape storage  
-- use of commodity hardware (cannot store entire dedup index in RAM)   
-
 ** **
 
 ## 1.   Vision and Goals Of The Project:
@@ -18,7 +13,8 @@ leveraging parallelism for throughput of data vs storage of duplicate data. We w
 while achieving balanced use of the dedup nodes. 
 
 The main output of this project will be collection of performance data. We will collect data on several 
-configurations of our file storage simulator. 
+configurations of our file storage simulator. Deduplication space savings will be measured for each node 
+and across the cluster and compute efficiency will be considered.
  - scale up to ~1,000 dedup pods
  - implement several algorithms<sup>[1](#tradeoffs), [2](#bottleneck)</sup> for intelligent assignment of regions to pods
  - compare settings for region size (~1MB-8MB)     
@@ -47,18 +43,48 @@ Within scope:
 
 ## 4. Solution Concept
 
-Global Architectural Structure Of the Project:
+Data deduplication techniques are crucial for modern cloud-scale storage systems. Key attributes required include:
+- high throughput, typically over 100 MB/sec to complete a backup quickly  
+- high compression of data by deduplication to make disk cost equivalent to tape storage  
+- use of commodity hardware (cannot store entire dedup index in RAM)   
 
+Global Architectural Structure Of the Project:  
 ![Conceptual Diagram](https://github.com/yrrah/cs6620-fall21-intelligent-assignment-of-data-to-dedup-nodes/blob/main/conceptual-diagram.png)
 
-We will use fingerprint data from https://tracer.filesystems.org/ representing real world storage of files. The fingerprints are hashes representing a unique segment of data and are used to identify duplicate segments. We will not be manipulating the data itself (data ingest is out of scope of the project).   
+We will use fingerprint data from https://tracer.filesystems.org/ representing real world storage of files. 
+The fingerprints are hashes representing a unique segment of data and are used to identify duplicate segments.
 
-Fingerprinted segments are grouped into regions. These regions act as a higher level hash that can be checked once to avoid inspecting each segment fingerprint within the region. Finding duplicated regions is more efficient than finding each duplicated segment separately.   
+Fingerprinted segments are grouped into regions. These regions act as a higher level hash that can be checked 
+once to avoid inspecting each segment fingerprint within the region. Finding duplicated regions is more efficient 
+than finding each duplicated segment separately.   
 
-The Dedup pods represent the Deduplication nodes where the region metadata are stored.  
+The Dedup pods represent the deduplication nodes where the region metadata are stored.  
 The Key-Value store contains a collection of fingerprints (which are the keys) which points to the actual chunks of data stored.  
   
-The algorithms we plan to use will be manipulating the fingerprint segment metadata and the region metadata mapping segments->regions. Algorithms will smartly assign regions to dedup pods, which each contain multiple dedup domains. It will be necessary to allow some duplication across pods to avoid strictly checking every fingerprint against a single global key store. We will be comparing various algorithms and evaluating the amount of duplication that occurs.  We will also investigate manipulating region size to find the optimal performance. 
+The algorithms we plan to use will be manipulating the fingerprint segment metadata and the region metadata 
+mapping segments->regions. Algorithms will smartly assign regions to dedup pods, which each contain multiple 
+dedup domains. It will be necessary to allow some duplication across pods to avoid strictly checking every 
+fingerprint against a single global key store. We will be comparing various algorithms and evaluating the amount 
+of duplication that occurs.  We will also investigate manipulating region size to find the optimal performance. 
+
+The storage simulator will be made up of client/server modules...  
+
+Frontend (FE) Module
+ - assign fingerprints to regions 
+ - assign regions to dedup nodes
+ - gRPC Client code
+ - instrumentation for performance metrics
+
+Backend (BE) Module
+ - Lookup into FP index (KV store)
+ - Insert into FP index (KV store)
+ - gRPC server code
+ - instrumentation for performance metrics
+
+
+
+
+
 ## 5. Acceptance criteria
 
 Deliver a repeatable test configuration that can be used for different algorithms. 
@@ -68,6 +94,7 @@ Deliver a repeatable test configuration that can be used for different algorithm
 Implement two (stretch goal four) distribution algorithms  
 - Collect data on optimal size of regions for each algorithm  
 - Collect data on rate of duplication for each algorithm
+- Collect data on compute efficiency for each algorithm
 
 ## 6.  Release Planning:
 
