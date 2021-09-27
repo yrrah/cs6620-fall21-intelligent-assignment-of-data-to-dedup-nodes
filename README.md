@@ -7,6 +7,10 @@ Data deduplication techniques are crucial for modern enterprise backup storage s
 - high compression of data by deduplication to make disk cost equivalent to tape storage  
 - use of commodity hardware (cannot store entire dedup index in RAM)   
 
+https://www.usenix.org/conference/fast11/tradeoffs-scalable-data-routing-deduplication-clusters
+DataDomain Overview Paper: https://www.usenix.org/conference/fast-08/avoiding-disk-bottleneck-data-domain-deduplication-file-system
+
+
 ** **
 
 ## 1.   Vision and Goals Of The Project:
