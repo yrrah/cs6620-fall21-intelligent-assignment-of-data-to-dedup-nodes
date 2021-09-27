@@ -16,7 +16,7 @@ The main output of this project will be collection of performance data. We will 
 configurations of our file storage simulator. Deduplication space savings will be measured for each node 
 and across the cluster and compute efficiency will be considered.
  - scale up to ~1,000 dedup pods
- - implement several algorithms<sup>[2](#bottleneck)</sup> for intelligent assignment of regions to pods
+ - implement several algorithms<sup>[1](#bottleneck)</sup> for intelligent assignment of regions to pods
  - compare settings for region size (~1MB-8MB)     
 
 We will draw conclusions on how to balance the trade-offs of data deduplication in a cloud environment. 
@@ -25,7 +25,7 @@ We will draw conclusions on how to balance the trade-offs of data deduplication 
 
 ## 2. Background:  
 
-Data deduplication techniques are crucial for modern cloud-scale storage systems. Key attributes<sup>[1](#tradeoffs)</sup> required include:
+Data deduplication techniques are crucial for modern cloud-scale storage systems. Key attributes<sup>[2](#tradeoffs)</sup> required include:
 - high throughput, typically over 100 MB/sec to complete a backup quickly  
 - high compression of data by deduplication to make disk cost equivalent to tape storage  
 - use of commodity hardware (cannot store entire dedup index in RAM)
@@ -136,7 +136,7 @@ Release #5:
 ** **
 
 ## 8. References
+<a name="bottleneck">1</a>: https://www.usenix.org/conference/fast-08/avoiding-disk-bottleneck-data-domain-deduplication-file-system   
+<a name="tradeoffs">2</a>: https://www.usenix.org/conference/fast11/tradeoffs-scalable-data-routing-deduplication-clusters  
 
-<a name="tradeoffs">1</a>: https://www.usenix.org/conference/fast11/tradeoffs-scalable-data-routing-deduplication-clusters
-<a name="bottleneck">2</a>: https://www.usenix.org/conference/fast-08/avoiding-disk-bottleneck-data-domain-deduplication-file-system
 
