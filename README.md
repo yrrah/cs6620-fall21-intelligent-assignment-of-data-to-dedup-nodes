@@ -109,7 +109,8 @@ Deliver a repeatable test configuration that can be used for different algorithm
 
 Implement two (stretch goal four) distribution algorithms  
 - Collect data on optimal size of regions for each algorithm  
-- Collect data on rate of duplication for each algorithm
+- Collect data on rate of duplication for each algorithm. The ideal case of deduplication would be implemented by directing everything to a single dedup domain, so we will compare to this baseline.
+- Collect data on how balanced usage of the dedup domains are. Goal is to minimize skew.
 - Collect data on compute efficiency for each algorithm
 
 ## 7.  Release Planning:
