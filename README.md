@@ -15,7 +15,7 @@ while achieving balanced use of the dedup nodes.
 The main output of this project will be collection of performance data. We will collect data on several 
 configurations of our file storage simulator. Deduplication space savings will be measured for each node 
 and across the cluster and compute efficiency will be considered. Configuration variations:  
- - scale up to ~1,000 dedup pods
+ - scale up to ~1,000 dedup domains
  - implement several algorithms<sup>[1](#bottleneck)</sup> for intelligent assignment of regions to pods
  - compare settings for region size (~1MB-8MB)     
 
@@ -41,7 +41,7 @@ than finding each duplicated segment separately.
 
 The Key-Value store contains the collection of fingerprints (which are the keys) which points to the actual chunks of data stored.
 
-To increase data throughput, a dedup system can be sharded into multiple nodes. Each node would contain a portion of file 
+To increase data throughput, a dedup system can be sharded into multiple nodes. Our solution for this is described in [Section 5](#5-solution-concept). Each node would contain a portion of file 
 metadata and key value store necessary for duplicate checking.
 
 ** **
