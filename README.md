@@ -108,7 +108,7 @@ Deliver a repeatable test configuration that can be used for different algorithm
 - Uses containers and kubernetes to scale independent of hardware 
 
 Implement two algorithms for creation of regions. 
- - "Variable length [regions] are essential for deduplication of the shifted content of backup images"<sup>[1](#bottleneck)</sup>
+ - "Variable length segments are essential for deduplication of the shifted content of backup images"<sup>[1](#bottleneck)</sup>
  - "A well-designed duplication storage system should have the smallest segment size possible given the throughput and capacity requirements"<sup>[1](#bottleneck)</sup>
 
 Implement two distribution algorithms of regions to domains.
