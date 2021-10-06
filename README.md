@@ -107,7 +107,11 @@ Deliver a repeatable test configuration that can be used for different algorithm
 - Scalable for testing cloud workload
 - Uses containers and kubernetes to scale independent of hardware 
 
-Implement two (stretch goal four) distribution algorithms  
+Implement two algorithms for creation of regions. 
+ - "Variable length segments are essential for deduplication of the shifted content of backup images"<sup>[1](#bottleneck)</sup>
+ - "A well-designed duplication storage system should have the smallest segment size possible given the throughput and capacity requirements"<sup>[1](#bottleneck)</sup>
+
+Implement two distribution algorithms of regions to domains.
 - Collect data on optimal size of regions for each algorithm  
 - Collect data on rate of duplication for each algorithm. The ideal case of deduplication would be implemented by directing everything to a single dedup domain, so we will compare to this baseline.
 - Collect data on how balanced usage of the dedup domains are. Goal is to minimize skew.
