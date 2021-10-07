@@ -1,3 +1,5 @@
+Demo 1 Video: https://youtu.be/l5Yt3aOgk84 or [download MP4](https://github.com/yrrah/cs6620-fall21-intelligent-assignment-of-data-to-dedup-nodes/blob/b40b7e1fcec8fbdbd4479dbefe80ec54300d8d98/report_1.mp4)
+
 
 ** **
 ## CS6620-Fall21 Intelligent Assignment of Data to Dedup Nodes  
