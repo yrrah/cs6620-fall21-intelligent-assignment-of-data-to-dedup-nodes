@@ -1,3 +1,5 @@
+Demo 1 Video: https://youtu.be/l5Yt3aOgk84 or [download MP4](https://github.com/yrrah/cs6620-fall21-intelligent-assignment-of-data-to-dedup-nodes/blob/b40b7e1fcec8fbdbd4479dbefe80ec54300d8d98/report_1.mp4)
+
 
 ** **
 ## CS6620-Fall21 Intelligent Assignment of Data to Dedup Nodes  
@@ -14,8 +16,8 @@ while achieving balanced use of the dedup nodes.
 
 The main output of this project will be collection of performance data. We will collect data on several 
 configurations of our file storage simulator. Deduplication space savings will be measured for each node 
-and across the cluster and compute efficiency will be considered.
- - scale up to ~1,000 dedup pods
+and across the cluster and compute efficiency will be considered. Configuration variations:  
+ - scale up to ~1,000 dedup domains
  - implement several algorithms<sup>[1](#bottleneck)</sup> for intelligent assignment of regions to pods
  - compare settings for region size (~1MB-8MB)     
 
@@ -41,7 +43,7 @@ than finding each duplicated segment separately.
 
 The Key-Value store contains the collection of fingerprints (which are the keys) which points to the actual chunks of data stored.
 
-To increase data throughput, a dedup system can be sharded into multiple nodes. Each node would contain a portion of file 
+To increase data throughput, a dedup system can be sharded into multiple nodes. Our solution for this is described in [Section 5](#5-solution-concept). Each node would contain a portion of file 
 metadata and key value store necessary for duplicate checking.
 
 ** **
@@ -51,6 +53,11 @@ metadata and key value store necessary for duplicate checking.
 Enterprise data storage architects need performance data on proposed improvements to data storage techniques.   
 
 Data center operators need to minimize storage of duplicate data to minimize cost. 
+
+- Team users, the files systems shared by a big team will be benefited from this project. If multiple versions of files are existing, and we want to reduce the memory usage on duplicate data. Also, as data is frequently modified, the inline back of the data is necessary with efficient performance. An intelligent assignment of pods will be helpful for such users for improved performance. 
+- Virtual Desktop Deployment (VDI), the organization which must manage multiple VDI, this project will be applicable as it will automatically scale the VDIs and their data backups. 
+- In virtualized backup applications, such as cloud storage infrastructures, this project will be helpful for such organizations in intelligently backing up the data with better performance. 
+
 
 ** **
 
@@ -74,7 +81,7 @@ Global Architectural Structure Of the Project:
 
 We will use fingerprint data from https://tracer.filesystems.org/ representing real world storage of files. 
 
-We will create a containerized, parallel version of the system described in Section 2. 
+We will create a containerized, parallel version of the system described in [Section 2](#2-background). 
 
 The storage simulator will be made up of client/server modules...  
 
@@ -102,9 +109,14 @@ Deliver a repeatable test configuration that can be used for different algorithm
 - Scalable for testing cloud workload
 - Uses containers and kubernetes to scale independent of hardware 
 
-Implement two (stretch goal four) distribution algorithms  
+Implement two algorithms for creation of regions. 
+ - "Variable length segments are essential for deduplication of the shifted content of backup images"<sup>[1](#bottleneck)</sup>
+ - "A well-designed duplication storage system should have the smallest segment size possible given the throughput and capacity requirements"<sup>[1](#bottleneck)</sup>
+
+Implement two distribution algorithms of regions to domains.
 - Collect data on optimal size of regions for each algorithm  
-- Collect data on rate of duplication for each algorithm
+- Collect data on rate of duplication for each algorithm. The ideal case of deduplication would be implemented by directing everything to a single dedup domain, so we will compare to this baseline.
+- Collect data on how balanced usage of the dedup domains are. Goal is to minimize skew.
 - Collect data on compute efficiency for each algorithm
 
 ## 7.  Release Planning:
