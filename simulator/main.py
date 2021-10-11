@@ -1,5 +1,6 @@
 from front_end import SimpleAlgo
 from back_end import BackendPod
+from simulator.region_creation.fixed_region import hex_string_to_int
 
 
 def main():
@@ -10,4 +11,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    print(hex_string_to_int("3f:8d:1a:35:a8:ff"))
