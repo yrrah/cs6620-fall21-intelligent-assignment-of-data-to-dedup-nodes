@@ -1,5 +1,3 @@
-Demo 1 Video: https://youtu.be/l5Yt3aOgk84 or [download MP4](https://github.com/yrrah/cs6620-fall21-intelligent-assignment-of-data-to-dedup-nodes/blob/b40b7e1fcec8fbdbd4479dbefe80ec54300d8d98/report_1.mp4)
-
 
 ** **
 ## CS6620-Fall21 Intelligent Assignment of Data to Dedup Nodes  
@@ -123,23 +121,27 @@ Implement two distribution algorithms of regions to domains.
 
 Detailed user stories and plans are on the Taiga board: https://tree.taiga.io/project/amanbatra-cs6620-fall21-intelligent-assignment-of-data-to-dedup-nodes
 
-Release #1(due by Week 5):  
-Test bed established and validated to be ready for algorithm testing. 
+Week 5: Oct 4 - 8 Sprint 1 Demo  
+ - Video: https://youtu.be/l5Yt3aOgk84 or [download MP4](https://github.com/yrrah/cs6620-fall21-intelligent-assignment-of-data-to-dedup-nodes/blob/b40b7e1fcec8fbdbd4479dbefe80ec54300d8d98/report_1.mp4)
+
+Week 7: Oct 18 -21 Sprint 2 Demo  
+ - Test bed established and validated to be ready for algorithm testing.   
 
 
-Release #2:
-
-…
-
-Release #3:
-
-…
-
-Release #4:
+Week 9: Nov 1 - 5 Sprint 3 Demo  
 
 …
 
-Release #5:
+Week 11: Nov 15 - 19 Sprint 4 Demo
+
+…
+
+Week 15: Dec 6 - 9 Sprint 5 Demo
+
+…
+
+Final projects due: Dec 15th
+
 
 
 ** **
