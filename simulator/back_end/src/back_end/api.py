@@ -1,3 +1,6 @@
+# -*- coding: utf-8 -*-
+
+"""Main code."""
 from typing import Tuple
 
 
