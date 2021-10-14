@@ -10,22 +10,14 @@ The back_end command line tool is automatically installed. It can
 be used from the shell with the `--help` flag to show all subcommands:
 
 ```shell
-$ back_end --help
+$ ./back_end/back_end --help
+$ ./front_end/front_end --help
 ```
 
 > TODO show the most useful thing the CLI does! The CLI will have documentation auto-generated
 by `sphinx`.
 
 ## 🚀 Installation
-
-<!-- Uncomment this section after your first ``tox -e finish``
-The most recent release can be installed from
-[PyPI](https://pypi.org/project/back_end/) with:
-
-```bash
-$ pip install back_end
-```
--->
 
 The most recent code and data can be installed directly from GitHub with:
 
