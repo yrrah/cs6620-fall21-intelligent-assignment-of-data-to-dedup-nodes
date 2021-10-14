@@ -35,20 +35,16 @@ Data deduplication techniques are crucial for modern cloud-scale storage systems
 Fingerprints are hashes representing a unique segment of data and are used for identifying duplicate segments. An incoming data 
 stream is checked against a key-value store so that recognized fingerprints do not need to be stored again. 
 
-Fingerprinted segments are grouped into regions. These regions act as a higher level hash that can be checked 
-once to avoid inspecting each segment fingerprint within the region. Finding duplicated regions is more efficient 
-than finding each duplicated segment separately.   
+Fingerprinted segments are grouped into regions. These regions act as a unit of routing to distribute the work of deduplication evenly across multiple processing nodes. Regions can be created in a variety of sizes. Regions can be routed statefully based on past deduplication results, or statelessly based only on the fingerprints inside the region. 
 
-The Key-Value store contains the collection of fingerprints (which are the keys) which points to the actual chunks of data stored.
+The Key-Value store contains the collection of fingerprints (which are the keys) which points to values addressing the actual chunks of data stored.
 
-To increase data throughput, a dedup system can be sharded into multiple nodes. Our solution for this is described in [Section 5](#5-solution-concept). Each node would contain a portion of file 
-metadata and key value store necessary for duplicate checking.
-
+The diagram depicts one of each component required for deduplication. To increase data throughput, a dedup system can be replicated as multiple dedup domains. This way the domains evenly share the work of deduplication. Our solution for this is described in [Section 5](#5-solution-concept). 
 ** **
 
 ## 3. Users/Personas Of The Project:
 
-Enterprise data storage architects need performance data on proposed improvements to data storage techniques.   
+Enterprise data storage architects need to understand how to scale deduplication clusters to handle cloud-sized storage systems.   
 
 Data center operators need to minimize storage of duplicate data to minimize cost. 
 
@@ -64,11 +60,13 @@ Data center operators need to minimize storage of duplicate data to minimize cos
 Out of scope:
 - Data ingestion (segmentation and fingerprinting)
 - Creation of fingerprint trace datasets (will use existing data set)
+- Rebalancing of domains between pods (future work)
 
 Within scope: 
 - Creation of cloud native, scalable, containerized, file storage simulator
 - Selecting size of regions that group together fingerprints
-- Testing algorithms for intelligent assignment of regions to dedup pods
+- Testing techniques to form regions
+- Testing algorithms for intelligent assignment of regions to dedup domains
 
 ** **
 
@@ -85,19 +83,23 @@ The storage simulator will be made up of client/server modules...
 
 Frontend (FE) Module
  - assign fingerprints to regions 
- - assign regions to dedup nodes
+ - assign regions to dedup domains
  - gRPC Client code
- - instrumentation for performance metrics
+ - instrument for performance metrics
+ - instrument for deduplication and balance metrics
 
 Backend (BE) Module
  - Lookup into FP index (KV store)
  - Insert into FP index (KV store)
  - gRPC server code
- - instrumentation for performance metrics
+ - instrument for performance metrics
+ - instrument for deduplication and balance metrics
  
 The algorithms we plan to use will be manipulating the fingerprint segment metadata and the region metadata 
-mapping segments->regions. Algorithms will smartly assign regions to dedup pods, which each contain multiple 
-dedup domains. It will be necessary to allow some duplication across pods to avoid strictly checking every 
+mapping segments->regions. Algorithms will smartly assign regions to dedup domains. The domains are distributed across
+pods, with many domains per pod.   
+
+It will be necessary to allow some duplication across domains to avoid strictly checking every 
 fingerprint against a single global key store. We will be comparing various algorithms and evaluating the amount 
 of duplication that occurs.  We will also investigate manipulating region size to find the optimal performance.
 
@@ -108,14 +110,16 @@ Deliver a repeatable test configuration that can be used for different algorithm
 - Uses containers and kubernetes to scale independent of hardware 
 
 Implement two algorithms for creation of regions. 
- - "Variable length segments are essential for deduplication of the shifted content of backup images"<sup>[1](#bottleneck)</sup>
- - "A well-designed duplication storage system should have the smallest segment size possible given the throughput and capacity requirements"<sup>[1](#bottleneck)</sup>
+ - "Variable length [regions]* are essential for deduplication of the shifted content of backup images"<sup>[1](#bottleneck)</sup>
+ - "A well-designed duplication storage system should have the smallest [region]* size possible given the throughput and capacity requirements"<sup>[1](#bottleneck)</sup>  
+ 
+    \*We expect that principles found for segment formation will also apply to region formation.
 
 Implement two distribution algorithms of regions to domains.
 - Collect data on optimal size of regions for each algorithm  
 - Collect data on rate of duplication for each algorithm. The ideal case of deduplication would be implemented by directing everything to a single dedup domain, so we will compare to this baseline.
 - Collect data on how balanced usage of the dedup domains are. Goal is to minimize skew.
-- Collect data on compute efficiency for each algorithm
+- Evaluate the compute efficiency of each algorithm
 
 ## 7.  Release Planning:
 
