@@ -14,11 +14,11 @@ later, but that will cause problems--the code will get executed twice:
 """
 
 import logging
-
 import click
+from simulator.front_end.src.front_end.region_creation.input_streams import read_file
 
 __all__ = [
-  "main",
+    "main",
 ]
 
 logger = logging.getLogger(__name__)
@@ -32,3 +32,6 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+

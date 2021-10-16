@@ -218,7 +218,8 @@ class HashFile:
         else:
             raise ValueError('Invalid file header.')
 
-        print(path.decode('ascii'))
+        path = path.decode('ascii')
+        # print(path)
 
         self.num_files_processed += 1
         self.num_hashes_processed_current_file = 0
