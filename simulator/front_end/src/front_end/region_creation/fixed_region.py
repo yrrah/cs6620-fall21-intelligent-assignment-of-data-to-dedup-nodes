@@ -1,3 +1,4 @@
+import hashlib
 from typing import Generator, Any
 
 from simulator.front_end.src.front_end.region_creation.input_streams import HashFile
@@ -8,10 +9,12 @@ class Region:
         self.max_size = max_size
         self.current_size = 0
         self.fingerprints = []
+        self.hash = hashlib.sha1()
 
     def add_fingerprint(self, fingerprint: bytes):
         if len(fingerprint) + self.current_size <= self.max_size:
             self.fingerprints.append(fingerprint)
+            self.hash.update(fingerprint)
             self.current_size += len(fingerprint)
         else:
             raise BufferError(f"Region is too full to accept fingerprint. {self.current_size}/{self.max_size}")
@@ -31,7 +34,6 @@ def create_fixed_regions(hash_file: HashFile, size_mib: int) -> Generator[Region
         hash_file.hashfile_next_file()
         while hash_file.num_hashes_processed_current_file < hash_file.current_file_total_chunks:
             fingerprint, compression = hash_file.hashfile_next_chunk()
-            finlen = len(fingerprint)
             if len(fingerprint) + current_region.current_size > max_region_size:
                 yield current_region
                 current_region = Region(max_region_size)
@@ -44,7 +46,7 @@ def create_fixed_regions(hash_file: HashFile, size_mib: int) -> Generator[Region
 def main():
     hash_file = HashFile("fslhomes-user006-2011-09-10.8kb.hash.anon")
 
-    for region in create_fixed_regions(hash_file, 4):
+    for region in create_fixed_regions(hash_file, 1):
         print(region.current_size, len(region.fingerprints))
 
 

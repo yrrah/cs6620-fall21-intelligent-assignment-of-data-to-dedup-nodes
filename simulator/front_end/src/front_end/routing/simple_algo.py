@@ -1,28 +1,18 @@
-from simulator.front_end.src.front_end.api import Frontend
+from simulator.front_end.src.front_end.region_creation.fixed_region import create_fixed_regions, Region
+from simulator.front_end.src.front_end.region_creation.input_streams import HashFile
 
 
-class SimpleAlgo(Frontend):
-    def __init__(self) -> None:
-        """Simulator with simple algorithms
+def simple_routing(region: Region) -> int:
+    return int.from_bytes(region.hash.digest(), "little") % 1000
 
-        Args:
 
-        """
-        super().__init__()
+def main():
+    hash_file = HashFile("fslhomes-user006-2011-09-10.8kb.hash.anon")
 
-    def create_regions(self):
-        """
-        given an input stream of fingerprints, yield regions
+    for region in create_fixed_regions(hash_file, 1):
+        print(simple_routing(region))
 
-        Args:
-        :return:
-        """
-        yield None
 
-    def route_region(self) -> None:
-        """
+if __name__ == "__main__":
+    main()
 
-        Args:
-
-        """
-        raise NotImplementedError
