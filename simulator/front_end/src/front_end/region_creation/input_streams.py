@@ -249,7 +249,7 @@ class HashFile:
             self.current_chunk_size = 0
 
         hash_bytes = self.hash_size // 8
-        self.current_chunk_hash = unpack(f"{hash_bytes}s", self.file.read(hash_bytes))
+        self.current_chunk_hash = unpack(f"{hash_bytes}s", self.file.read(hash_bytes))[0]
 
         if self.version >= HashFileVersion.V6:
             self.current_chunk_compression_ratio = int.from_bytes(self.file.read(1), "little")
@@ -308,7 +308,7 @@ def main():
         read_file.hashfile_next_file()
         while read_file.num_hashes_processed_current_file < read_file.current_file_total_chunks:
             fingerprint, compression = read_file.hashfile_next_chunk()
-            print(''.join(list(joinit(str(fingerprint[0].hex()), ':'))))
+            print(''.join(list(joinit(str(fingerprint.hex()), ':'))))
 
 
 if __name__ == "__main__":
