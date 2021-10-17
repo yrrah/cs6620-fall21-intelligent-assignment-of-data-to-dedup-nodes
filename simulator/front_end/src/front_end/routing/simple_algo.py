@@ -2,8 +2,8 @@ from simulator.front_end.src.front_end.region_creation.fixed_region import creat
 from simulator.front_end.src.front_end.region_creation.input_streams import HashFile
 
 
-def simple_routing(region: Region) -> int:
-    return int.from_bytes(region.hash.digest(), "little") % 1000
+def simple_routing(region: Region, num_domains: int) -> int:
+    return int.from_bytes(region.hash.digest()[:7], "little") % num_domains
 
 
 def main():
