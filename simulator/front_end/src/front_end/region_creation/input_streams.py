@@ -229,6 +229,7 @@ class HashFile:
 
         if self.version >= HashFileVersion.V7 and self.chunking_params.chunking_method == Chunking.Method.VARIABLE:
             self.current_chunk_size = unpack("i", self.file.read(calcsize("i")))
+
         elif (self.version >= HashFileVersion.V3 and
               self.chunking_params.chunking_method == Chunking.Method.VARIABLE):
             self.current_chunk_size = unpack("l", self.file.read(calcsize("l")))
@@ -262,7 +263,7 @@ class HashFile:
 
         self.num_hashes_processed_current_file += 1
 
-        return self.current_chunk_hash, self.current_chunk_compression_ratio
+        return self.current_chunk_hash, self.current_chunk_compression_ratio, self.current_chunk_size[0]
 
 
 #  * v.7:
@@ -303,7 +304,8 @@ def joinit(iterable, delimiter):
 
 
 def main():
-    read_file = HashFile("fslhomes-user006-2011-09-10.8kb.hash.anon")
+    file_name = input("Please enter the hash file name to read: ")
+    read_file = HashFile(file_name)
 
     while read_file.num_files_processed < 10:
         read_file.hashfile_next_file()
