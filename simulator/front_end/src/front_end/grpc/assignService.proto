@@ -1,0 +1,32 @@
+syntax = "proto3";
+
+/**
+A service that receives a region and assigns it to a domain.
+ */
+service RegionReceiveService{
+  rpc AssignRegion(Region) returns (Acknowledgement) {}
+}
+
+/**
+The message represents a region. It has properties like max Size, currentSize, fingerprints and its hash.
+ */
+message Region{
+  int32 maxSize=1;
+  int32 currentSize = 2;
+  repeated Fingerprint fingerPrint = 3;
+  bytes hash = 4; //Need to decide how to store this.
+}
+
+/**
+This represents a fingerprint within a region. A region has a collection of these.
+ */
+message Fingerprint{
+  bytes fingerPrint = 1;
+}
+
+/**
+Acknowledgement to the client that the region is received
+ */
+message Acknowledgement{
+  bool ack = 1;
+}
