@@ -21,11 +21,19 @@ def create_content_defined_regions(min_region_size: int, max_region_size: int, m
     :param mask: mask bits to mask the chunks
     :param hash_file: A hash file object that can be read to extract hashes.
     :return: the region objects
+
+    I found this example of setting 6 bits in a mask
+    https://stackoverflow.com/questions/12416639/how-to-create-mask-with-least-significat-bits-set-to-1-in-c
+    uint64_t bits = 6;
+    uint64_t mask = ((uint64_t)1 << bits) - 1;
+    # Results in 0b111111 (or 0x03F)
+
+
     """
 
     max_region_size = (max_region_size * 1024 * 1024)
     min_region_size = (min_region_size * 1024 * 1024)
-    mask = (mask * 1024 * 1024)
+    mask = (mask * 1024 * 1024)  # 00001110100010 1/2^4 for 4 bits (probably 10 or so bits desired)
     region = Region(max_region_size)
 
     while hash_file.num_files_processed < hash_file.total_files:
