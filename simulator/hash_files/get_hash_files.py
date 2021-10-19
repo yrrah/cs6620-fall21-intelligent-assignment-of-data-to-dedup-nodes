@@ -1,9 +1,11 @@
 import glob
+import ssl
 import tarfile
 
+import certifi
 import htmllistparse
 import os
-from urllib import request
+import urllib.request as urlrq
 from tqdm import tqdm
 
 
@@ -21,7 +23,9 @@ def download_files(web_dir: str, limit: int):
 
         # Download the file if it does not yet exist
         if not glob.glob(name + '*.hash.anon'):
-            request.urlretrieve(url, name + '.tar.bz2')
+            file = urlrq.urlopen(url, context=ssl.create_default_context(cafile=certifi.where()))
+            with open(name + '.tar.bz2', 'wb') as output:
+                output.write(file.read())
 
             # extract hash file from archive
             tar = tarfile.open(name + '.tar.bz2', "r:bz2")
