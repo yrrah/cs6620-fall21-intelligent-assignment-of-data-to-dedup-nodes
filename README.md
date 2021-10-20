@@ -1,4 +1,4 @@
-Sprint 2 Demo Video: [download MP4](https://github.com/yrrah/cs6620-fall21-intelligent-assignment-of-data-to-dedup-nodes/blob/4299dff72d59ce8fd1f95df4e2206be16b50ffed/report_2.mp4)   
+Sprint 2 Demo Video: [download MP4](https://github.com/yrrah/cs6620-fall21-intelligent-assignment-of-data-to-dedup-nodes/blob/main/report_2.mp4)   
 
 ** **
 ## CS6620-Fall21 Intelligent Assignment of Data to Dedup Nodes  
