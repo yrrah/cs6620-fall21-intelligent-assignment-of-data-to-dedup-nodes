@@ -1,3 +1,4 @@
+Sprint 2 Demo Video: [download MP4](https://github.com/yrrah/cs6620-fall21-intelligent-assignment-of-data-to-dedup-nodes/blob/b40b7e1fcec8fbdbd4479dbefe80ec54300d8d98/report_2.mp4)   
 
 ** **
 ## CS6620-Fall21 Intelligent Assignment of Data to Dedup Nodes  
@@ -129,7 +130,7 @@ Week 5: Oct 4 - 8 Sprint 1 Demo
  - Video: https://youtu.be/l5Yt3aOgk84 or [download MP4](https://github.com/yrrah/cs6620-fall21-intelligent-assignment-of-data-to-dedup-nodes/blob/b40b7e1fcec8fbdbd4479dbefe80ec54300d8d98/report_1.mp4)
 
 Week 7: Oct 18 -21 Sprint 2 Demo  
- - Test bed established and validated to be ready for algorithm testing.   
+ - Test bed established and validated to be ready for algorithm testing.
 
 
 Week 9: Nov 1 - 5 Sprint 3 Demo  
