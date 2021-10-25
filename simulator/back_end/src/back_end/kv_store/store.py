@@ -32,8 +32,3 @@ class KeyValueStore:
         :return: Number of fingerprints in kv store
         """
         return len(self.fingerprints)
-
-
-
-
-

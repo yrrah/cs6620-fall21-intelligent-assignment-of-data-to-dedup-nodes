@@ -32,8 +32,7 @@ def create_fixed_regions(hash_file: HashFile, size_mib: int) -> Generator[Region
 
 
 def main():
-    file_name = input("Enter file name with path: ")
-    hash_file = HashFile(file_name)
+    hash_file = HashFile("fslhomes-user006-2011-09-10.8kb.hash.anon")
 
     for region in create_fixed_regions(hash_file, 4):
         print(region.current_size, len(region.fingerprints))
