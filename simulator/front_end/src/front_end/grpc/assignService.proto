@@ -11,19 +11,18 @@ service RegionReceiveService{
 The message represents a region. It has properties like max Size, currentSize, fingerprints and its hash.
  */
 message Region{
+
   int32 domainNumber = 1;
   int32 maxSize=2;
   int32 currentSize = 3;
   repeated Fingerprint fingerPrint = 4;
 }
-
-/**
-This represents a fingerprint within a region. A region has a collection of these.
- */
-message Fingerprint{
-  bytes fingerPrint = 1;
-}
-
+    /**
+  This represents a fingerprint within a region. A region has a collection of these.
+   */
+  message Fingerprint{
+    bytes fingerPrint = 1;
+  }
 /**
 Acknowledgement to the client that the region is received
  */

@@ -20,9 +20,10 @@ class AssignToDomain(assignService_pb2_grpc.RegionReceiveServiceServicer):
     kv_store = KeyValueMap(1)
 
     def AssignRegion(self, request, context):
+        print("In the assign region method!!")
         region_to_store = Region(request.maxSize)
         for fingerPrint in request.fingerPrint:
-            region_to_store.add_fingerprint(fingerPrint)
+            region_to_store.add_fingerprint(fingerPrint, 1)
 
         self.kv_store.add_region(region_to_store)
 
