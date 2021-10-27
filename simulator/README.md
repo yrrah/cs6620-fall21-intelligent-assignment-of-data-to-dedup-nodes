@@ -22,7 +22,10 @@ by `sphinx`.
 The most recent code and data can be installed directly from GitHub with:
 
 ```bash
-$ pip install git+https://github.com//cs6620-fall21-intelligent-assignment-of-data-to-dedup-nodes.git
+$ git clone git+https://github.com//cs6620-fall21-intelligent-assignment-of-data-to-dedup-nodes.git
+$ cd cs6620-fall21-intelligent-assignment-of-data-to-dedup-nodes
+$ pip install simulator/front_end
+$ pip install simulator/back_end
 ```
 
 To install in development mode, use the following:
@@ -30,7 +33,8 @@ To install in development mode, use the following:
 ```bash
 $ git clone git+https://github.com//cs6620-fall21-intelligent-assignment-of-data-to-dedup-nodes.git
 $ cd cs6620-fall21-intelligent-assignment-of-data-to-dedup-nodes
-$ pip install -e .
+$ pip install -e simulator/front_end
+$ pip install -e simulator/back_end
 ```
 
 ### ⚖️ License
