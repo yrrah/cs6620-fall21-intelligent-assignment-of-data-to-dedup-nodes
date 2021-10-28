@@ -1,0 +1,23 @@
+apiVersion: apps.openshift.io/v1
+kind: DeploymentConfig
+metadata:
+  name: cs6620-fall21-dedup-nodes-back-end
+  namespace: cs6620-fall21-intelligentassignment-dedupnodes
+spec:
+  selector:
+    app: cs6620-fall21-dedup-nodes-back-end
+  template:
+    metadata:
+      labels:
+        app: cs6620-fall21-dedup-nodes-back-end
+    spec:
+      containers:
+        - name: cs6620-fall21-dedup-nodes-back-end
+          image: >-
+            image-registry.openshift-image-registry.svc:5000/openshift/cs6620-fall21-dedup-nodes-back-end:latest
+          ports:
+            - containerPort: 8080
+          env:
+            - name: SIMULATOR_MODE
+              value: DEMO
+#  replicas: 3

@@ -1,0 +1,31 @@
+apiVersion: build.openshift.io/v1
+kind: BuildConfig
+metadata:
+  labels:
+    app: cs6620-fall21-dedup-nodes-back-end
+    app.kubernetes.io/component: cs6620-fall21-dedup-nodes-back-end
+    app.kubernetes.io/instance: cs6620-fall21-dedup-nodes-back-end
+  name: cs6620-fall21-dedup-nodes-back-end
+  namespace: cs6620-fall21-intelligentassignment-dedupnodes
+spec:
+  source:
+    contextDir: simulator/back_end
+    git:
+      uri: https://github.com/yrrah/cs6620-fall21-intelligent-assignment-of-data-to-dedup-nodes.git
+    type: Git
+  strategy:
+    type: Source
+    sourceStrategy:
+      from:
+        kind: ImageStreamTag
+        name: python:3.9-ubi8
+        namespace: openshift
+      env:
+      - name: SIMULATOR_MODE
+        value: DEMO
+      - name: APP_FILE
+        value: src/app.py
+  output:
+    to:
+      kind: ImageStreamTag
+      name: cs6620-fall21-dedup-nodes-back-end:latest
