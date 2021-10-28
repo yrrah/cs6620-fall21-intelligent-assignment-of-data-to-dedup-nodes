@@ -14,8 +14,10 @@ later, but that will cause problems--the code will get executed twice:
 """
 
 import logging
+import os
 
 import click
+from .grpc.greeter_server import serve
 
 __all__ = [
   "main",
@@ -24,10 +26,17 @@ __all__ = [
 logger = logging.getLogger(__name__)
 
 
-@click.group()
+@click.command()
 @click.version_option()
-def main():
+@click.option('--demo', 'demo', flag_value=True)
+@click.argument('first_arg')
+def main(demo, first_arg):
     """CLI for back_end."""
+    if demo or os.environ['SIMULATOR_MODE'] == 'DEMO':
+        print(f"Server running. First Arg Value: {first_arg}")
+        serve()
+    else:
+        print("No back_end demo :(")
 
 
 if __name__ == "__main__":
