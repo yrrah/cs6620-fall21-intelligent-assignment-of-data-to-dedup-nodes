@@ -28,11 +28,10 @@ logger = logging.getLogger(__name__)
 @click.command()
 @click.version_option()
 @click.option('--demo', 'demo', flag_value=True)
-@click.argument('first_arg')
-def main(demo, first_arg):
+def main(demo):
     """CLI for front_end."""
     if demo or os.environ['SIMULATOR_MODE'] == 'DEMO':
-        print(f"Client running. First Arg Value: {first_arg}")
+        print(f"Client running.")
         run()
     else:
         print("No front_end demo :(")
