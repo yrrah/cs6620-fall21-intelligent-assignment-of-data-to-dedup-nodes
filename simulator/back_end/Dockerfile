@@ -7,7 +7,8 @@ USER 0
 RUN INSTALL_PKGS="centos-release-scl cmake snappy-devel zlib-devel bzip2-devel lz4-devel" && \
     yum -y --setopt=tsflags=nodocs install $INSTALL_PKGS && \
     rpm -V $INSTALL_PKGS && \
-    yum -y clean all --enablerepo='*'
+    yum -y clean all --enablerepo='*' && \
+    yum -y install devtoolset-7-gcc*
 
 RUN git clone https://github.com/gflags/gflags.git && \
     cd gflags && \
@@ -18,10 +19,11 @@ RUN git clone https://github.com/gflags/gflags.git && \
 
 ADD . /tmp/src
 RUN /usr/bin/fix-permissions /tmp/src
-USER 1001
+
 
 # Install the dependencies
 RUN echo "source scl_source enable devtoolset-7" >> /etc/bashrc
+USER 1001
 RUN source /etc/bashrc
 RUN gcc --version
 RUN /usr/libexec/s2i/assemble
