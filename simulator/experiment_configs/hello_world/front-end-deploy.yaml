@@ -20,6 +20,4 @@ spec:
           env:
             - name: SIMULATOR_MODE
               value: DEMO
-            - name: SERVER_IP
-              value: 10.217.5.5
 #  replicas: 3

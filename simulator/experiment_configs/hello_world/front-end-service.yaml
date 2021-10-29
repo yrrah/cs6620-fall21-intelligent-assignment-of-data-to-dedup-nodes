@@ -1,11 +1,11 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: cs6620-fall21-dedup-nodes-back-end
+  name: cs6620-fall21-dedup-nodes-front-end
   namespace: cs6620-fall21-intelligentassignment-dedupnodes
 spec:
   selector:
-    app: cs6620-fall21-dedup-nodes-back-end
+    app: cs6620-fall21-dedup-nodes-front-end
   ports:
     - protocol: TCP
       port: 50051
