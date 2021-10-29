@@ -22,9 +22,9 @@ RUN /usr/bin/fix-permissions /tmp/src
 
 
 # Install the dependencies
-RUN echo "source scl_source enable devtoolset-7" >> /etc/bashrc
+SHELL [ "/usr/bin/scl", "enable", "devtoolset-7"]
+RUN gcc --version
 USER 1001
-RUN source /etc/bashrc
 RUN gcc --version
 RUN /usr/libexec/s2i/assemble
 
