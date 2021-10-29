@@ -1,12 +1,21 @@
-FROM registry.access.redhat.com/ubi8/python-39
+FROM quay.io/centos7/python-38-centos7
 
 # Add application sources to a directory that the assemble script expects them
 # and set permissions so that the container runs without root access
 USER 0
-RUN INSTALL_PKGS="gcc gcc-c++ make cmake snappy-devel gflags-devel zlib-devel bzip2-devel lz4-devel libzstd-devel" && \
+
+RUN INSTALL_PKGS="gcc gcc-c++ make cmake snappy-devel zlib-devel bzip2-devel lz4-devel" && \
     yum -y --setopt=tsflags=nodocs install $INSTALL_PKGS && \
     rpm -V $INSTALL_PKGS && \
     yum -y clean all --enablerepo='*'
+
+RUN git clone https://github.com/gflags/gflags.git && \
+    cd gflags && \
+    git checkout v2.0 && \
+    ./configure && \
+    make && \
+    make install
+
 ADD . /tmp/src
 RUN /usr/bin/fix-permissions /tmp/src
 USER 1001
