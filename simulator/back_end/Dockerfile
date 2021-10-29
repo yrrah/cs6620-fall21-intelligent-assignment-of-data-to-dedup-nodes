@@ -7,8 +7,10 @@ USER 0
 RUN INSTALL_PKGS="centos-release-scl cmake gflags snappy-devel zlib-devel bzip2-devel lz4-devel" && \
     yum -y --setopt=tsflags=nodocs install $INSTALL_PKGS && \
     rpm -V $INSTALL_PKGS && \
-    yum -y clean all --enablerepo='*' && \
-    yum -y install devtoolset-7-gcc*
+    yum -y clean all --enablerepo='*'
+
+ADD https://download-ib01.fedoraproject.org/pub/epel/7/x86_64/Packages/g/gflags-2.1.1-6.el7.x86_64.rpm .
+RUN yum install -y gflags-2.1.1-6.el7.x86_64.rpm
 
 #RUN git clone https://github.com/gflags/gflags.git && \
 #    cd gflags && \
