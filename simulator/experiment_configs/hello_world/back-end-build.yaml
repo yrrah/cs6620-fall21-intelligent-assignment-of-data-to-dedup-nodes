@@ -15,11 +15,7 @@ spec:
     type: Git
   strategy:
     type: Source
-    sourceStrategy:
-      from:
-        kind: ImageStreamTag
-        name: python:3.9-ubi8
-        namespace: openshift
+    dockerStrategy:
       env:
       - name: SIMULATOR_MODE
         value: DEMO
