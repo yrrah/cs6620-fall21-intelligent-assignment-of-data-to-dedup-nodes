@@ -9,15 +9,15 @@ RUN INSTALL_PKGS="centos-release-scl cmake snappy-devel zlib-devel bzip2-devel l
     rpm -V $INSTALL_PKGS && \
     yum -y clean all --enablerepo='*'
 
-ADD https://download-ib01.fedoraproject.org/pub/epel/7/x86_64/Packages/g/gflags-2.1.1-6.el7.x86_64.rpm .
-RUN yum install -y gflags-2.1.1-6.el7.x86_64.rpm
+#ADD https://download-ib01.fedoraproject.org/pub/epel/7/x86_64/Packages/g/gflags-2.1.1-6.el7.x86_64.rpm .
+#RUN yum install -y gflags-2.1.1-6.el7.x86_64.rpm
 
-#RUN git clone https://github.com/gflags/gflags.git && \
-#    cd gflags && \
-#    git checkout v2.0 && \
-#    ./configure && \
-#    make && \
-#    make install
+RUN git clone https://github.com/gflags/gflags.git && \
+    cd gflags && \
+    git checkout v2.0 && \
+    ./configure && \
+    make && \
+    make install
 
 ADD . /tmp/src
 RUN /usr/bin/fix-permissions /tmp/src
