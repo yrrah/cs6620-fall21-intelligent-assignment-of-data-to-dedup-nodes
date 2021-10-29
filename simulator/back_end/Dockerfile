@@ -1,81 +1,20 @@
-# This image provides a Python 3.8 environment you can use to run your Python
-# applications.
-FROM quay.io/centos7/s2i-base-centos7
+FROM registry.access.redhat.com/ubi8/python-39
 
-EXPOSE 8080
+# Add application sources to a directory that the assemble script expects them
+# and set permissions so that the container runs without root access
+USER 0
+ADD app-src /tmp/src
 
-ENV PYTHON_VERSION=3.8 \
-    PYTHON_SCL_VERSION=38 \
-    PATH=$PATH:/opt/rh/rh-python38/root/usr/bin:$HOME/.local/bin/:/opt/rh/$NODEJS_SCL/root/usr/bin:/opt/rh/httpd24/root/usr/bin:/opt/rh/python38/root/usr/bin:/opt/rh/httpd24/root/usr/sbin:/opt/rh/rh-python38/root/usr/local/bin \
-    LD_LIBRARY_PATH=/opt/rh/rh-python38/root/usr/lib64:/opt/rh/$NODEJS_SCL/root/usr/lib64:/opt/rh/httpd24/root/usr/lib64:/opt/rh/python38/root/usr/lib64 \
-    LIBRARY_PATH=/opt/rh/httpd24/root/usr/lib64 \
-    X_SCLS=rh-python38 \
-    MANPATH=/opt/rh/rh-python38/root/usr/share/man:/opt/rh/python38/root/usr/share/man:/opt/rh/httpd24/root/usr/share/man:/opt/rh/$NODEJS_SCL/root/usr/share/man \
-    VIRTUAL_ENV=/opt/app-root \
-    PYTHONPATH=/opt/rh/$NODEJS_SCL/root/usr/lib/python2.7/site-packages \
-    XDG_DATA_DIRS=/opt/rh/python38/root/usr/share:/opt/rh/rh-python38/root/usr/share:/usr/local/share:/usr/share \
-    PKG_CONFIG_PATH=/opt/rh/python38/root/usr/lib64/pkgconfig:/opt/rh/httpd24/root/usr/lib64/pkgconfig:/opt/rh/rh-python38/root/usr/lib64/pkgconfig \
-    PYTHONUNBUFFERED=1 \
-    PYTHONIOENCODING=UTF-8 \
-    LC_ALL=en_US.UTF-8 \
-    LANG=en_US.UTF-8 \
-    PIP_NO_CACHE_DIR=off
-
-
-ENV SUMMARY="Platform for building and running Python $PYTHON_VERSION applications" \
-    DESCRIPTION="Python $PYTHON_VERSION available as container is a base platform for \
-building and running various Python $PYTHON_VERSION applications and frameworks. \
-Python is an easy to learn, powerful programming language. It has efficient high-level \
-data structures and a simple but effective approach to object-oriented programming. \
-Python's elegant syntax and dynamic typing, together with its interpreted nature, \
-make it an ideal language for scripting and rapid application development in many areas \
-on most platforms."
-
-LABEL summary="$SUMMARY" \
-      description="$DESCRIPTION" \
-      io.k8s.description="$DESCRIPTION" \
-      io.k8s.display-name="Python 3.8" \
-      io.openshift.expose-services="8080:http" \
-      io.openshift.tags="builder,python,python38,python-38,rh-python38" \
-      com.redhat.component="python38-container" \
-      name="centos7/python-38-centos7" \
-      version="1" \
-      usage="s2i build https://github.com/sclorg/s2i-python-container.git --context-dir=3.8/test/setup-test-app/ centos7/python-38-centos7 python-sample-app" \
-      maintainer="SoftwareCollections.org <sclorg@redhat.com>"
-
-RUN INSTALL_PKGS="rh-python38 rh-python38-python-devel rh-python38-python-setuptools rh-python38-python-pip nss_wrapper \
-        httpd24 httpd24-httpd-devel httpd24-mod_ssl httpd24-mod_auth_kerb httpd24-mod_ldap \
-        httpd24-mod_session atlas-devel gcc-gfortran libffi-devel libtool-ltdl enchant  \
-    gcc gcc-c++ make cmake snappy-devel zlib-devel bzip2-devel lz4-devel " && \
-    yum install -y centos-release-scl && \
-    yum -y --setopt=tsflags=nodocs install --enablerepo=centosplus $INSTALL_PKGS && \
+RUN INSTALL_PKGS="gcc gcc-c++ make cmake snappy-devel gflags-devel zlib-devel bzip2-devel lz4-devel libzstd-devel" && \
+    yum -y --setopt=tsflags=nodocs install $INSTALL_PKGS && \
     rpm -V $INSTALL_PKGS && \
-    # Remove centos-logos (httpd dependency) to keep image size smaller.
-    rpm -e --nodeps centos-logos && \
     yum -y clean all --enablerepo='*'
 
-RUN git clone https://github.com/gflags/gflags.git && \
-    cd gflags && \
-    git checkout v2.0 && \
-    ./configure && \
-    make && \
-    make install
-
-# Copy the S2I scripts from the specific language image to $STI_SCRIPTS_PATH.
-#COPY 3.8/s2i/bin/ $STI_SCRIPTS_PATH
-ADD https://raw.githubusercontent.com/sclorg/s2i-python-container/generated/3.8/s2i/bin/assemble $STI_SCRIPTS_PATH
-ADD https://raw.githubusercontent.com/sclorg/s2i-python-container/generated/3.8/s2i/bin/run $STI_SCRIPTS_PATH
-ADD https://raw.githubusercontent.com/sclorg/s2i-python-container/generated/3.8/s2i/bin/init-wrapper $STI_SCRIPTS_PATH
-ADD https://raw.githubusercontent.com/sclorg/s2i-python-container/generated/3.8/s2i/bin/usage $STI_SCRIPTS_PATH
-
-
-
-# Copy extra files to the image.
-ADD https://raw.githubusercontent.com/sclorg/s2i-python-container/generated/3.8/root/opt/app-root/etc/generate_container_user /opt/app-root/etc/
-ADD https://raw.githubusercontent.com/sclorg/s2i-python-container/generated/3.8/root/opt/app-root/etc/scl_enable /opt/app-root/etc/
-
-
+RUN /usr/bin/fix-permissions /tmp/src
 USER 1001
 
-# Set the default CMD to print the usage of the language image.
-CMD $STI_SCRIPTS_PATH/usage
+# Install the dependencies
+RUN /usr/libexec/s2i/assemble
+
+# Set the default command for the resulting image
+CMD /usr/libexec/s2i/run
