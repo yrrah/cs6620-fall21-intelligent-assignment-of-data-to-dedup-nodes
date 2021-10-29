@@ -1,26 +1,27 @@
-# This image provides a Python 3.8 environment you can use to run your Python
+# This image provides a Python 3.9 environment you can use to run your Python
 # applications.
-FROM quay.io/centos7/s2i-base-centos7
+FROM ubi8/s2i-base:1
 
 EXPOSE 8080
 
-ENV PYTHON_VERSION=3.8 \
-    PYTHON_SCL_VERSION=38 \
-    PATH=$PATH:/opt/rh/rh-python38/root/usr/bin:$HOME/.local/bin/:/opt/rh/$NODEJS_SCL/root/usr/bin:/opt/rh/httpd24/root/usr/bin:/opt/rh/python38/root/usr/bin:/opt/rh/httpd24/root/usr/sbin:/opt/rh/rh-python38/root/usr/local/bin \
-    LD_LIBRARY_PATH=/opt/rh/rh-python38/root/usr/lib64:/opt/rh/$NODEJS_SCL/root/usr/lib64:/opt/rh/httpd24/root/usr/lib64:/opt/rh/python38/root/usr/lib64 \
-    LIBRARY_PATH=/opt/rh/httpd24/root/usr/lib64 \
-    X_SCLS=rh-python38 \
-    MANPATH=/opt/rh/rh-python38/root/usr/share/man:/opt/rh/python38/root/usr/share/man:/opt/rh/httpd24/root/usr/share/man:/opt/rh/$NODEJS_SCL/root/usr/share/man \
-    VIRTUAL_ENV=/opt/app-root \
-    PYTHONPATH=/opt/rh/$NODEJS_SCL/root/usr/lib/python2.7/site-packages \
-    XDG_DATA_DIRS=/opt/rh/python38/root/usr/share:/opt/rh/rh-python38/root/usr/share:/usr/local/share:/usr/share \
-    PKG_CONFIG_PATH=/opt/rh/python38/root/usr/lib64/pkgconfig:/opt/rh/httpd24/root/usr/lib64/pkgconfig:/opt/rh/rh-python38/root/usr/lib64/pkgconfig \
+ENV PYTHON_VERSION=3.9 \
+    PATH=$HOME/.local/bin/:$PATH \
     PYTHONUNBUFFERED=1 \
     PYTHONIOENCODING=UTF-8 \
     LC_ALL=en_US.UTF-8 \
     LANG=en_US.UTF-8 \
+    CNB_STACK_ID=com.redhat.stacks.ubi8-python-39 \
+    CNB_USER_ID=1001 \
+    CNB_GROUP_ID=0 \
     PIP_NO_CACHE_DIR=off
 
+# RHEL7 base images automatically set these envvars to run scl_enable. RHEl8
+# images, however, don't as most images don't need SCLs any more. But we want
+# to run it even on RHEL8, because we set the virtualenv environment as part of
+# that script
+ENV BASH_ENV=${APP_ROOT}/etc/scl_enable \
+    ENV=${APP_ROOT}/etc/scl_enable \
+    PROMPT_COMMAND=". ${APP_ROOT}/etc/scl_enable"
 
 ENV SUMMARY="Platform for building and running Python $PYTHON_VERSION applications" \
     DESCRIPTION="Python $PYTHON_VERSION available as container is a base platform for \
@@ -34,38 +35,39 @@ on most platforms."
 LABEL summary="$SUMMARY" \
       description="$DESCRIPTION" \
       io.k8s.description="$DESCRIPTION" \
-      io.k8s.display-name="Python 3.8" \
+      io.k8s.display-name="Python 3.9" \
       io.openshift.expose-services="8080:http" \
-      io.openshift.tags="builder,python,python38,python-38,rh-python38" \
-      com.redhat.component="python38-container" \
-      name="centos7/python-38-centos7" \
+      io.openshift.tags="builder,python,python39,python-39,rh-python39" \
+      com.redhat.component="python-39-container" \
+      name="ubi8/python-39" \
       version="1" \
-      usage="s2i build https://github.com/sclorg/s2i-python-container.git --context-dir=3.8/test/setup-test-app/ centos7/python-38-centos7 python-sample-app" \
+      usage="s2i build https://github.com/sclorg/s2i-python-container.git --context-dir=3.9/test/setup-test-app/ ubi8/python-39 python-sample-app" \
+      com.redhat.license_terms="https://www.redhat.com/en/about/red-hat-end-user-license-agreements#UBI" \
+      io.buildpacks.stack.id="com.redhat.stacks.ubi8-python-39" \
       maintainer="SoftwareCollections.org <sclorg@redhat.com>"
 
-RUN INSTALL_PKGS="rh-python38 rh-python38-python-devel rh-python38-python-setuptools rh-python38-python-pip nss_wrapper  \
-    httpd24 httpd24-httpd-devel httpd24-mod_ssl httpd24-mod_auth_kerb httpd24-mod_ldap  \
-    httpd24-mod_session atlas-devel gcc-gfortran libffi-devel libtool-ltdl enchant  \
+RUN INSTALL_PKGS="python39 python39-devel python39-setuptools python39-pip nss_wrapper \
+        httpd httpd-devel mod_ssl mod_auth_gssapi mod_ldap \
+        mod_session atlas-devel gcc-gfortran libffi-devel libtool-ltdl enchant  \
     gcc gcc-c++ make cmake snappy-devel gflags-devel zlib-devel bzip2-devel lz4-devel libzstd-devel" && \
-    yum install -y centos-release-scl && \
-    yum -y --setopt=tsflags=nodocs install --enablerepo=centosplus $INSTALL_PKGS && \
+    yum -y module enable python39:3.9 httpd:2.4 && \
+    yum -y --setopt=tsflags=nodocs install $INSTALL_PKGS && \
     rpm -V $INSTALL_PKGS && \
-    # Remove centos-logos (httpd dependency) to keep image size smaller.
-    rpm -e --nodeps centos-logos && \
+    # Remove redhat-logos-httpd (httpd dependency) to keep image size smaller.
+    rpm -e --nodeps redhat-logos-httpd && \
     yum -y clean all --enablerepo='*'
 
 # Copy the S2I scripts from the specific language image to $STI_SCRIPTS_PATH.
-#COPY 3.8/s2i/bin/ $STI_SCRIPTS_PATH
-ADD https://raw.githubusercontent.com/sclorg/s2i-python-container/generated/3.8/s2i/bin/assemble $STI_SCRIPTS_PATH
-ADD https://raw.githubusercontent.com/sclorg/s2i-python-container/generated/3.8/s2i/bin/run $STI_SCRIPTS_PATH
-ADD https://raw.githubusercontent.com/sclorg/s2i-python-container/generated/3.8/s2i/bin/init-wrapper $STI_SCRIPTS_PATH
-ADD https://raw.githubusercontent.com/sclorg/s2i-python-container/generated/3.8/s2i/bin/usage $STI_SCRIPTS_PATH
-
-
+#COPY 3.9/s2i/bin/ $STI_SCRIPTS_PATH
+ADD https://raw.githubusercontent.com/sclorg/s2i-python-container/master/3.9/s2i/bin/assemble $STI_SCRIPTS_PATH
+ADD https://raw.githubusercontent.com/sclorg/s2i-python-container/master/3.9/s2i/bin/run $STI_SCRIPTS_PATH
+ADD https://raw.githubusercontent.com/sclorg/s2i-python-container/master/3.9/s2i/bin/init-wrapper $STI_SCRIPTS_PATH
+ADD https://raw.githubusercontent.com/sclorg/s2i-python-container/master/3.9/s2i/bin/usage $STI_SCRIPTS_PATH
 
 # Copy extra files to the image.
-ADD https://raw.githubusercontent.com/sclorg/s2i-python-container/generated/3.8/root/opt/app-root/etc/generate_container_user /opt/app-root/etc/
-ADD https://raw.githubusercontent.com/sclorg/s2i-python-container/generated/3.8/root/opt/app-root/etc/scl_enable /opt/app-root/etc/
+#COPY 3.9/root/ /
+ADD https://raw.githubusercontent.com/sclorg/s2i-python-container/master/3.9/root/opt/app-root/etc/generate_container_user /opt/app-root/etc/
+ADD https://raw.githubusercontent.com/sclorg/s2i-python-container/master/3.9/root/opt/app-root/etc/scl_enable /opt/app-root/etc/
 
 
 USER 1001
