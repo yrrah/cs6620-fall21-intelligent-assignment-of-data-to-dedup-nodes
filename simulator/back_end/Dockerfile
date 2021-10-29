@@ -64,14 +64,11 @@ ADD https://raw.githubusercontent.com/sclorg/s2i-python-container/generated/3.8/
 
 
 # Copy extra files to the image.
-COPY 3.8/root/ /
+ADD https://raw.githubusercontent.com/sclorg/s2i-python-container/generated/3.8/root/opt/app-root/etc/generate_container_user /opt/app-root/etc/
+ADD https://raw.githubusercontent.com/sclorg/s2i-python-container/generated/3.8/root/opt/app-root/etc/scl_enable /opt/app-root/etc/
 
 # Python 3 only
-# Yes, the directory below is already copied by the previous command.
-# The problem here is that the wheels directory is copied as a symlink.
-# Only if you specify symlink directly as a source, COPY copies all the
-# files from the symlink destination.
-COPY 3.8/root/opt/wheels /opt/wheels
+COPY ../../../src/root/opt/wheels/ /opt/wheels
 # - Create a Python virtual environment for use by any application to avoid
 #   potential conflicts with Python packages preinstalled in the main Python
 #   installation.
