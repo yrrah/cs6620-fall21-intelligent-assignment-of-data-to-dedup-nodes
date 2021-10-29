@@ -3,13 +3,11 @@ FROM registry.access.redhat.com/ubi8/python-39
 # Add application sources to a directory that the assemble script expects them
 # and set permissions so that the container runs without root access
 USER 0
-ADD app-src /tmp/src
-
 RUN INSTALL_PKGS="gcc gcc-c++ make cmake snappy-devel gflags-devel zlib-devel bzip2-devel lz4-devel libzstd-devel" && \
     yum -y --setopt=tsflags=nodocs install $INSTALL_PKGS && \
     rpm -V $INSTALL_PKGS && \
     yum -y clean all --enablerepo='*'
-
+ADD . /tmp/src
 RUN /usr/bin/fix-permissions /tmp/src
 USER 1001
 
