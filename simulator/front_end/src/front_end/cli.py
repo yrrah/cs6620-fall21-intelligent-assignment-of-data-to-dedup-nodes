@@ -16,7 +16,7 @@ later, but that will cause problems--the code will get executed twice:
 import logging
 import os
 import click
-from front_end import run
+from front_end import serve
 
 __all__ = [
     "main",
@@ -31,8 +31,8 @@ logger = logging.getLogger(__name__)
 def main(demo):
     """CLI for front_end."""
     if demo or os.environ['SIMULATOR_MODE'] == 'DEMO':
-        print(f"Client running.")
-        run()
+        print(f"Server running.")
+        serve()
     else:
         print("No front_end demo :(")
 

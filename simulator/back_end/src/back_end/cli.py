@@ -17,7 +17,7 @@ import logging
 import os
 
 import click
-from back_end import serve
+from back_end import run
 
 __all__ = [
   "main",
@@ -32,8 +32,8 @@ logger = logging.getLogger(__name__)
 def main(demo):
     """CLI for back_end."""
     if demo or os.environ['SIMULATOR_MODE'] == 'DEMO':
-        print(f"Server running.")
-        serve()
+        print(f"Client running.")
+        run()
     else:
         print("No back_end demo :(")
 
