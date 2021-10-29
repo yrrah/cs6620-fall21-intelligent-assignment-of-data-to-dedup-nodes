@@ -45,10 +45,10 @@ LABEL summary="$SUMMARY" \
 
 RUN INSTALL_PKGS="rh-python38 rh-python38-python-devel rh-python38-python-setuptools rh-python38-python-pip nss_wrapper \
         httpd24 httpd24-httpd-devel httpd24-mod_ssl httpd24-mod_auth_kerb httpd24-mod_ldap \
-        httpd24-mod_session atlas-devel gcc-gfortran libffi-devel libtool-ltdl enchant" && \
+        httpd24-mod_session atlas-devel gcc-gfortran libffi-devel libtool-ltdl enchant  \
+    build-essential cmake libgflags-dev libsnappy-dev zlib1g-dev libbz2-dev liblz4-dev libzstd-dev" && \
     yum install -y centos-release-scl && \
     yum -y --setopt=tsflags=nodocs install --enablerepo=centosplus $INSTALL_PKGS && \
-    yum install -y build-essential cmake libgflags-dev libsnappy-dev zlib1g-dev libbz2-dev liblz4-dev libzstd-dev && \
     rpm -V $INSTALL_PKGS && \
     # Remove centos-logos (httpd dependency) to keep image size smaller.
     rpm -e --nodeps centos-logos && \
@@ -66,31 +66,7 @@ ADD https://raw.githubusercontent.com/sclorg/s2i-python-container/generated/3.8/
 # Copy extra files to the image.
 ADD https://raw.githubusercontent.com/sclorg/s2i-python-container/generated/3.8/root/opt/app-root/etc/generate_container_user /opt/app-root/etc/
 ADD https://raw.githubusercontent.com/sclorg/s2i-python-container/generated/3.8/root/opt/app-root/etc/scl_enable /opt/app-root/etc/
-ADD https://raw.githubusercontent.com/sclorg/s2i-python-container/generated/3.8/root/opt/wheels /wheels
-# Python 3 only
-COPY /wheels /opt/wheels/
-# - Create a Python virtual environment for use by any application to avoid
-#   potential conflicts with Python packages preinstalled in the main Python
-#   installation.
-# - In order to drop the root user, we have to make some directories world
-#   writable as OpenShift default security model is to run the container
-#   under random UID.
-RUN source scl_source enable rh-python38 && \
-    python3.8 -m venv ${APP_ROOT} && \
-    # Python 3 only code, Python 2 installs pip from PyPI in the assemble script. \
-    # We have to upgrade pip to a newer verison because: \
-    # * pip < 9 does not support different packages' versions for Python 2/3 \
-    # * pip < 19.3 does not support manylinux2014 wheels. Only manylinux2014 (and later) wheels \
-    #   support platforms like ppc64le, aarch64 or armv7 \
-    # We are newly using wheel from one of the latest stable Fedora releases (from RPM python-pip-wheel) \
-    # because it's tested better then whatever version from PyPI and contains useful patches. \
-    # We have to do it here (in the macro) so the permissions are correctly fixed and pip is able \
-    # to reinstall itself in the next build phases in the assemble script if user wants the latest version \
-    ${APP_ROOT}/bin/pip install /opt/wheels/pip-* && \
-    rm -r /opt/wheels && \
-    chown -R 1001:0 ${APP_ROOT} && \
-    fix-permissions ${APP_ROOT} -P && \
-    rpm-file-permissions
+
 
 USER 1001
 
