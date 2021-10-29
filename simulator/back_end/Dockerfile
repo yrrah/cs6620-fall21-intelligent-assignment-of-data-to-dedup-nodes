@@ -4,7 +4,7 @@ FROM quay.io/centos7/python-38-centos7
 # and set permissions so that the container runs without root access
 USER 0
 
-RUN INSTALL_PKGS="gcc gcc-c++ make cmake snappy-devel zlib-devel bzip2-devel lz4-devel" && \
+RUN INSTALL_PKGS="centos-release-scl devtoolset-7-gcc* cmake snappy-devel zlib-devel bzip2-devel lz4-devel" && \
     yum -y --setopt=tsflags=nodocs install $INSTALL_PKGS && \
     rpm -V $INSTALL_PKGS && \
     yum -y clean all --enablerepo='*'
@@ -21,6 +21,9 @@ RUN /usr/bin/fix-permissions /tmp/src
 USER 1001
 
 # Install the dependencies
+RUN echo "source scl_source enable devtoolset-7" >> /etc/bashrc
+RUN source /etc/bashrc
+RUN gcc --version
 RUN /usr/libexec/s2i/assemble
 
 # Set the default command for the resulting image
