@@ -48,13 +48,20 @@ RUN INSTALL_PKGS="rh-python38 rh-python38-python-devel rh-python38-python-setupt
         httpd24-mod_session atlas-devel gcc-gfortran libffi-devel libtool-ltdl enchant" && \
     yum install -y centos-release-scl && \
     yum -y --setopt=tsflags=nodocs install --enablerepo=centosplus $INSTALL_PKGS && \
+    yum install -y build-essential cmake libgflags-dev libsnappy-dev zlib1g-dev libbz2-dev liblz4-dev libzstd-dev && \
     rpm -V $INSTALL_PKGS && \
     # Remove centos-logos (httpd dependency) to keep image size smaller.
     rpm -e --nodeps centos-logos && \
     yum -y clean all --enablerepo='*'
 
 # Copy the S2I scripts from the specific language image to $STI_SCRIPTS_PATH.
-COPY 3.8/s2i/bin/ $STI_SCRIPTS_PATH
+#COPY 3.8/s2i/bin/ $STI_SCRIPTS_PATH
+ADD https://raw.githubusercontent.com/sclorg/s2i-python-container/generated/3.8/s2i/bin/assemble $STI_SCRIPTS_PATH
+ADD https://raw.githubusercontent.com/sclorg/s2i-python-container/generated/3.8/s2i/bin/run $STI_SCRIPTS_PATH
+ADD https://raw.githubusercontent.com/sclorg/s2i-python-container/generated/3.8/s2i/bin/init-wrapper $STI_SCRIPTS_PATH
+ADD https://raw.githubusercontent.com/sclorg/s2i-python-container/generated/3.8/s2i/bin/usage $STI_SCRIPTS_PATH
+
+
 
 # Copy extra files to the image.
 COPY 3.8/root/ /

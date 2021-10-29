@@ -1,5 +1,0 @@
-#!/bin/bash
-
-
-
-yum -y install build-essential cmake libgflags-dev libsnappy-dev zlib1g-dev libbz2-dev liblz4-dev libzstd-dev
