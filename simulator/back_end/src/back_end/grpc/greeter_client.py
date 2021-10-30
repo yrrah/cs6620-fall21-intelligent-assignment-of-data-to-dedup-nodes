@@ -19,7 +19,7 @@ import logging
 import os
 
 import grpc
-import pyrocksdb
+#import pyrocksdb
 from .generated import helloworld_pb2
 from .generated import helloworld_pb2_grpc
 
