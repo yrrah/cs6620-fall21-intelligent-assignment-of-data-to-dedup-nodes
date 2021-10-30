@@ -14,8 +14,10 @@ later, but that will cause problems--the code will get executed twice:
 """
 
 import logging
+import os
 
 import click
+from back_end import run
 
 __all__ = [
   "main",
@@ -24,10 +26,16 @@ __all__ = [
 logger = logging.getLogger(__name__)
 
 
-@click.group()
+@click.command()
 @click.version_option()
-def main():
+@click.option('--demo', 'demo', flag_value=True)
+def main(demo):
     """CLI for back_end."""
+    if demo or os.environ['SIMULATOR_MODE'] == 'DEMO':
+        print(f"Client running.")
+        run()
+    else:
+        print("No back_end demo :(")
 
 
 if __name__ == "__main__":
