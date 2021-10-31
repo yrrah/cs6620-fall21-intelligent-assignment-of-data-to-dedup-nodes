@@ -1,2 +1,4 @@
 *.bin binary
 *.hash.anon binary
+*.mp4 binary
+*.png binary

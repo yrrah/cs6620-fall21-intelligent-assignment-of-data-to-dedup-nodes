@@ -2,12 +2,12 @@ import os
 
 from tqdm import tqdm
 
-from simulator.back_end.src.back_end.kv_store.store import KeyValueStore
-from simulator.front_end.src.front_end.region_creation.fixed_region import create_fixed_regions
-from simulator.front_end.src.front_end.region_creation.input_streams import HashFile
+from back_end.store import KeyValueStore
+from front_end.region_creation.fixed_region import create_fixed_regions
+from front_end.region_creation.input_streams import HashFile
 import matplotlib.pyplot as plt
 
-from simulator.front_end.src.front_end.routing.simple_algo import simple_routing
+from front_end.routing.simple_algo import simple_routing
 
 
 def plot_distribution(domain_stats: [float]):
@@ -32,7 +32,7 @@ def plot_compression_ratio(domain_stats: [float]):
     plt.close(fig)
 
 
-def locally_running_example(num_domains: int = 10, max_input_files: int = 10, hash_file_dir: str = './hash_files/'):
+def locally_running_example(hash_file_dir: str, num_domains: int = 10, max_input_files: int = 10):
     domains = [KeyValueStore() for _ in range(num_domains)]
     hash_files = [file for file in os.listdir(hash_file_dir) if file.endswith(".hash.anon")]
     num_files = len(hash_files)
@@ -61,7 +61,7 @@ def locally_running_example(num_domains: int = 10, max_input_files: int = 10, ha
 
 
 def main():
-    locally_running_example()
+    locally_running_example('./front_end/src/front_end/hash_files/')
 
 
 if __name__ == "__main__":
