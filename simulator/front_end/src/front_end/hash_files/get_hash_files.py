@@ -36,7 +36,7 @@ def download_files(working_dir: str, web_dir: str, limit: int):
                 file.name = os.path.basename(file.name)
             tar.extractall(path=working_dir, members=hash_files)
             tar.close()
-            os.remove(name + '.tar.bz2')
+            os.remove(tar_name)
 
 
 def main():
