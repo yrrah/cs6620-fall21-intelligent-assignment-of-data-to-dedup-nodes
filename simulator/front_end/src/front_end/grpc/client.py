@@ -3,13 +3,10 @@ from __future__ import print_function
 import grpc
 import assignService_pb2
 import assignService_pb2_grpc
-from simulator.front_end.src.front_end.region_creation.content_defined_region_creation import \
-    create_content_defined_regions
+
 from simulator.front_end.src.front_end.region_creation.fixed_region import create_fixed_regions
 from simulator.front_end.src.front_end.region_creation.input_streams import HashFile
 
-from simulator.front_end.src.front_end.region_creation.region import Region
-import simulator.front_end.src.front_end.region_creation.content_defined_region_creation
 
 
 def sendToBackend(domainID, region):
@@ -29,7 +26,8 @@ def sendToBackend(domainID, region):
 
     # Get the response from the server(like a callback)
     response = stub.AssignRegion(region_to_send)
-    print("response from the backend service")
+    print("response from the backend service -> nonDuplicatesSize = {} and nonDuplicatesLength = {}".
+          format(response.nonDuplicatesSize, response.nonDuplicatesLength))
     return response
 
 
@@ -38,6 +36,5 @@ def sendToBackend(domainID, region):
 if __name__ == '__main__':
 
     hash_file = HashFile("../../../../hash_files/fslhomes-user006-2011-09-10.8kb.hash.anon")
-
-    for region in create_fixed_regions(hash_file, 1):
+    for region in create_fixed_regions(hash_file, 4):
         sendToBackend(1, region)

@@ -20,13 +20,11 @@ class AssignToDomain(assignService_pb2_grpc.RegionReceiveServiceServicer):
     kv_store = KeyValueMap(1)
 
     def AssignRegion(self, request, context):
-        print("In the assign region method!!")
-        region_to_store = Region(request.maxSize)
-        for fingerPrint in request.fingerPrint:
-            region_to_store.add_fingerprint(fingerPrint, 1)
-
-        self.kv_store.add_region(region_to_store)
-
+        print("In the assign method")
+        print(type(request.fingerPrint))
+        non_duplicate_size, non_duplicates_length = self.kv_store.add_region(request.fingerPrint, 1)
+        return assignService_pb2.Acknowledgement(nonDuplicatesSize=non_duplicate_size,
+                                                 nonDuplicatesLength=non_duplicates_length)
     # TODO : Write some code for getting some stats from the domains.
 
 

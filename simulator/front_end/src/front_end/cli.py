@@ -14,8 +14,9 @@ later, but that will cause problems--the code will get executed twice:
 """
 
 import logging
+import os
 import click
-from simulator.front_end.src.front_end.region_creation.input_streams import read_file
+from front_end import serve
 
 __all__ = [
     "main",
@@ -24,10 +25,16 @@ __all__ = [
 logger = logging.getLogger(__name__)
 
 
-@click.group()
+@click.command()
 @click.version_option()
-def main():
+@click.option('--demo', 'demo', flag_value=True)
+def main(demo):
     """CLI for front_end."""
+    if demo or os.environ['SIMULATOR_MODE'] == 'DEMO':
+        print(f"Server running.")
+        serve()
+    else:
+        print("No front_end demo :(")
 
 
 if __name__ == "__main__":
