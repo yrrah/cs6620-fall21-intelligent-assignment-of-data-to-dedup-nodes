@@ -37,7 +37,7 @@ def main(demo, hello_world):
     """CLI for back_end."""
     if demo:
         os.environ['SIMULATOR_MODE'] = 'DEMO'
-        os.environ['SERVER_IP'] = 'localhost'
+
     if hello_world:
         os.environ['SIMULATOR_MODE'] = 'HELLO'
         os.environ['SERVER_IP'] = 'localhost'

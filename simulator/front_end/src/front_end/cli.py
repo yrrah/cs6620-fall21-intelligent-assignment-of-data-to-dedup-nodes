@@ -37,10 +37,9 @@ def main(demo, hello_world):
     """CLI for front_end."""
     if demo:
         os.environ['SIMULATOR_MODE'] = 'DEMO'
-        os.environ['SERVER_IP'] = 'localhost'
+        os.environ['SERVER_IP'] = 'localhost:50051'
     if hello_world:
         os.environ['SIMULATOR_MODE'] = 'HELLO'
-        os.environ['SERVER_IP'] = 'localhost'
 
     if os.environ['SIMULATOR_MODE'] == 'HELLO':
         print(f"Hello Server running on front_end.")
