@@ -24,6 +24,5 @@ USER 1001
 SHELL [ "/usr/bin/scl", "enable", "devtoolset-7"]
 RUN gcc --version
 RUN python3 -m pip install --upgrade pip
-RUN pip install wheel
-RUN pip install more_itertools tqdm click more_click grpcio protobuf grpcio-tools
+RUN pip install wheel more_itertools tqdm click more_click grpcio protobuf grpcio-tools
 RUN pip install 'python-rocksdb @ git+https://git@github.com/twmht/python-rocksdb@pybind11#egg=python-rocksdb'
