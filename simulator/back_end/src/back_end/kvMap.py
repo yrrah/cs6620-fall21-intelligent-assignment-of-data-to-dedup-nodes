@@ -1,6 +1,3 @@
-from simulator.front_end.src.front_end.region_creation.fixed_region import Region
-
-
 class KeyValueMap:
     """
     A map representation of a store that handles key, value pairs. Key --> domain_id and value

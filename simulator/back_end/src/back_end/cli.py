@@ -17,11 +17,14 @@ import logging
 import os
 
 import click
-from back_end import run
+
 
 __all__ = [
   "main",
 ]
+
+from back_end.grpc.hello_world_demo.greeter_client import run
+from back_end.grpc.server import serve
 
 logger = logging.getLogger(__name__)
 
@@ -29,15 +32,22 @@ logger = logging.getLogger(__name__)
 @click.command()
 @click.version_option()
 @click.option('--demo', 'demo', flag_value=True)
-def main(demo):
+@click.option('--hello_world', 'hello_world', flag_value=True)
+def main(demo, hello_world):
     """CLI for back_end."""
     if demo:
         os.environ['SIMULATOR_MODE'] = 'DEMO'
         os.environ['SERVER_IP'] = 'localhost'
+    if hello_world:
+        os.environ['SIMULATOR_MODE'] = 'HELLO'
+        os.environ['SERVER_IP'] = 'localhost'
 
-    if os.environ['SIMULATOR_MODE'] == 'DEMO':
-        print(f"Client running.")
+    if os.environ['SIMULATOR_MODE'] == 'HELLO':
+        print(f"Hello Client running on back_end.")
         run()
+    elif os.environ['SIMULATOR_MODE'] == 'DEMO':
+        print(f"Demo Server running on back_end.")
+        serve()
     else:
         print("No back_end demo :(")
 

@@ -1,11 +1,10 @@
 from __future__ import print_function
 
 import grpc
-from .generated import assignService_pb2
-from .generated import assignService_pb2_grpc
 
-from simulator.front_end.src.front_end.region_creation.fixed_region import create_fixed_regions
-from simulator.front_end.src.front_end.region_creation.input_streams import HashFile
+from front_end.grpc import assignService_pb2_grpc, assignService_pb2
+from front_end.region_creation.fixed_region import create_fixed_regions
+from front_end.region_creation.input_streams import HashFile
 
 
 def sendToBackend(domainID, region):
@@ -32,8 +31,12 @@ def sendToBackend(domainID, region):
 
 # TODO : Integrate with the assignment service
 
-if __name__ == '__main__':
-
-    hash_file = HashFile("../../../../hash_files/fslhomes-user006-2011-09-10.8kb.hash.anon")
+def hash_file_demo(filename: str):
+    hash_file = HashFile(filename)
     for region in create_fixed_regions(hash_file, 4):
         sendToBackend(1, region)
+
+
+if __name__ == '__main__':
+    hash_file_demo("../hash_files/fslhomes-user006-2011-09-10.8kb.hash.anon")
+

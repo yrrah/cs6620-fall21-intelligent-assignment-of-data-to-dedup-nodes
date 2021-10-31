@@ -1,7 +1,7 @@
 from typing import Generator, Any
 
-from simulator.front_end.src.front_end.region_creation.region import Region
-from simulator.front_end.src.front_end.region_creation.input_streams import HashFile
+from front_end.region_creation.input_streams import HashFile
+from front_end.region_creation.region import Region
 
 """
     This file contains the the algorithm to create regions of fixed size.

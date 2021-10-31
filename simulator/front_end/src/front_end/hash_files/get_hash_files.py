@@ -39,8 +39,7 @@ def download_files(web_dir: str, limit: int):
 
 
 def main():
-    web_dir = "https://tracer.filesystems.org/traces/fslhomes/2011-8kb-only/"
-    download_files(web_dir, limit=15)
+    download_files("https://tracer.filesystems.org/traces/fslhomes/2011-8kb-only/", limit=15)
 
 
 if __name__ == "__main__":

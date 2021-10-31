@@ -2,13 +2,14 @@
 region to the domains (the backend service)
 """
 from __future__ import print_function
-from concurrent import futures
+
 import logging
+from concurrent import futures
+
 import grpc
-from .generated import assignService_pb2
-from .generated import assignService_pb2_grpc
-from simulator.front_end.src.front_end.region_creation.region import Region
-from simulator.back_end.src.back_end.kv_store.kvMap import KeyValueMap
+
+from back_end.grpc import assignService_pb2_grpc, assignService_pb2
+from back_end.kvMap import KeyValueMap
 
 
 class AssignToDomain(assignService_pb2_grpc.RegionReceiveServiceServicer):

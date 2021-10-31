@@ -1,4 +1,4 @@
-from simulator.front_end.src.front_end.region_creation.fixed_region import Region
+from back_end.grpc.assignService_pb2 import Region
 
 
 class KeyValueStore:

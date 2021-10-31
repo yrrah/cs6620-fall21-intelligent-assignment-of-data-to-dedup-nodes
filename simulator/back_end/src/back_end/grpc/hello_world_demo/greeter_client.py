@@ -17,11 +17,10 @@ from __future__ import print_function
 
 import logging
 import os
-
 import grpc
 import pyrocksdb
-from .generated import helloworld_pb2
-from .generated import helloworld_pb2_grpc
+
+from back_end.grpc.hello_world_demo import helloworld_pb2, helloworld_pb2_grpc
 
 
 def run():
@@ -63,5 +62,6 @@ def db_test():
 
 
 if __name__ == '__main__':
+    os.environ['SERVER_IP'] = 'localhost'
     logging.basicConfig()
     run()

@@ -1,7 +1,6 @@
 import fixed_region
-from simulator.front_end.src.front_end.region_creation.content_defined_region_creation import \
-    create_content_defined_regions
-from simulator.front_end.src.front_end.region_creation.input_streams import HashFile
+from front_end.region_creation.content_defined_region_creation import create_content_defined_regions
+from front_end.region_creation.input_streams import HashFile
 
 """
  This file contains the interface to create the region based on the different
