@@ -31,7 +31,11 @@ logger = logging.getLogger(__name__)
 @click.option('--demo', 'demo', flag_value=True)
 def main(demo):
     """CLI for back_end."""
-    if demo or os.environ['SIMULATOR_MODE'] == 'DEMO':
+    if demo:
+        os.environ['SIMULATOR_MODE'] = 'DEMO'
+        os.environ['SERVER_IP'] = 'localhost'
+
+    if os.environ['SIMULATOR_MODE'] == 'DEMO':
         print(f"Client running.")
         run()
     else:
