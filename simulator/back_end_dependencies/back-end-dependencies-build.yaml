@@ -1,0 +1,25 @@
+apiVersion: build.openshift.io/v1
+kind: BuildConfig
+metadata:
+  labels:
+    app: cs6620-fall21-dedup-nodes-back-end-dependencies
+    app.kubernetes.io/component: cs6620-fall21-dedup-nodes-back-end-dependencies
+    app.kubernetes.io/instance: cs6620-fall21-dedup-nodes-back-end-dependencies
+  name: cs6620-fall21-dedup-nodes-back-end-dependencies
+  namespace: cs6620-fall21-intelligentassignment-dedupnodes
+spec:
+  resources:
+    limits:
+      cpu: "2"
+  source:
+    contextDir: simulator/back_end_dependencies
+    git:
+      uri: https://github.com/yrrah/cs6620-fall21-intelligent-assignment-of-data-to-dedup-nodes.git
+    type: Git
+  strategy:
+    type: Source
+    dockerStrategy:
+  output:
+    to:
+      kind: ImageStreamTag
+      name: cs6620-fall21-dedup-nodes-back-end-dependencies:latest
