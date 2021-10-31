@@ -1,5 +1,7 @@
 from __future__ import print_function
 
+import os
+
 import grpc
 
 from front_end.grpc import assignService_pb2_grpc, assignService_pb2
@@ -11,21 +13,22 @@ def sendToBackend(domainID, region):
     """
     A client code that sends a region to the backend server,based on domainId.
     """
-    channel = grpc.insecure_channel('localhost:50051')
-    stub = assignService_pb2_grpc.RegionReceiveServiceStub(channel)
-    region_to_send = assignService_pb2.Region()
-    for i in range(0, len(region.fingerprints)):
-        region_to_send.fingerPrint.append(assignService_pb2.Fingerprint(fingerPrint=region.fingerprints[i]))
+    server_ip = os.environ['SERVER_IP']
+    with grpc.insecure_channel(f'{server_ip}:50051') as channel:
+        stub = assignService_pb2_grpc.RegionReceiveServiceStub(channel)
+        region_to_send = assignService_pb2.Region()
+        for i in range(0, len(region.fingerprints)):
+            region_to_send.fingerPrint.append(assignService_pb2.Fingerprint(fingerPrint=region.fingerprints[i]))
 
-    region_to_send.domainNumber = domainID
-    region_to_send.maxSize = region.max_size
-    region_to_send.currentSize = region.current_size
-    # Assigning to the region class
+        region_to_send.domainNumber = domainID
+        region_to_send.maxSize = region.max_size
+        region_to_send.currentSize = region.current_size
+        # Assigning to the region class
 
-    # Get the response from the server(like a callback)
-    response = stub.AssignRegion(region_to_send)
-    print("response from the backend service -> nonDuplicatesSize = {} and nonDuplicatesLength = {}".
-          format(response.nonDuplicatesSize, response.nonDuplicatesLength))
+        # Get the response from the server(like a callback)
+        response = stub.AssignRegion(region_to_send)
+        print("response from the backend service -> nonDuplicatesSize = {} and nonDuplicatesLength = {}".
+              format(response.nonDuplicatesSize, response.nonDuplicatesLength))
     return response
 
 
