@@ -23,4 +23,6 @@ USER 1001
 # Install the dependencies
 SHELL [ "/usr/bin/scl", "enable", "devtoolset-7"]
 RUN gcc --version
+RUN python3 -m pip install --upgrade pip
+RUN pip install wheel
 RUN pip install 'python-rocksdb @ git+https://git@github.com/twmht/python-rocksdb@pybind11#egg=python-rocksdb'

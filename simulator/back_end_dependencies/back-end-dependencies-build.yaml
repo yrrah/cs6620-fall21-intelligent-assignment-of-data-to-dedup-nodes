@@ -11,14 +11,15 @@ spec:
   resources:
     limits:
       cpu: "2"
+    requests:
+      cpu: '0.1'
   source:
     contextDir: simulator/back_end_dependencies
     git:
       uri: https://github.com/yrrah/cs6620-fall21-intelligent-assignment-of-data-to-dedup-nodes.git
     type: Git
   strategy:
-    type: Source
-    dockerStrategy:
+    type: Docker
   output:
     to:
       kind: ImageStreamTag
