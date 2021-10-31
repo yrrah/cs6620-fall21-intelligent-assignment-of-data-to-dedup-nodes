@@ -9,7 +9,7 @@ import urllib.request as urlrq
 from tqdm import tqdm
 
 
-def download_files(web_dir: str, limit: int):
+def download_files(working_dir: str, web_dir: str, limit: int):
     cwd, listing = htmllistparse.fetch_listing(web_dir, timeout=30)
     names = [f.name.split('.tar.bz2')[0] for f in listing if f.name.endswith('.tar.bz2')]
 
@@ -22,24 +22,25 @@ def download_files(web_dir: str, limit: int):
         filename = os.path.join(web_dir, name)
 
         # Download the file if it does not yet exist
-        if not glob.glob(name + '*.hash.anon'):
+        if not glob.glob(os.path.join(working_dir, name + '*.hash.anon')):
             file = urlrq.urlopen(url, context=ssl.create_default_context(cafile=certifi.where()))
-            with open(name + '.tar.bz2', 'wb') as output:
+            tar_name = os.path.join(working_dir, name + '.tar.bz2')
+            with open(tar_name, 'wb') as output:
                 output.write(file.read())
 
             # extract hash file from archive
-            tar = tarfile.open(name + '.tar.bz2', "r:bz2")
+            tar = tarfile.open(tar_name, "r:bz2")
             hash_files = [m for m in tar.getmembers() if m.name.endswith('.hash.anon')]
             for file in hash_files:
                 # get just the file without directory structure
                 file.name = os.path.basename(file.name)
-            tar.extractall(members=hash_files)
+            tar.extractall(path=working_dir, members=hash_files)
             tar.close()
             os.remove(name + '.tar.bz2')
 
 
 def main():
-    download_files("https://tracer.filesystems.org/traces/fslhomes/2011-8kb-only/", limit=15)
+    download_files(".", "https://tracer.filesystems.org/traces/fslhomes/2011-8kb-only/", limit=15)
 
 
 if __name__ == "__main__":

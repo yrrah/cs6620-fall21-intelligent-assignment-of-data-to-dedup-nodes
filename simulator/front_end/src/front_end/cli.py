@@ -47,8 +47,9 @@ def main(demo, hello_world):
         serve()
     elif os.environ['SIMULATOR_MODE'] == 'DEMO':
         print(f"Demo Client running on front_end.")
-        download_files("https://tracer.filesystems.org/traces/fslhomes/2011-8kb-only/", limit=1)
-        serve()
+        if not os.path.exists("./hash_files"):
+            os.makedirs("./hash_files")
+        download_files("./hash_files", "https://tracer.filesystems.org/traces/fslhomes/2011-8kb-only/", limit=1)
         hash_file_demo("./hash_files/fslhomes-user006-2011-09-10.8kb.hash.anon")
     else:
         print("No front_end demo :(")
