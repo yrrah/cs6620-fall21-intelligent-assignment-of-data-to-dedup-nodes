@@ -134,3 +134,4 @@ dmypy.json
 /.idea/misc.xml
 /.idea/cs6620-fall21-intelligent-assignment-of-data-to-dedup-nodes.iml
 /.idea/
+/db_files/
