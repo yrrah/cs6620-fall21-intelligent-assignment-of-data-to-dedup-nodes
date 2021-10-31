@@ -6,18 +6,19 @@
 
 ### Command Line Interface
 
-The back_end command line tool is automatically installed. It can
-be used from the shell with the `--help` flag to show all subcommands:
-
 ```shell
-$ ./back_end/back_end --help
-$ ./front_end/front_end --help
+$ python -m back_end --help
+$ python -m front_end --help
 ```
 
 > TODO show the most useful thing the CLI does! The CLI will have documentation auto-generated
 by `sphinx`.
 
 ## 🚀 Installation
+
+The back_end depends on https://twmht.github.io/python-rocksdb/index.html which builds rocksdb from c++ source when 
+it is installed. The requirements are slightly different for each OS https://github.com/facebook/rocksdb/blob/main/INSTALL.md
+`simulator/back_end_dependencies` contains a Docker file which prepares a centos7 image with all dependencies installed. 
 
 The most recent code and data can be installed directly from GitHub with:
 
@@ -28,9 +29,6 @@ $ pip install simulator/front_end
 $ pip install simulator/back_end
 ```
 
-```
-oc new-app https://github.com/yrrah/cs6620-fall21-intelligent-assignment-of-data-to-dedup-nodes.git --context-dir=simulator/front_end
-```
 
 To install in development mode, use the following:
 
