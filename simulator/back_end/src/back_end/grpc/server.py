@@ -5,8 +5,8 @@ from __future__ import print_function
 from concurrent import futures
 import logging
 import grpc
-import assignService_pb2
-import assignService_pb2_grpc
+from .generated import assignService_pb2
+from .generated import assignService_pb2_grpc
 from simulator.front_end.src.front_end.region_creation.region import Region
 from simulator.back_end.src.back_end.kv_store.kvMap import KeyValueMap
 
