@@ -1,4 +1,4 @@
-FROM default-route-openshift-image-registry.apps-crc.testing/cs6620-fall21-intelligentassignment-dedupnodes/cs6620-fall21-dedup-nodes-back-end-dependencies:latest
+FROM image-registry.openshift-image-registry.svc:5000/cs6620-fall21-intelligentassignment-dedupnodes/cs6620-fall21-dedup-nodes-back-end-dependencies:latest
 
 # Add application sources to a directory that the assemble script expects them
 # and set permissions so that the container runs without root access
