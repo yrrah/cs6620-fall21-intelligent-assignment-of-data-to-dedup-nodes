@@ -18,7 +18,7 @@ spec:
     sourceStrategy:
       from:
         kind: ImageStreamTag
-        name: python:3.9-ubi8
+        name: python:3.8-ubi7
         namespace: openshift
       env:
       - name: SIMULATOR_MODE
