@@ -1,7 +1,0 @@
-apiVersion: image.openshift.io/v1
-kind: ImageStream
-metadata:
-  labels:
-    application: cs6620-fall21-dedup-nodes-front-end
-  name: cs6620-fall21-dedup-nodes-front-end
-  namespace: cs6620-fall21-intelligentassignment-dedupnodes

@@ -1,9 +1,10 @@
-apiVersion: apps.openshift.io/v1
-kind: DeploymentConfig
+apiVersion: batch/v1
+kind: Job
 metadata:
   name: cs6620-fall21-dedup-nodes-back-end
   namespace: cs6620-fall21-intelligentassignment-dedupnodes
 spec:
+  parallelism: 10
   selector:
     app: cs6620-fall21-dedup-nodes-back-end
   template:
@@ -20,6 +21,4 @@ spec:
           env:
             - name: SIMULATOR_MODE
               value: DEMO
-            - name: SERVER_IP
-              value: 10.217.5.5
-#  replicas: 3
+      restartPolicy: Never

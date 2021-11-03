@@ -14,7 +14,7 @@ def sendToBackend(domainID, region):
     A client code that sends a region to the backend server,based on domainId.
     """
     server_ip = os.environ['SERVER_IP']
-    with grpc.insecure_channel(server_ip) as channel:
+    with grpc.insecure_channel(f'{server_ip}:50051') as channel:
         stub = assignService_pb2_grpc.RegionReceiveServiceStub(channel)
         region_to_send = assignService_pb2.Region()
         for i in range(0, len(region.fingerprints)):

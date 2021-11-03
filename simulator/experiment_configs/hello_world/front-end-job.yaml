@@ -1,5 +1,5 @@
-apiVersion: apps.openshift.io/v1
-kind: DeploymentConfig
+apiVersion: batch/v1
+kind: Job
 metadata:
   name: cs6620-fall21-dedup-nodes-front-end
   namespace: cs6620-fall21-intelligentassignment-dedupnodes
@@ -19,5 +19,5 @@ spec:
             - containerPort: 50051
           env:
             - name: SIMULATOR_MODE
-              value: DEMO
-#  replicas: 3
+              value: HELLO
+      restartPolicy: Never
