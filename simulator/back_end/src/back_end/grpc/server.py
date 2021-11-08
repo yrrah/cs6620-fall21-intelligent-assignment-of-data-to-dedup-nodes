@@ -4,10 +4,8 @@ region to the domains (the backend service)
 from __future__ import print_function
 
 import logging
-from concurrent import futures
-
 import grpc
-#import rocksdb
+from concurrent import futures
 from back_end.grpc import assignService_pb2_grpc, assignService_pb2
 from back_end.kvMap import KeyValueMap
 
