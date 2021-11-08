@@ -31,9 +31,13 @@ def sendToBackend(domain: int, back_end_address: str, region):
     return response
 
 
-def hash_file_demo(filename: str):
+def hash_file_demo(filename: str, ip_address):
+    """
+    Send the region to a backend server based on the ip_address sent to it by the simulate code-->
+    which in turn gets it from the assignment code.
+    """
     hash_file = HashFile(filename)
-    server_ip = os.environ['SERVER_IP'] + ':50051'
+    server_ip = ip_address + ':50051'
     for region in create_fixed_regions(hash_file, 4):
         sendToBackend(1, server_ip, region)
 
