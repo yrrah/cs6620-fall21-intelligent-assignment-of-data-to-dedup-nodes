@@ -1,0 +1,24 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: cs6620-fall21-dedup-nodes-back-end-ex0
+  namespace: cs6620-fall21-intelligentassignment-dedupnodes
+spec:
+  parallelism: 3
+  selector:
+    app: cs6620-fall21-dedup-nodes-back-end-ex0
+  template:
+    metadata:
+      labels:
+        app: cs6620-fall21-dedup-nodes-back-end-ex0
+    spec:
+      containers:
+        - name: cs6620-fall21-dedup-nodes-back-end-ex0
+          image: >-
+            image-registry.openshift-image-registry.svc:5000/cs6620-fall21-intelligentassignment-dedupnodes/cs6620-fall21-dedup-nodes-back-end
+          ports:
+            - containerPort: 50051
+          env:
+            - name: SIMULATOR_MODE
+              value: RUN
+      restartPolicy: Never
