@@ -2,3 +2,4 @@
 
 """deduplication domain module"""
 
+from grpc.server import serve

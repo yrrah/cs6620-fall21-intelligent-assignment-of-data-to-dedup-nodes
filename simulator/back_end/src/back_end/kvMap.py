@@ -1,3 +1,7 @@
+#Made changes to work with rocksdb rather than the traditional python collections.
+
+import rocksdb
+
 class KeyValueMap:
     """
     A map representation of a store that handles key, value pairs. Key --> domain_id and value

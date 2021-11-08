@@ -26,6 +26,21 @@ def create_regions(algorithms: str, hash_file: HashFile):
         raise ValueError("Region is too full to accept fingerprint")
 
 
+def region_factory(algorithm: str, hash_file: HashFile, fingerprint_size=1, min_size=2, max_size=8, bit_mask=5):
+    """
+    A factory method which produces the appropriate region based on the file passed to it and the algorithm.
+    """
+
+    if algorithm is "FIXED_SIZE":
+        return fixed_region.create_fixed_regions(hash_file, fingerprint_size)
+
+    if algorithm is "CONTENT-DEFINED":
+        return create_content_defined_regions(min_size, max_size, bit_mask, hash_file)
+
+    else:
+        raise ValueError("Please enter a correct region formation algorithm!")
+
+
 def main():
     file_name = input("Enter file name with path: ")
 
