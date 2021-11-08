@@ -9,18 +9,17 @@ from front_end.region_creation.fixed_region import create_fixed_regions
 from front_end.region_creation.input_streams import HashFile
 
 
-def sendToBackend(domainID, region):
+def sendToBackend(domain: int, back_end_address: str, region):
     """
     A client code that sends a region to the backend server,based on domainId.
     """
-    server_ip = os.environ['SERVER_IP']
-    with grpc.insecure_channel(f'{server_ip}:50051') as channel:
+    with grpc.insecure_channel(back_end_address) as channel:
         stub = assignService_pb2_grpc.RegionReceiveServiceStub(channel)
         region_to_send = assignService_pb2.Region()
         for i in range(0, len(region.fingerprints)):
             region_to_send.fingerPrint.append(assignService_pb2.Fingerprint(fingerPrint=region.fingerprints[i]))
 
-        region_to_send.domainNumber = domainID
+        region_to_send.domainNumber = domain
         region_to_send.maxSize = region.max_size
         region_to_send.currentSize = region.current_size
         # Assigning to the region class
@@ -32,12 +31,11 @@ def sendToBackend(domainID, region):
     return response
 
 
-# TODO : Integrate with the assignment service
-
 def hash_file_demo(filename: str):
     hash_file = HashFile(filename)
+    server_ip = os.environ['SERVER_IP'] + ':50051'
     for region in create_fixed_regions(hash_file, 4):
-        sendToBackend(1, region)
+        sendToBackend(1, server_ip, region)
 
 
 if __name__ == '__main__':
