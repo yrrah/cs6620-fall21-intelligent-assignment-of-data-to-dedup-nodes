@@ -2,6 +2,9 @@ import os
 
 
 def get_variables():
+    """
+    use environment variables to configure the simulator
+    """
     pass
     # REGION_FORMATION = FIXED
     # REGION_SIZE = 4
@@ -11,6 +14,9 @@ def get_variables():
 
 
 def get_files():
+    """
+    open a file stream to the path / pod location on Openshift
+    """
     pass
 
 
