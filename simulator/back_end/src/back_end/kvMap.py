@@ -7,6 +7,7 @@ import pyrocksdb
 def db_test():
     """
     example rocksdb usage
+    https://twmht.github.io/python-rocksdb/index.html
     @return:
     """
     db = pyrocksdb.DB()
