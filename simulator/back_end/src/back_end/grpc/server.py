@@ -16,12 +16,10 @@ class AssignToDomain(assignService_pb2_grpc.RegionReceiveServiceServicer):
     """
 
     # Here kv_store represents the domains and the fingerprints which we will store in the pod.
-    kv_store = KeyValueMap(1)
+    kv_store = KeyValueMap()
 
     def AssignRegion(self, request, context):
-        print("In the assign method")
-        print(type(request.fingerPrint))
-        non_duplicate_size, non_duplicates_length = self.kv_store.add_region(request.fingerPrint, 1)
+        non_duplicate_size, non_duplicates_length = self.kv_store.add_region(request.fingerPrint, request.domainNumber)
         return assignService_pb2.Acknowledgement(nonDuplicatesSize=non_duplicate_size,
                                                  nonDuplicatesLength=non_duplicates_length)
     # TODO : Write some code for getting some stats from the domains.
