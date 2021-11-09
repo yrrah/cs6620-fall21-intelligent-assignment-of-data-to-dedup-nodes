@@ -76,15 +76,15 @@ Within scope:
 Global Architectural Structure Of the Project:  
 ![Conceptual Diagram](https://github.com/yrrah/cs6620-fall21-intelligent-assignment-of-data-to-dedup-nodes/blob/main/conceptual-diagram.png)
 
-We will use fingerprint data from https://tracer.filesystems.org/ representing real world storage of files.   
-> 2.879 TB : /traces/fslhomes
->   
-> 81.860 GB : /traces/fslhomes/2011-8kb-only/   
-> 26.645 GB : /traces/fslhomes/2012-8kb-only/	  
-> 1.287 TB : /traces/fslhomes/2012/	  
-> 373.241 GB : /traces/fslhomes/2013/	  
-> 1.120 TB : /traces/fslhomes/2014/	  
-> 2.102 GB : /traces/fslhomes/2015/	  
+We will use fingerprint data from https://tracer.filesystems.org/ representing real world storage of files.      
+Physical size of hashes representing many TBs of logical data...   
+2.879 TB : /traces/fslhomes
+- 81.860 GB : /traces/fslhomes/2011-8kb-only/   
+- 26.645 GB : /traces/fslhomes/2012-8kb-only/	  
+- 1.287 TB : /traces/fslhomes/2012/	  
+- 373.241 GB : /traces/fslhomes/2013/	  
+- 1.120 TB : /traces/fslhomes/2014/	  
+- 2.102 GB : /traces/fslhomes/2015/	  
 
 We will create a containerized, parallel version of the system described in [Section 2](#2-background). 
 
