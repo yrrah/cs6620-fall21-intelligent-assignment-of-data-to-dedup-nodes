@@ -20,5 +20,5 @@ spec:
             - containerPort: 50051
           env:
             - name: SIMULATOR_MODE
-              value: RUN
+              value: DEMO
       restartPolicy: Never

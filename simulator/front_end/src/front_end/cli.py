@@ -50,7 +50,7 @@ def main(demo, hello_world, run):
         os.environ['REGION_ALGO'] = 'FIXED-SIZE'
         os.environ['REGION_SIZE'] = '4'
         os.environ['ROUTING'] = 'SIMPLE'
-        os.environ['DOMAINS'] = '2'
+        os.environ['DOMAINS'] = '10'
         os.environ['BACKEND_IPS'] = 'localhost,localhost'
 
     # run a small demo with 1 backend pod
