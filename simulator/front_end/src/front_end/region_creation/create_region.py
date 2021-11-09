@@ -1,4 +1,4 @@
-import fixed_region
+from front_end.region_creation import fixed_region
 from front_end.region_creation.content_defined_region_creation import create_content_defined_regions
 from front_end.region_creation.input_streams import HashFile
 
@@ -31,10 +31,10 @@ def region_factory(algorithm: str, hash_file: HashFile, fingerprint_size=1, min_
     A factory method which produces the appropriate region based on the file passed to it and the algorithm.
     """
 
-    if algorithm is "FIXED_SIZE":
+    if algorithm == "FIXED-SIZE":
         return fixed_region.create_fixed_regions(hash_file, fingerprint_size)
 
-    if algorithm is "CONTENT-DEFINED":
+    if algorithm == "CONTENT-DEFINED":
         return create_content_defined_regions(min_size, max_size, bit_mask, hash_file)
 
     else:
