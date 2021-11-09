@@ -1,6 +1,8 @@
 import os
 
-from front_end.grpc.client import sendToBackend
+from grpc._channel import _InactiveRpcError
+
+from front_end.grpc.client import sendToBackend, kill_backend
 from front_end.hash_files.get_hash_files import download_files
 from front_end.region_creation.input_streams import HashFile
 from front_end.routing.simple_algo import simple_routing
@@ -112,7 +114,12 @@ class Simulator:
         kill back_end pods
         save / process results
         """
-        pass
+        for backend in self.back_end_ips:
+            try:
+                kill_backend(backend + ':50051')
+                print(f"{backend} shut down")
+            except _InactiveRpcError as err:
+                print("_InactiveRpcError: {0}".format(err))
 
     def simulate(self):
         self.get_files()

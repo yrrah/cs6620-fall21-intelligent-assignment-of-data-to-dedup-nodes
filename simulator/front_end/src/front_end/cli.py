@@ -51,7 +51,7 @@ def main(demo, hello_world, run):
         os.environ['REGION_SIZE'] = '4'
         os.environ['ROUTING'] = 'SIMPLE'
         os.environ['DOMAINS'] = '10'
-        os.environ['BACKEND_IPS'] = 'localhost,localhost'
+        os.environ['BACKEND_IPS'] = 'localhost'
 
     # run a small demo with 1 backend pod
     if os.environ['SIMULATOR_MODE'] == 'DEMO':

@@ -106,4 +106,4 @@ class KeyValueMap:
 
         :return: Number of fingerprints stored in a particular domain in the KV store.
         """
-        return  self.domain_counts[domain_id]
+        return self.domain_counts[domain_id]

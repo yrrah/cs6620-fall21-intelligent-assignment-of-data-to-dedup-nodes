@@ -9,6 +9,14 @@ from front_end.region_creation.fixed_region import create_fixed_regions
 from front_end.region_creation.input_streams import HashFile
 
 
+def kill_backend(back_end_address: str) -> None:
+    with grpc.insecure_channel(back_end_address) as channel:
+        stub = assignService_pb2_grpc.RegionReceiveServiceStub(channel)
+        region_to_send = assignService_pb2.Region()
+        region_to_send.domainNumber = -1
+        stub.AssignRegion(region_to_send)
+
+
 def sendToBackend(domain: int, back_end_address: str, region):
     """
     A client code that sends a region to the backend server,based on domainId.
