@@ -70,8 +70,8 @@ class Simulator:
         self.assign_domains_to_pods()
 
     def assign_domains_to_pods(self) -> None:
-        # The domain ids start from number 1
-        domain_num = 1
+        # The domain ids start from number 0
+        domain_num = 0
         for ip in self.back_end_ips:
             for _ in range(0, self.DOMAINS):
                 self.domains_to_pod[domain_num] = ip
