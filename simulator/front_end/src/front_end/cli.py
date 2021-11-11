@@ -43,16 +43,14 @@ def main(hello_world, run):
         os.environ['SIMULATOR_MODE'] = 'RUN'
         os.environ['SIMULATOR_INPUT_DIR'] = './hash_files/'
         os.environ['SIMULATOR_TRACES_LISTS_DIR'] = './simulator/front_end/src/traces/'
-        os.environ['SIMULATOR_TRACES_LISTS'] = 'fslhomes_2011-8kb-only_006,fslhomes_2012-8kb-only_006'
+        os.environ['SIMULATOR_TRACES_LISTS'] = 'fslhomes_2011-8kb-only_018'
         os.environ['SIMULATOR_REGION_ALGO'] = 'FIXED-SIZE'
         os.environ['SIMULATOR_REGION_SIZE'] = '4'
         os.environ['SIMULATOR_ROUTING'] = 'SIMPLE'
         os.environ['SIMULATOR_DOMAINS'] = '10'
         os.environ['SIMULATOR_BACKEND_IPS'] = 'localhost'
 
-    for k, v in sorted(os.environ.items()):
-        if k.startswith('SIMULATOR_'):
-            print(k + ':', v)
+    [print(f'{k}:{v}') for k, v in os.environ.items() if k.startswith('SIMULATOR_')]
 
     # run a hello world test
     if os.environ['SIMULATOR_MODE'] == 'HELLO':

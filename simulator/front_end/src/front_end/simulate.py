@@ -1,6 +1,7 @@
 import os
 
 from grpc._channel import _InactiveRpcError
+from timeit import default_timer as timer
 
 from front_end.grpc.client import sendToBackend, kill_backend
 from front_end.get_hash_files import download_files
@@ -53,6 +54,7 @@ class Simulator:
         self.INPUT_DIR = os.getenv('SIMULATOR_INPUT_DIR')
         if self.INPUT_DIR is None:
             self.INPUT_DIR = '/var/input/'
+        self.log_file = None
         self.TRACES_WEBDIR = os.getenv('SIMULATOR_TRACES_WEBDIR')
         if self.TRACES_WEBDIR is None:
             self.TRACES_WEBDIR = 'https://tracer.filesystems.org/traces/'
@@ -105,6 +107,7 @@ class Simulator:
                 self.trace_file_paths.append(working_dir + trace_file_name)
 
     def send_regions(self):
+        print("domain, region bytes, non-dupe bytes, region fp count, non-dupe fp count, route time, response time")
         for file_path in self.trace_file_paths:
             hash_file = HashFile(file_path)
             regions = region_factory(self.REGION_FORMATION, hash_file, self.REGION_SIZE, self.MAX_REGION_SIZE,
@@ -114,9 +117,16 @@ class Simulator:
             number_domains = self.DOMAINS * len(self.back_end_ips)
 
             for region in regions:
+                before_routing = timer()
                 domain_to_send_to = simple_routing(region, number_domains)
+                after_routing = timer()
                 # This sends the region to the appropriate domain id
-                sendToBackend(domain_to_send_to, self.domains_to_pod[domain_to_send_to] + ':50051', region)
+                response = sendToBackend(domain_to_send_to, self.domains_to_pod[domain_to_send_to] + ':50051', region)
+                after_response = timer()
+                print(domain_to_send_to,
+                      region.current_size, response.nonDuplicatesSize,
+                      len(region.fingerprints), response.nonDuplicatesLength,
+                      f'{after_routing - before_routing:.2E},{after_response - after_routing:.2E}', sep=',')
 
     def shut_down(self):
         """
