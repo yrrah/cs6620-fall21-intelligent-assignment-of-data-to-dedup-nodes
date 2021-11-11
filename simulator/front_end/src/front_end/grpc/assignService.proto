@@ -1,4 +1,5 @@
 syntax = "proto3";
+/**  python -m grpc_tools.protoc -I=. --python_out=. --grpc_python_out=. ./assignService.proto */
 
 /**
 A service that receives a region and assigns it to a domain.
@@ -15,13 +16,13 @@ message Region{
   int32 maxSize=2; //max Size of the region
   int32 currentSize = 3;
   repeated Fingerprint fingerPrint = 4;
-  //sizes along with the fingerprints repeated int64 fingerPrintSize
 }
     /**
   This represents a fingerprint within a region. A region has a collection of these.
    */
   message Fingerprint{
     bytes fingerPrint = 1;
+    int32 fingerPrintSize = 2;   //sizes along with the fingerprints
   }
 /**
 Acknowledgement to the client that the region is received -> deduplication rate, size stored - original, ->

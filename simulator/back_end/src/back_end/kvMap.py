@@ -83,14 +83,14 @@ class KeyValueMap:
         non_duplicates = set()
 
         # looping as the GRPC sends a repeated array and we only store the fingerprints.
-        for finger_print in region_sent_fingerprints:
-            fp = finger_print.fingerPrint
-            if not self._check_key(domain_id, fp):
-                non_duplicates.add(fp)
-                self._set_key(domain_id, fp)
+        for fp in region_sent_fingerprints:
+
+            if not self._check_key(domain_id, fp.fingerPrint):
+                non_duplicates.add(fp.fingerPrintSize)
+                self._set_key(domain_id, fp.fingerPrint)
                 self.domain_counts[domain_id] += 1
 
-        non_duplicates_size = sum([len(x) for x in non_duplicates])
+        non_duplicates_size = sum(non_duplicates)
         self.current_total_mib += non_duplicates_size
         return non_duplicates_size, len(non_duplicates)
 

@@ -19,7 +19,7 @@ DESCRIPTOR = _descriptor.FileDescriptor(
   syntax='proto3',
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_pb=b'\n\x13\x61ssignService.proto\"g\n\x06Region\x12\x14\n\x0c\x64omainNumber\x18\x01 \x01(\x05\x12\x0f\n\x07maxSize\x18\x02 \x01(\x05\x12\x13\n\x0b\x63urrentSize\x18\x03 \x01(\x05\x12!\n\x0b\x66ingerPrint\x18\x04 \x03(\x0b\x32\x0c.Fingerprint\"\"\n\x0b\x46ingerprint\x12\x13\n\x0b\x66ingerPrint\x18\x01 \x01(\x0c\"I\n\x0f\x41\x63knowledgement\x12\x19\n\x11nonDuplicatesSize\x18\x01 \x01(\x05\x12\x1b\n\x13nonDuplicatesLength\x18\x02 \x01(\x05\x32\x43\n\x14RegionReceiveService\x12+\n\x0c\x41ssignRegion\x12\x07.Region\x1a\x10.Acknowledgement\"\x00\x62\x06proto3'
+  serialized_pb=b'\n\x13\x61ssignService.proto\"g\n\x06Region\x12\x14\n\x0c\x64omainNumber\x18\x01 \x01(\x05\x12\x0f\n\x07maxSize\x18\x02 \x01(\x05\x12\x13\n\x0b\x63urrentSize\x18\x03 \x01(\x05\x12!\n\x0b\x66ingerPrint\x18\x04 \x03(\x0b\x32\x0c.Fingerprint\";\n\x0b\x46ingerprint\x12\x13\n\x0b\x66ingerPrint\x18\x01 \x01(\x0c\x12\x17\n\x0f\x66ingerPrintSize\x18\x02 \x01(\x05\"I\n\x0f\x41\x63knowledgement\x12\x19\n\x11nonDuplicatesSize\x18\x01 \x01(\x05\x12\x1b\n\x13nonDuplicatesLength\x18\x02 \x01(\x05\x32\x43\n\x14RegionReceiveService\x12+\n\x0c\x41ssignRegion\x12\x07.Region\x1a\x10.Acknowledgement\"\x00\x62\x06proto3'
 )
 
 
@@ -93,6 +93,13 @@ _FINGERPRINT = _descriptor.Descriptor(
       message_type=None, enum_type=None, containing_type=None,
       is_extension=False, extension_scope=None,
       serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
+    _descriptor.FieldDescriptor(
+      name='fingerPrintSize', full_name='Fingerprint.fingerPrintSize', index=1,
+      number=2, type=5, cpp_type=1, label=1,
+      has_default_value=False, default_value=0,
+      message_type=None, enum_type=None, containing_type=None,
+      is_extension=False, extension_scope=None,
+      serialized_options=None, file=DESCRIPTOR,  create_key=_descriptor._internal_create_key),
   ],
   extensions=[
   ],
@@ -106,7 +113,7 @@ _FINGERPRINT = _descriptor.Descriptor(
   oneofs=[
   ],
   serialized_start=128,
-  serialized_end=162,
+  serialized_end=187,
 )
 
 
@@ -144,8 +151,8 @@ _ACKNOWLEDGEMENT = _descriptor.Descriptor(
   extension_ranges=[],
   oneofs=[
   ],
-  serialized_start=164,
-  serialized_end=237,
+  serialized_start=189,
+  serialized_end=262,
 )
 
 _REGION.fields_by_name['fingerPrint'].message_type = _FINGERPRINT
@@ -184,8 +191,8 @@ _REGIONRECEIVESERVICE = _descriptor.ServiceDescriptor(
   index=0,
   serialized_options=None,
   create_key=_descriptor._internal_create_key,
-  serialized_start=239,
-  serialized_end=306,
+  serialized_start=264,
+  serialized_end=331,
   methods=[
   _descriptor.MethodDescriptor(
     name='AssignRegion',
