@@ -9,31 +9,22 @@ oc run scs6620-fall21-dedup-nodes-front-end-ex0 --overrides='
                             "name": "SIMULATOR_MODE",
                             "value": "RUN"
                     },{
-                            "name": "INPUT_DIR",
-                            "value": "/var/input/"
+                            "name": "SIMULATOR_TRACES_LISTS",
+                            "value": "fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018,fslhomes_2012_018"
                     },{
-                            "name": "TRACES_WEBDIR",
-                            "value": "https://tracer.filesystems.org/traces/"
-                    },{
-                            "name": "TRACES_SUBDIR",
-                            "value": "fslhomes/2011-8kb-only/"
-                    },{
-                            "name": "TRACES_LIST",
-                            "value": "/opt/app-root/src/src/traces/user006.txt"
-                    },{
-                            "name": "REGION_ALGO",
+                            "name": "SIMULATOR_REGION_ALGO",
                             "value": "FIXED-SIZE"
                     },{
-                            "name": "REGION_SIZE",
+                            "name": "SIMULATOR_REGION_SIZE",
                             "value": "4"
                     },{
-                            "name": "ROUTING",
+                            "name": "SIMULATOR_ROUTING",
                             "value": "SIMPLE"
                     },{
-                            "name": "DOMAINS",
+                            "name": "SIMULATOR_DOMAINS",
                             "value": "10"
                     },{
-                            "name": "BACKEND_IPS",
+                            "name": "SIMULATOR_BACKEND_IPS",
                             "value": "'"$(oc get pods --selector app=cs6620-fall21-dedup-nodes-back-end-ex0 -o jsonpath='{range .items[:-1]}{.status.podIP}{","}{end}{.items[-1].status.podIP}')"'"
                     }],
                     "volumeMounts": [{

@@ -24,43 +24,35 @@ __all__ = [
 
 from front_end.grpc.client import hash_file_demo
 from front_end.grpc.hello_world_demo.greeter_server import serve
-from front_end.hash_files.get_hash_files import download_files, get_web_dir_list
+from front_end.get_hash_files import download_files
 from front_end.simulate import Simulator
+from traces.generate_trace_lists import get_web_dir_list
 
 logger = logging.getLogger(__name__)
 
 
 @click.command()
 @click.version_option()
-@click.option('--demo', 'demo', flag_value=True)
 @click.option('--hello_world', 'hello_world', flag_value=True)
 @click.option('--run', 'run', flag_value=True)
-def main(demo, hello_world, run):
+def main(hello_world, run):
     """CLI for front_end."""
-    if demo:
-        os.environ['SIMULATOR_MODE'] = 'DEMO'
-        os.environ['SERVER_IP'] = 'localhost:50051'
     if hello_world:
         os.environ['SIMULATOR_MODE'] = 'HELLO'
     if run:
         os.environ['SIMULATOR_MODE'] = 'RUN'
-        os.environ['INPUT_DIR'] = './hash_files/'
-        os.environ['TRACES_SUBDIR'] = 'fslhomes/2011-8kb-only/'
-        os.environ['TRACES_LIST'] = 'simulator/front_end/src/traces/user006.txt'
-        os.environ['REGION_ALGO'] = 'FIXED-SIZE'
-        os.environ['REGION_SIZE'] = '4'
-        os.environ['ROUTING'] = 'SIMPLE'
-        os.environ['DOMAINS'] = '10'
-        os.environ['BACKEND_IPS'] = 'localhost'
+        os.environ['SIMULATOR_INPUT_DIR'] = './hash_files/'
+        os.environ['SIMULATOR_TRACES_LISTS_DIR'] = './simulator/front_end/src/traces/'
+        os.environ['SIMULATOR_TRACES_LISTS'] = 'fslhomes_2011-8kb-only_006,fslhomes_2012-8kb-only_006'
+        os.environ['SIMULATOR_REGION_ALGO'] = 'FIXED-SIZE'
+        os.environ['SIMULATOR_REGION_SIZE'] = '4'
+        os.environ['SIMULATOR_ROUTING'] = 'SIMPLE'
+        os.environ['SIMULATOR_DOMAINS'] = '10'
+        os.environ['SIMULATOR_BACKEND_IPS'] = 'localhost'
 
-    # run a small demo with 1 backend pod
-    if os.environ['SIMULATOR_MODE'] == 'DEMO':
-        print(f"Demo Client running on front_end.")
-        if not os.path.exists("./hash_files"):
-            os.makedirs("./hash_files")
-        trace_files = get_web_dir_list("https://tracer.filesystems.org/traces/fslhomes/2011-8kb-only/", limit=15)
-        download_files("./hash_files", "https://tracer.filesystems.org/traces/fslhomes/2011-8kb-only/", trace_files)
-        hash_file_demo("./hash_files/fslhomes-user006-2011-09-10.8kb.hash.anon", 'localhost')
+    for k, v in sorted(os.environ.items()):
+        if k.startswith('SIMULATOR_'):
+            print(k + ':', v)
 
     # run a hello world test
     if os.environ['SIMULATOR_MODE'] == 'HELLO':

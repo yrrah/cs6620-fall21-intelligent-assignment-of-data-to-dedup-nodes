@@ -119,17 +119,9 @@ class Chunking:
 # };
 
 class HashFile:
-    def __init__(self, filename: str) -> None:
-        """Epsilon greedy bandit agent
-
-        Args:
-            k (int): number of arms
-            init (init): initial value of Q-values
-            epsilon (float): random action probability
-            step_size (float or None): step size. If None, then it is equal to 1 / N_t (dynamic step size)
-        """
+    def __init__(self, file_path: str) -> None:
         # header info
-        self.file = open(filename, "rb")
+        self.file = open(file_path, "rb")
         self.version = 0
         self.total_files = 0
         self.path_root = ""

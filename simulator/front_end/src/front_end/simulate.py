@@ -3,7 +3,7 @@ import os
 from grpc._channel import _InactiveRpcError
 
 from front_end.grpc.client import sendToBackend, kill_backend
-from front_end.hash_files.get_hash_files import download_files
+from front_end.get_hash_files import download_files
 from front_end.region_creation.input_streams import HashFile
 from front_end.routing.simple_algo import simple_routing
 from front_end.region_creation.create_region import region_factory
@@ -21,10 +21,10 @@ class Simulator:
         """
         # Region Formation Config
         # ****************************************
-        self.REGION_FORMATION = os.environ['REGION_ALGO']
+        self.REGION_FORMATION = os.environ['SIMULATOR_REGION_ALGO']
         
         # Used by the fixed algo
-        self.REGION_SIZE = os.getenv('REGION_SIZE')
+        self.REGION_SIZE = os.getenv('SIMULATOR_REGION_SIZE')
         if self.REGION_FORMATION == 'FIXED-SIZE':
             if self.REGION_SIZE is None:
                 raise ValueError(
@@ -34,9 +34,9 @@ class Simulator:
                 self.REGION_SIZE = int(self.REGION_SIZE)
         
         # The 3 below are used by the content-based-algo
-        self.MIN_REGION_SIZE = os.getenv('MIN_REGION_SIZE')
-        self.MAX_REGION_SIZE = os.getenv('MAX_REGION_SIZE')
-        self.BIT_MASK = os.getenv('BIT_MASK')
+        self.MIN_REGION_SIZE = os.getenv('SIMULATOR_MIN_REGION_SIZE')
+        self.MAX_REGION_SIZE = os.getenv('SIMULATOR_MAX_REGION_SIZE')
+        self.BIT_MASK = os.getenv('SIMULATOR_BIT_MASK')
         if self.REGION_FORMATION == 'CONTENT-DEFINED':
             if self.MIN_REGION_SIZE is None or self.MAX_REGION_SIZE is None or self.BIT_MASK is None:
                 raise ValueError(
@@ -50,24 +50,25 @@ class Simulator:
         
         # Trace File Location Config
         # *****************************************
-        self.INPUT_DIR = os.getenv('INPUT_DIR')
+        self.INPUT_DIR = os.getenv('SIMULATOR_INPUT_DIR')
         if self.INPUT_DIR is None:
             self.INPUT_DIR = '/var/input/'
-        self.TRACES_WEBDIR = os.getenv('TRACES_WEBDIR')
+        self.TRACES_WEBDIR = os.getenv('SIMULATOR_TRACES_WEBDIR')
         if self.TRACES_WEBDIR is None:
             self.TRACES_WEBDIR = 'https://tracer.filesystems.org/traces/'
-        self.TRACES_SUBDIR = os.environ['TRACES_SUBDIR']
-        self.TRACES_LIST = os.environ['TRACES_LIST']
-        self.trace_file_names = []
-        self.working_dir = self.INPUT_DIR+self.TRACES_SUBDIR
+        self.TRACES_LISTS_DIR = os.getenv('SIMULATOR_TRACES_LISTS_DIR')
+        if self.TRACES_LISTS_DIR is None:
+            self.TRACES_LISTS_DIR = '/opt/app-root/src/src/traces/'
+        self.TRACES_LISTS = os.environ['SIMULATOR_TRACES_LISTS'].split(',')
+        self.trace_file_paths = []
 
         # *****************************************
-        self.ROUTING = os.environ['ROUTING']
+        self.ROUTING = os.environ['SIMULATOR_ROUTING']
         # DOMAINS specify the number of domains per pod
-        self.DOMAINS = int(os.environ['DOMAINS'])
+        self.DOMAINS = int(os.environ['SIMULATOR_DOMAINS'])
         # domains_to_pod maps a domain id to the pod.
         self.domains_to_pod = dict()
-        self.back_end_ips = os.environ['BACKEND_IPS'].split(',')
+        self.back_end_ips = os.environ['SIMULATOR_BACKEND_IPS'].split(',')
         # Assign the domain ids to specific ip addresses -> each of them represent a service.
         self.assign_domains_to_pods()
 
@@ -83,21 +84,29 @@ class Simulator:
         """
         open a file stream to the path / pod location on Openshift
         """
-        with open(self.TRACES_LIST) as f:
-            self.trace_file_names = f.read().splitlines()
+        for list_name in self.TRACES_LISTS:
+            sub_dir = list_name[:(list_name.rindex('_') + 1)].replace('_', '/')
+            working_dir = self.INPUT_DIR + sub_dir
 
-        if not os.path.exists(self.working_dir):
-            os.makedirs(self.working_dir)
+            with open(self.TRACES_LISTS_DIR + list_name) as f:
+                trace_file_names = f.read().splitlines()
 
-        existing_files = set(next(os.walk(self.working_dir), (None, None, []))[2])
+            if not os.path.exists(working_dir):
+                os.makedirs(working_dir)
 
-        to_be_downloaded = list(set(self.trace_file_names) - existing_files)
+            existing_files = set(next(os.walk(working_dir), (None, None, []))[2])
 
-        download_files(self.working_dir, self.TRACES_WEBDIR+self.TRACES_SUBDIR, to_be_downloaded)
+            to_be_downloaded = list(set(trace_file_names) - existing_files)
+
+            if len(to_be_downloaded) > 0:
+                download_files(working_dir, self.TRACES_WEBDIR + sub_dir, to_be_downloaded)
+
+            for trace_file_name in trace_file_names:
+                self.trace_file_paths.append(working_dir + trace_file_name)
 
     def send_regions(self):
-        for file_name in self.trace_file_names:
-            hash_file = HashFile(self.working_dir + file_name)
+        for file_path in self.trace_file_paths:
+            hash_file = HashFile(file_path)
             regions = region_factory(self.REGION_FORMATION, hash_file, self.REGION_SIZE, self.MAX_REGION_SIZE,
                                      self.MIN_REGION_SIZE, self.BIT_MASK)
 
