@@ -1,13 +1,44 @@
 import os
-
-from tqdm import tqdm
-
-from back_end.store import KeyValueStore
-from front_end.region_creation.fixed_region import create_fixed_regions
-from front_end.region_creation.input_streams import HashFile
 import matplotlib.pyplot as plt
 
+from tqdm import tqdm
+from front_end.region_creation.fixed_region import create_fixed_regions
+from front_end.region_creation.input_streams import HashFile
+from front_end.region_creation.region import Region
 from front_end.routing.simple_algo import simple_routing
+
+
+class KeyValueStore:
+    def __init__(self):
+        self.fingerprints = set()
+        self.current_total_mib = 0
+
+    def add_region(self, region: Region):
+        """
+        Add a region to the KV store and de-dup the fingerprints inside.
+        :param region:
+        :return: Tuple(int, int): bytes not de-duped, count of fingerprints not de-duped
+        """
+        region_fingerprints = set(region.fingerprints)
+        non_duplicates = region_fingerprints - self.fingerprints
+        self.fingerprints.update(non_duplicates)
+        non_duplicates_size = sum([len(x) for x in non_duplicates])
+        self.current_total_mib += non_duplicates_size
+        return non_duplicates_size, len(non_duplicates)
+
+    def get_current_size(self):
+        """
+
+        :return: Total size of fingerprints in the kv store
+        """
+        return self.current_total_mib
+
+    def get_current_count(self):
+        """
+
+        :return: Number of fingerprints in kv store
+        """
+        return len(self.fingerprints)
 
 
 def plot_distribution(domain_stats: [float]):
@@ -61,7 +92,7 @@ def locally_running_example(hash_file_dir: str, num_domains: int = 10, max_input
 
 
 def main():
-    locally_running_example('./front_end/src/front_end/hash_files/')
+    locally_running_example('../hash_files/fslhomes/2011-8kb-only/')
 
 
 if __name__ == "__main__":

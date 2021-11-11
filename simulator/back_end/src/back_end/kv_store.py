@@ -35,7 +35,7 @@ def db_test():
     db.close()
 
 
-class KeyValueMap:
+class RocksDBStore:
     """
     A map representation of a store that handles key, value pairs.
     Key (domain_id + fingerprint) --> Value (empty)

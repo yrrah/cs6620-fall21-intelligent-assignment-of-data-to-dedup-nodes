@@ -4,13 +4,12 @@ region to the domains (the backend service)
 from __future__ import print_function
 
 import logging
-import sys
 import threading
-
 import grpc
+
 from concurrent import futures
 from back_end.grpc import assignService_pb2_grpc, assignService_pb2
-from back_end.kvMap import KeyValueMap
+from back_end.kv_store import RocksDBStore
 
 
 class AssignToDomain(assignService_pb2_grpc.RegionReceiveServiceServicer):
@@ -20,7 +19,7 @@ class AssignToDomain(assignService_pb2_grpc.RegionReceiveServiceServicer):
     def __init__(self, stop_event):
         self._stop_event = stop_event
         # Here kv_store represents the domains and the fingerprints which we will store in the pod.
-        self.kv_store = KeyValueMap()
+        self.kv_store = RocksDBStore()
         self.region_count = 0
 
     def AssignRegion(self, request, context):
