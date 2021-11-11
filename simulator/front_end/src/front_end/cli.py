@@ -15,18 +15,15 @@ later, but that will cause problems--the code will get executed twice:
 
 import logging
 import os
-import click
 
+import click
 
 __all__ = [
     "main",
 ]
 
-from front_end.grpc.client import hash_file_demo
 from front_end.grpc.hello_world_demo.greeter_server import serve
-from front_end.get_hash_files import download_files
 from front_end.simulate import Simulator
-from traces.generate_trace_lists import get_web_dir_list
 
 logger = logging.getLogger(__name__)
 
