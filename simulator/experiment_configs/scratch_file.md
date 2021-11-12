@@ -23,3 +23,6 @@ SIMULATOR_MODE=RUN \
 # start front_end
 `oc scale dc cs6620-fall21-dedup-nodes-front-end --replicas=1 \
 ;oc get pods --selector app=cs6620-fall21-dedup-nodes-front-end -o wide`
+
+# put hash file back inside tar archive
+find . -name "*.hash.anon" -execdir sh -c 'mkdir "${0%.8kb.hash.anon}"; cp "$0" ./"${0%.8kb.hash.anon}"/"$0"; tar -jcf "${0%.8kb.hash.anon}.tar.bz2" "$(basename ${0%.8kb.hash.anon})"; rm -rf ${0%.8kb.hash.anon}' {} \;
