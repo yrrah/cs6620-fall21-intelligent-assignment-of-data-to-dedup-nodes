@@ -6,6 +6,9 @@ oc run scs6620-fall21-dedup-nodes-front-end-ex0 --overrides='
                     "image": "image-registry.openshift-image-registry.svc:5000/cs6620-fall21-intelligentassignment-dedupnodes/cs6620-fall21-dedup-nodes-front-end",
                     "ports": [{ "containerPort": 50051 }],
                     "env": [{
+                            "name": "SIMULATOR_RUN_NAME",
+                            "value": "ex0"
+                    },{
                             "name": "SIMULATOR_MODE",
                             "value": "RUN"
                     },{

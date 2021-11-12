@@ -119,10 +119,13 @@ class Simulator:
 
     def send_regions(self):
         print("domain, region bytes, non-dupe bytes, region fp count, non-dupe fp count, route time, response time")
-        print_freq = 10000
+        print_freq = 1000
         print_count = print_freq
         for file_path in self.trace_file_paths:
             print(file_path)
+            u = file_path.index('user')
+            user_num = file_path[u+4:u+7]
+            hash_date = file_path[u+8:u+18]
             hash_file = HashFile(file_path)
             regions = region_factory(self.REGION_FORMATION, hash_file, self.REGION_SIZE, self.MAX_REGION_SIZE,
                                      self.MIN_REGION_SIZE, self.BIT_MASK)
@@ -139,7 +142,8 @@ class Simulator:
                 after_response = timer()
                 log_line = f'{domain_to_send_to},{region.current_size},{response.nonDuplicatesSize},' \
                            f'{len(region.fingerprints)},{response.nonDuplicatesLength},' \
-                           f'{after_routing - before_routing:.2E},{after_response - after_routing:.2E}\n'
+                           f'{after_routing - before_routing:.2E},{after_response - after_routing:.2E},' \
+                           f'{user_num},{hash_date}\n'
                 self.log_file.write(log_line)
 
                 if print_count == 0:
