@@ -15,6 +15,7 @@ def download_file(working_dir: str, web_dir: str, name: str) -> None:
     """
     # strip file type
     name, _, suffix = name.partition('.')
+    suffix = '.' + suffix
 
     # download the tar archive
     file = urlrq.urlopen(web_dir + name + '.tar.bz2', context=ssl.create_default_context(cafile=certifi.where()))

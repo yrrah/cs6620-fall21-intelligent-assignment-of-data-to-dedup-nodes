@@ -30,12 +30,20 @@ oc run scs6620-fall21-dedup-nodes-front-end-ex0 --overrides='
                     "volumeMounts": [{
                         "mountPath": "/var/input",
                         "name": "input-traces"
+                    },{
+                        "mountPath": "/var/output",
+                        "name": "output-logs"
                     }]
             }],
             "volumes": [{
                     "name": "input-traces",
                     "persistentVolumeClaim": {
                         "claimName": "input-trace-files"
+                    }
+            },{
+                    "name": "output-logs",
+                    "persistentVolumeClaim": {
+                        "claimName": "output-log-files"
                     }
             }]
         }

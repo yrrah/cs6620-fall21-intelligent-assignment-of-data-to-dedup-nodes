@@ -54,6 +54,9 @@ class Simulator:
         self.INPUT_DIR = os.getenv('SIMULATOR_INPUT_DIR')
         if self.INPUT_DIR is None:
             self.INPUT_DIR = '/var/input/'
+        self.OUTPUT_DIR = os.getenv('SIMULATOR_OUTPUT_DIR')
+        if self.OUTPUT_DIR is None:
+            self.OUTPUT_DIR = '/var/output/'
         self.log_file = None
         self.TRACES_WEBDIR = os.getenv('SIMULATOR_TRACES_WEBDIR')
         if self.TRACES_WEBDIR is None:
@@ -73,6 +76,7 @@ class Simulator:
         self.back_end_ips = os.environ['SIMULATOR_BACKEND_IPS'].split(',')
         # Assign the domain ids to specific ip addresses -> each of them represent a service.
         self.assign_domains_to_pods()
+        self.setup_log()
 
     def assign_domains_to_pods(self) -> None:
         # The domain ids start from number 0
@@ -81,6 +85,13 @@ class Simulator:
             for _ in range(0, self.DOMAINS):
                 self.domains_to_pod[domain_num] = ip
                 domain_num += 1
+
+    def setup_log(self):
+        if not os.path.exists(self.OUTPUT_DIR):
+            os.makedirs(self.OUTPUT_DIR)
+
+        self.log_file = open(self.OUTPUT_DIR + str(int(timer())) + '.txt', 'w')
+        self.log_file.writelines([f'{k}:{v}\n' for k, v in os.environ.items() if k.startswith('SIMULATOR_')])
 
     def get_files(self):
         """
@@ -108,7 +119,10 @@ class Simulator:
 
     def send_regions(self):
         print("domain, region bytes, non-dupe bytes, region fp count, non-dupe fp count, route time, response time")
+        print_freq = 10000
+        print_count = print_freq
         for file_path in self.trace_file_paths:
+            print(file_path)
             hash_file = HashFile(file_path)
             regions = region_factory(self.REGION_FORMATION, hash_file, self.REGION_SIZE, self.MAX_REGION_SIZE,
                                      self.MIN_REGION_SIZE, self.BIT_MASK)
@@ -123,10 +137,16 @@ class Simulator:
                 # This sends the region to the appropriate domain id
                 response = sendToBackend(domain_to_send_to, self.domains_to_pod[domain_to_send_to] + ':50051', region)
                 after_response = timer()
-                print(domain_to_send_to,
-                      region.current_size, response.nonDuplicatesSize,
-                      len(region.fingerprints), response.nonDuplicatesLength,
-                      f'{after_routing - before_routing:.2E},{after_response - after_routing:.2E}', sep=',')
+                log_line = f'{domain_to_send_to},{region.current_size},{response.nonDuplicatesSize},' \
+                           f'{len(region.fingerprints)},{response.nonDuplicatesLength},' \
+                           f'{after_routing - before_routing:.2E},{after_response - after_routing:.2E}\n'
+                self.log_file.write(log_line)
+
+                if print_count == 0:
+                    print(log_line, end='')
+                    print_count = print_freq
+                else:
+                    print_freq -= 1
 
     def shut_down(self):
         """
