@@ -100,7 +100,8 @@ class Chunking:
                     = unpack(params, self.file.read(calcsize(params)))
 
             else:
-                raise ValueError('Invalid variable chunking algorithm.')
+                raise ValueError(f"Invalid variable chunking algorithm. "
+                                 f"{len(self.file.read())} remaining bytes not read.")
 
         else:
             raise ValueError('Invalid chunking method.')

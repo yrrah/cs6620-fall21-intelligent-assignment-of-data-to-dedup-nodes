@@ -126,7 +126,11 @@ class Simulator:
             u = file_path.index('user')
             user_num = file_path[u+4:u+7]
             hash_date = file_path[u+8:u+18]
-            hash_file = HashFile(file_path)
+            try:
+                hash_file = HashFile(file_path)
+            except ValueError as e:
+                print(e)
+                continue
             regions = region_factory(self.REGION_FORMATION, hash_file, self.REGION_SIZE, self.MAX_REGION_SIZE,
                                      self.MIN_REGION_SIZE, self.BIT_MASK)
 
