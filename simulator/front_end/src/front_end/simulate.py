@@ -24,7 +24,7 @@ class Simulator:
         # Region Formation Config
         # ****************************************
         self.REGION_FORMATION = os.environ['SIMULATOR_REGION_ALGO']
-        
+
         # Used by the fixed algo
         self.REGION_SIZE = os.getenv('SIMULATOR_REGION_SIZE')
         if self.REGION_FORMATION == 'FIXED-SIZE':
@@ -34,7 +34,7 @@ class Simulator:
                     f'REGION_SIZE:{self.REGION_SIZE} ')
             else:
                 self.REGION_SIZE = int(self.REGION_SIZE)
-        
+
         # The 3 below are used by the content-based-algo
         self.MIN_REGION_SIZE = os.getenv('SIMULATOR_MIN_REGION_SIZE')
         self.MAX_REGION_SIZE = os.getenv('SIMULATOR_MAX_REGION_SIZE')
@@ -49,7 +49,7 @@ class Simulator:
             else:
                 self.MIN_REGION_SIZE = int(self.MIN_REGION_SIZE)
                 self.MAX_REGION_SIZE = int(self.MAX_REGION_SIZE)
-        
+
         # Trace File Location Config
         # *****************************************
         self.INPUT_DIR = os.getenv('SIMULATOR_INPUT_DIR')
@@ -59,6 +59,8 @@ class Simulator:
         if self.OUTPUT_DIR is None:
             self.OUTPUT_DIR = '/var/output/'
         self.log_file = None
+        self.log_file_header = "domain, region bytes, non-dupe bytes, region fp count," \
+                               " non-dupe fp count, route time, response time, user, hash date\n"
         self.TRACES_WEBDIR = os.getenv('SIMULATOR_TRACES_WEBDIR')
         if self.TRACES_WEBDIR is None:
             self.TRACES_WEBDIR = 'https://tracer.filesystems.org/traces/'
@@ -91,8 +93,11 @@ class Simulator:
         if not os.path.exists(self.OUTPUT_DIR):
             os.makedirs(self.OUTPUT_DIR)
 
-        self.log_file = open(self.OUTPUT_DIR + str(int(timer())) + '.txt', 'w')
-        self.log_file.writelines([f'{k}:{v}\n' for k, v in os.environ.items() if k.startswith('SIMULATOR_')])
+        self.log_file = open(self.OUTPUT_DIR + str(int(timer())) + '.csv', 'w')
+        commas = ',' * 9
+        self.log_file.writelines([f'{commas}{k}:{v}\n' for k, v in os.environ.items() if k.startswith('SIMULATOR_')])
+
+        self.log_file.write(self.log_file_header)
 
     def get_files(self):
         """
@@ -119,7 +124,7 @@ class Simulator:
                 self.trace_file_paths.append(working_dir + trace_file_name)
 
     def send_hash_file(self, file_path: str):
-        print_freq = 1000
+        print_freq = 100
         print_count = print_freq
 
         u = file_path.index('user')
@@ -151,13 +156,12 @@ class Simulator:
             self.log_file.write(log_line)
 
             if print_count == 0:
-                print(log_line, end='')
+                print(self.log_file_header + log_line, end='')
                 print_count = print_freq
             else:
-                print_freq -= 1
+                print_count -= 1
 
     def send_trace_files(self):
-        print("domain, region bytes, non-dupe bytes, region fp count, non-dupe fp count, route time, response time")
 
         for file_path in self.trace_file_paths:
             print(file_path)
