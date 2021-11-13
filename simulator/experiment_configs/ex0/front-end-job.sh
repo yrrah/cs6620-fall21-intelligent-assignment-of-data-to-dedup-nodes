@@ -1,4 +1,4 @@
-oc run scs6620-fall21-dedup-nodes-front-end-ex0 --overrides='
+oc run cs6620-fall21-dedup-nodes-front-end-ex0 --overrides='
 {
         "spec": {
             "containers": [{
