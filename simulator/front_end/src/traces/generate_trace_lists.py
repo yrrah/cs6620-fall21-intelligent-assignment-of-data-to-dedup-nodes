@@ -21,7 +21,8 @@ def get_web_dir_list(web_dir: str, user_nums: [str], chunk_size: str = '8kb', li
     total_bytes = 0
     for f in listing:
         if f.name.endswith('.tar.bz2') and f.name[:16] in prefix:
-            names.append(f"{f.name.split('.')[0]}.{chunk_size}.hash.anon")
+            names.append(f.name)
+            # names.append(f"{f.name.split('.')[0]}.{chunk_size}.hash.anon")
             total_bytes += f.size
 
         if limit is not None and len(names) == limit:

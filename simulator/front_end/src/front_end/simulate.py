@@ -1,4 +1,5 @@
 import os
+import tarfile
 
 from grpc._channel import _InactiveRpcError
 from timeit import default_timer as timer
@@ -117,44 +118,63 @@ class Simulator:
             for trace_file_name in trace_file_names:
                 self.trace_file_paths.append(working_dir + trace_file_name)
 
-    def send_regions(self):
-        print("domain, region bytes, non-dupe bytes, region fp count, non-dupe fp count, route time, response time")
+    def send_hash_file(self, file_path: str):
         print_freq = 1000
         print_count = print_freq
+
+        u = file_path.index('user')
+        user_num = file_path[u + 4:u + 7]
+        hash_date = file_path[u + 8:u + 18]
+        try:
+            hash_file = HashFile(file_path)
+        except ValueError as e:
+            print(e)
+            return
+
+        regions = region_factory(self.REGION_FORMATION, hash_file, self.REGION_SIZE, self.MAX_REGION_SIZE,
+                                 self.MIN_REGION_SIZE, self.BIT_MASK)
+
+        # Calculate the number of domains we have and pass it to the assignment code.
+        number_domains = self.DOMAINS * len(self.back_end_ips)
+
+        for region in regions:
+            before_routing = timer()
+            domain_to_send_to = simple_routing(region, number_domains)
+            after_routing = timer()
+            # This sends the region to the appropriate domain id
+            response = sendToBackend(domain_to_send_to, self.domains_to_pod[domain_to_send_to] + ':50051', region)
+            after_response = timer()
+            log_line = f'{domain_to_send_to},{region.current_size},{response.nonDuplicatesSize},' \
+                       f'{len(region.fingerprints)},{response.nonDuplicatesLength},' \
+                       f'{after_routing - before_routing:.2E},{after_response - after_routing:.2E},' \
+                       f'{user_num},{hash_date}\n'
+            self.log_file.write(log_line)
+
+            if print_count == 0:
+                print(log_line, end='')
+                print_count = print_freq
+            else:
+                print_freq -= 1
+
+    def send_trace_files(self):
+        print("domain, region bytes, non-dupe bytes, region fp count, non-dupe fp count, route time, response time")
+
         for file_path in self.trace_file_paths:
             print(file_path)
-            u = file_path.index('user')
-            user_num = file_path[u+4:u+7]
-            hash_date = file_path[u+8:u+18]
-            try:
-                hash_file = HashFile(file_path)
-            except ValueError as e:
-                print(e)
-                continue
-            regions = region_factory(self.REGION_FORMATION, hash_file, self.REGION_SIZE, self.MAX_REGION_SIZE,
-                                     self.MIN_REGION_SIZE, self.BIT_MASK)
 
-            # Calculate the number of domains we have and pass it to the assignment code.
-            number_domains = self.DOMAINS * len(self.back_end_ips)
+            # extract hash file from archive
+            tar = tarfile.open(file_path, "r:bz2")
+            hash_files = [m for m in tar.getmembers() if m.name.endswith('.8kb.hash.anon')]
+            for file in hash_files:
+                # get just the file without directory structure
+                file.name = os.path.basename(file.name)
+            tar.extractall(path='.', members=hash_files)
+            tar.close()
 
-            for region in regions:
-                before_routing = timer()
-                domain_to_send_to = simple_routing(region, number_domains)
-                after_routing = timer()
-                # This sends the region to the appropriate domain id
-                response = sendToBackend(domain_to_send_to, self.domains_to_pod[domain_to_send_to] + ':50051', region)
-                after_response = timer()
-                log_line = f'{domain_to_send_to},{region.current_size},{response.nonDuplicatesSize},' \
-                           f'{len(region.fingerprints)},{response.nonDuplicatesLength},' \
-                           f'{after_routing - before_routing:.2E},{after_response - after_routing:.2E},' \
-                           f'{user_num},{hash_date}\n'
-                self.log_file.write(log_line)
+            self.send_hash_file('./' + hash_files[0].name)
 
-                if print_count == 0:
-                    print(log_line, end='')
-                    print_count = print_freq
-                else:
-                    print_freq -= 1
+            # remove the local copy of hash file
+            os.remove('./' + hash_files[0].name)
 
     def shut_down(self):
         """
@@ -170,10 +190,10 @@ class Simulator:
 
     def simulate(self):
         self.get_files()
-        self.send_regions()
+        self.send_trace_files()
         self.shut_down()
 
 
 if __name__ == '__main__':
-    simulate = Simulator()
-    simulate.send_regions()
+    sim = Simulator()
+    sim.simulate()

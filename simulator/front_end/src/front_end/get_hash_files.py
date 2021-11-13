@@ -1,6 +1,5 @@
 import os
 import ssl
-import tarfile
 import urllib.request as urlrq
 
 import certifi
@@ -22,18 +21,6 @@ def download_file(working_dir: str, web_dir: str, name: str) -> None:
     tar_name = os.path.join(working_dir, name + '.tar.bz2')
     with open(tar_name, 'wb') as output:
         output.write(file.read())
-
-    # extract hash file from archive
-    tar = tarfile.open(tar_name, "r:bz2")
-    hash_files = [m for m in tar.getmembers() if m.name.endswith(suffix)]
-    for file in hash_files:
-        # get just the file without directory structure
-        file.name = os.path.basename(file.name)
-    tar.extractall(path=working_dir, members=hash_files)
-    tar.close()
-
-    # remove the tar archive
-    os.remove(tar_name)
 
 
 def download_files(working_dir: str, web_dir: str, names: [str]):
