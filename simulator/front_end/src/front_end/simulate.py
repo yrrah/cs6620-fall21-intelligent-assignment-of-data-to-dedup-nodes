@@ -169,20 +169,23 @@ class Simulator:
 
         for file_path in self.trace_file_paths:
             print(file_path)
+            suffix = '.8kb.hash.anon'
 
             # extract hash file from archive
             tar = tarfile.open(file_path, "r:bz2")
-            hash_files = [m for m in tar.getmembers() if m.name.endswith('.8kb.hash.anon')]
+            hash_files = [m for m in tar.getmembers() if m.name.endswith(suffix)]
             for file in hash_files:
                 # get just the file without directory structure
                 file.name = os.path.basename(file.name)
             tar.extractall(path='.', members=hash_files)
             tar.close()
+            if len(hash_files) > 0:
+                self.send_hash_file('./' + hash_files[0].name)
 
-            self.send_hash_file('./' + hash_files[0].name)
-
-            # remove the local copy of hash file
-            os.remove('./' + hash_files[0].name)
+                # remove the local copy of hash file
+                os.remove('./' + hash_files[0].name)
+            else:
+                print(f'cant find hash file ending in {suffix}')
 
     def shut_down(self):
         """
