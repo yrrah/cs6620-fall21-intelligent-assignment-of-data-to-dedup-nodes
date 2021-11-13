@@ -124,8 +124,9 @@ class Simulator:
                 self.trace_file_paths.append(working_dir + trace_file_name)
 
     def send_hash_file(self, file_path: str):
-        print_freq = 100
+        print_freq = 10000
         print_count = print_freq
+        print_header = True
 
         u = file_path.index('user')
         user_num = file_path[u + 4:u + 7]
@@ -156,7 +157,10 @@ class Simulator:
             self.log_file.write(log_line)
 
             if print_count == 0:
-                print(self.log_file_header + log_line, end='')
+                if print_header:
+                    print(self.log_file_header)
+                    print_header = False
+                print(log_line, end='')
                 print_count = print_freq
             else:
                 print_count -= 1
