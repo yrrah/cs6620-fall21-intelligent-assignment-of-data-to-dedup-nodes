@@ -9,6 +9,6 @@ def full_hash_7(region: Region, num_domains: int) -> int:
 def first_fingerprint_7(region: Region, num_domains: int) -> int:
     # with this algo you could stream directly to the destination domain rather than buffering all in the front_end
     # but that's not necessary to implement for this simulator
-    return int.from_bytes(region.fingerprints[0][:7], "little") % num_domains
+    return int.from_bytes(region.fingerprints[0].fingerPrint[:7], "little") % num_domains
 
     # could look at first k fingerprints take min value fingerprint or max value

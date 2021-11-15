@@ -44,7 +44,7 @@ def main(hello_world, run):
         os.environ['SIMULATOR_TRACES_LISTS'] = 'fslhomes_2011-8kb-only_018'
         os.environ['SIMULATOR_REGION_ALGO'] = 'FIXED-SIZE'
         os.environ['SIMULATOR_REGION_SIZE'] = '4'
-        os.environ['SIMULATOR_ROUTING'] = 'SIMPLE'
+        os.environ['SIMULATOR_ROUTING'] = 'FIRST_FINGERPRINT_7'
         os.environ['SIMULATOR_DOMAINS'] = '10'
         os.environ['SIMULATOR_BACKEND_IPS'] = 'localhost'
 
