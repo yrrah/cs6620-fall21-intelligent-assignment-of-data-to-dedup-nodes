@@ -7,7 +7,7 @@ oc run cs6620-fall21-dedup-nodes-front-end-ex0 --overrides='
                     "ports": [{ "containerPort": 50051 }],
                     "env": [{
                             "name": "SIMULATOR_RUN_NAME",
-                            "value": "ex0"
+                            "value": "ex0-run1"
                     },{
                             "name": "SIMULATOR_MODE",
                             "value": "RUN"
@@ -22,7 +22,7 @@ oc run cs6620-fall21-dedup-nodes-front-end-ex0 --overrides='
                             "value": "4"
                     },{
                             "name": "SIMULATOR_ROUTING",
-                            "value": "SIMPLE"
+                            "value": "FIRST_FINGERPRINT_7"
                     },{
                             "name": "SIMULATOR_DOMAINS",
                             "value": "100"

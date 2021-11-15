@@ -5,7 +5,7 @@ from tqdm import tqdm
 from front_end.region_creation.fixed_region import create_fixed_regions
 from front_end.region_creation.input_streams import HashFile
 from front_end.region_creation.region import Region
-from front_end.routing.simple_algo import simple_routing
+from front_end.routing.simple import full_hash_7
 
 
 class KeyValueStore:
@@ -74,7 +74,7 @@ def locally_running_example(hash_file_dir: str, num_domains: int = 10, max_input
     for filename in tqdm(hash_files[:min(max_input_files, num_files)]):
         hash_file = HashFile(hash_file_dir + filename)
         for region in create_fixed_regions(hash_file, size_mib=1):
-            destination = simple_routing(region, num_domains)
+            destination = full_hash_7(region, num_domains)
             unique_bytes, unique_fingerprints = domains[destination].add_region(region)
             domain_total_received[destination] += len(region.fingerprints)
             total_overall += len(region.fingerprints)

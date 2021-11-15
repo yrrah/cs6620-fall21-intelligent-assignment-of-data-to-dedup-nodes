@@ -7,7 +7,7 @@ from timeit import default_timer as timer
 from front_end.grpc.client import sendToBackend, kill_backend
 from front_end.get_hash_files import download_files
 from front_end.region_creation.input_streams import HashFile
-from front_end.routing.simple_algo import simple_routing
+from front_end.routing.routing import get_routing
 from front_end.region_creation.create_region import region_factory
 
 
@@ -72,6 +72,7 @@ class Simulator:
 
         # *****************************************
         self.ROUTING = os.environ['SIMULATOR_ROUTING']
+        self.routing_function = get_routing(self.ROUTING)
         # DOMAINS specify the number of domains per pod
         self.DOMAINS = int(os.environ['SIMULATOR_DOMAINS'])
         # domains_to_pod maps a domain id to the pod.
@@ -145,7 +146,7 @@ class Simulator:
 
         for region in regions:
             before_routing = timer()
-            domain_to_send_to = simple_routing(region, number_domains)
+            domain_to_send_to = self.routing_function(region, number_domains)
             after_routing = timer()
             # This sends the region to the appropriate domain id
             response = sendToBackend(domain_to_send_to, self.domains_to_pod[domain_to_send_to] + ':50051', region)
