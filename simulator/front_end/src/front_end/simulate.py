@@ -1,5 +1,6 @@
 import os
 import tarfile
+import time
 
 from grpc._channel import _InactiveRpcError
 from timeit import default_timer as timer
@@ -95,7 +96,7 @@ class Simulator:
         if not os.path.exists(self.OUTPUT_DIR):
             os.makedirs(self.OUTPUT_DIR)
 
-        self.log_file = open(self.OUTPUT_DIR + str(int(timer())) + '.csv', 'w')
+        self.log_file = open(self.OUTPUT_DIR + str(int(time.time())) + '.csv', 'w')
         commas = ',' * 9
         self.log_file.writelines([f'{commas}{k}:{v}\n' for k, v in os.environ.items() if k.startswith('SIMULATOR_')])
 
