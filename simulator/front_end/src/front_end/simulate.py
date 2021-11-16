@@ -101,6 +101,7 @@ class Simulator:
         self.log_file.writelines([f'{commas}{k}:{v}\n' for k, v in os.environ.items() if k.startswith('SIMULATOR_')])
 
         self.log_file.write(self.log_file_header)
+        self.log_file.write(f'{commas}START_TIME:{time.time()}\n')
 
     def get_files(self):
         """
@@ -197,6 +198,7 @@ class Simulator:
         kill back_end pods
         save / process results
         """
+        self.log_file.write(f"{(',' * 9)}STOP_TIME:{time.time()}\n")
         for backend in self.back_end_ips:
             try:
                 kill_backend(backend + ':50051')
