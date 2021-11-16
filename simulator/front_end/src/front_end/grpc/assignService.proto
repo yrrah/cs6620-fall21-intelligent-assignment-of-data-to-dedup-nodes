@@ -31,4 +31,5 @@ Acknowledgement to the client that the region is received -> deduplication rate,
 message Acknowledgement{
   int32 nonDuplicatesSize = 1;
   int32 nonDuplicatesLength = 2;
+  float cpuPercent = 3;
 }

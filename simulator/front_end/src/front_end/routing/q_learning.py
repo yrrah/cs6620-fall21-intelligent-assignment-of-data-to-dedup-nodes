@@ -76,6 +76,7 @@ class QLearning:
         self.prev_state = 0
         self.prev_action = 0
         self.prev_reward = 0
+        self.prev_reward_string = ''
         self.log_interval = 1000
         self.log_counter = self.log_interval
 
@@ -101,15 +102,16 @@ class QLearning:
                     row += self.Q[domain]
                     domain += 1
                 print(f'pod {p}: {row}')
+            print(f'domain 364: {self.Q[364]}')
+            print(self.prev_reward_string)
             self.log_counter = self.log_interval
         else:
             self.log_counter -= 1
 
         # use selected action to redirect region to a better pod
-        new_domain = state + (policy_pod - default_pod) * self.domains_per_pod
-        if new_domain < 0:
-            print('oops')
-        return new_domain
+        return state + (policy_pod - default_pod) * self.domains_per_pod
 
     def learn(self, region: Region, ack: Acknowledgement):
-        self.prev_reward = 1 - (ack.nonDuplicatesLength / len(region.fingerprints))
+        self.prev_reward = (1 - (ack.nonDuplicatesLength / len(region.fingerprints))) * (1 - (ack.cpuPercent / 100))
+        self.prev_reward_string = f'prev_reward = {(1 - (ack.nonDuplicatesLength / len(region.fingerprints)))} ' \
+                                  f'* {(1 - (ack.cpuPercent / 100))}'

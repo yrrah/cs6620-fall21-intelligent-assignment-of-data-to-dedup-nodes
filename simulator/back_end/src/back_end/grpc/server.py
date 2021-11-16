@@ -6,6 +6,7 @@ from __future__ import print_function
 import logging
 import threading
 import grpc
+import psutil
 
 from concurrent import futures
 from back_end.grpc import assignService_pb2_grpc, assignService_pb2
@@ -33,7 +34,8 @@ class AssignToDomain(assignService_pb2_grpc.RegionReceiveServiceServicer):
 
         non_duplicate_size, non_duplicates_length = self.kv_store.add_region(request.fingerPrint, request.domainNumber)
         return assignService_pb2.Acknowledgement(nonDuplicatesSize=non_duplicate_size,
-                                                 nonDuplicatesLength=non_duplicates_length)
+                                                 nonDuplicatesLength=non_duplicates_length,
+                                                 cpuPercent=psutil.cpu_percent())
     # TODO : Write some code for getting some stats from the domains.
 
 
