@@ -69,18 +69,19 @@ class Simulator:
             self.TRACES_LISTS_DIR = '/opt/app-root/src/src/traces/'
         self.TRACES_LISTS = os.environ['SIMULATOR_TRACES_LISTS'].split(',')
         self.trace_file_paths = []
+        self.setup_log()
 
         # *****************************************
-        self.ROUTING = os.environ['SIMULATOR_ROUTING']
-        self.routing_function = get_routing(self.ROUTING)
         # DOMAINS specify the number of domains per pod
         self.DOMAINS = int(os.environ['SIMULATOR_DOMAINS'])
         # domains_to_pod maps a domain id to the pod.
         self.domains_to_pod = dict()
         self.back_end_ips = os.environ['SIMULATOR_BACKEND_IPS'].split(',')
+        # choose function to do the routing
+        self.ROUTING = os.environ['SIMULATOR_ROUTING']
+        self.routing_function, self.learning_function = get_routing(self.ROUTING, self.DOMAINS, len(self.back_end_ips))
         # Assign the domain ids to specific ip addresses -> each of them represent a service.
         self.assign_domains_to_pods()
-        self.setup_log()
 
     def assign_domains_to_pods(self) -> None:
         # The domain ids start from number 0
@@ -151,6 +152,8 @@ class Simulator:
             # This sends the region to the appropriate domain id
             response = sendToBackend(domain_to_send_to, self.domains_to_pod[domain_to_send_to] + ':50051', region)
             after_response = timer()
+            if self.learning_function is not None:
+                self.learning_function(region, response)
             log_line = f'{domain_to_send_to},{region.current_size},{response.nonDuplicatesSize},' \
                        f'{len(region.fingerprints)},{response.nonDuplicatesLength},' \
                        f'{after_routing - before_routing:.2E},{after_response - after_routing:.2E},' \
