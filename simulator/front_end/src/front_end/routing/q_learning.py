@@ -112,6 +112,9 @@ class QLearning:
         return state + (policy_pod - default_pod) * self.domains_per_pod
 
     def learn(self, region: Region, ack: Acknowledgement):
-        self.prev_reward = (1 - (ack.nonDuplicatesLength / len(region.fingerprints))) * (1 - (ack.cpuPercent / 100))
-        self.prev_reward_string = f'prev_reward = {(1 - (ack.nonDuplicatesLength / len(region.fingerprints)))} ' \
-                                  f'* {(1 - (ack.cpuPercent / 100))}'
+        self.prev_reward = 1 - (ack.nonDuplicatesLength / len(region.fingerprints))
+        self.prev_reward_string = f'prev_reward = {(1 - (ack.nonDuplicatesLength / len(region.fingerprints)))}'
+
+        # self.prev_reward = (1 - (ack.nonDuplicatesLength / len(region.fingerprints))) * (1 - (ack.cpuPercent / 100))
+        # self.prev_reward_string = f'prev_reward = {(1 - (ack.nonDuplicatesLength / len(region.fingerprints)))} ' \
+        #                           f'* {(1 - (ack.cpuPercent / 100))}'
