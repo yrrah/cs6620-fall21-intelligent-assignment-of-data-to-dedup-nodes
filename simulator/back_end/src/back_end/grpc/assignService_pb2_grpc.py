@@ -2,7 +2,7 @@
 """Client and server classes corresponding to protobuf-defined services."""
 import grpc
 
-from back_end.grpc import assignService_pb2 as assignService__pb2
+import assignService_pb2 as assignService__pb2
 
 
 class RegionReceiveServiceStub(object):
@@ -21,6 +21,11 @@ class RegionReceiveServiceStub(object):
                 request_serializer=assignService__pb2.Region.SerializeToString,
                 response_deserializer=assignService__pb2.Acknowledgement.FromString,
                 )
+        self.ShutDownPod = channel.unary_unary(
+                '/RegionReceiveService/ShutDownPod',
+                request_serializer=assignService__pb2.Empty.SerializeToString,
+                response_deserializer=assignService__pb2.ShutDownMessage.FromString,
+                )
 
 
 class RegionReceiveServiceServicer(object):
@@ -34,6 +39,12 @@ class RegionReceiveServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def ShutDownPod(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_RegionReceiveServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -41,6 +52,11 @@ def add_RegionReceiveServiceServicer_to_server(servicer, server):
                     servicer.AssignRegion,
                     request_deserializer=assignService__pb2.Region.FromString,
                     response_serializer=assignService__pb2.Acknowledgement.SerializeToString,
+            ),
+            'ShutDownPod': grpc.unary_unary_rpc_method_handler(
+                    servicer.ShutDownPod,
+                    request_deserializer=assignService__pb2.Empty.FromString,
+                    response_serializer=assignService__pb2.ShutDownMessage.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -68,5 +84,22 @@ class RegionReceiveService(object):
         return grpc.experimental.unary_unary(request, target, '/RegionReceiveService/AssignRegion',
             assignService__pb2.Region.SerializeToString,
             assignService__pb2.Acknowledgement.FromString,
+            options, channel_credentials,
+            insecure, call_credentials, compression, wait_for_ready, timeout, metadata)
+
+    @staticmethod
+    def ShutDownPod(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(request, target, '/RegionReceiveService/ShutDownPod',
+            assignService__pb2.Empty.SerializeToString,
+            assignService__pb2.ShutDownMessage.FromString,
             options, channel_credentials,
             insecure, call_credentials, compression, wait_for_ready, timeout, metadata)

@@ -51,6 +51,32 @@ class Simulator:
                 self.MIN_REGION_SIZE = int(self.MIN_REGION_SIZE)
                 self.MAX_REGION_SIZE = int(self.MAX_REGION_SIZE)
 
+        # Checking inputs for the TTTD algorithm
+        # ******************************************** #
+        self.MIN_T = os.getenv('SIMULATOR_MIN_T_VALUE')
+        self.MAX_T = os.getenv('SIMULATOR_MAX_T_VALUE')
+        self.MAIN_D = os.getenv('SIMULATOR_MAIN_D')
+        self.SECOND_D = os.getenv('SIMULATOR_SECOND_D')
+        if self.REGION_FORMATION == "TTTD":
+            if self.MIN_T is None or self.MAX_T is None or self.MAIN_D is None or self.SECOND_D is None:
+                raise ValueError(
+                    f'Environment variable for content-based region formation missing: '
+                    f'MIN_T:{self.MIN_T} '
+                    f'MAX_T:{self.MAX_T} '
+                    f'MAIN_D:{self.MAIN_D}'
+                    f'SECOND_D:{self.SECOND_D}'
+                )
+
+        # ********************************************** #
+
+        # Check inputs for the AE algorithm -
+        if self.REGION_FORMATION == "AE":
+            if self.MAX_REGION_SIZE is None:
+                raise ValueError(
+                    f'Environment variable not set for the AE algorithms: '
+                    f'MAX_REGION_SIZE":{self.MAX_REGION_SIZE}'
+                )
+
         # Trace File Location Config
         # *****************************************
         self.INPUT_DIR = os.getenv('SIMULATOR_INPUT_DIR')
