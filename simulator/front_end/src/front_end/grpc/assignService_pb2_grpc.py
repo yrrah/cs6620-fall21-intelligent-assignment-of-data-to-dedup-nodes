@@ -2,7 +2,7 @@
 """Client and server classes corresponding to protobuf-defined services."""
 import grpc
 
-from back_end.grpc import assignService_pb2 as assignService__pb2
+from front_end.grpc import assignService_pb2 as assignService__pb2
 
 
 class RegionReceiveServiceStub(object):
