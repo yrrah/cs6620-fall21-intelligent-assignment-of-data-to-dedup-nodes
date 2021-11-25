@@ -13,7 +13,7 @@ oc run cs6620-fall21-dedup-nodes-front-end-ex0 --overrides='
                             "value": "RUN"
                     },{
                             "name": "SIMULATOR_TRACES_LISTS",
-                            "value": "fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018,fslhomes_2012_018"
+                            "value": "fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018"
                     },{
                             "name": "SIMULATOR_REGION_ALGO",
                             "value": "FIXED-SIZE"
