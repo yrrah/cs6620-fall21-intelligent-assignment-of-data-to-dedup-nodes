@@ -5,7 +5,7 @@ import grpc
 from front_end.grpc import assignService_pb2_grpc, assignService_pb2
 from front_end.grpc.assignService_pb2 import Acknowledgement
 from front_end.region_creation.input_streams import HashFile
-from simulator.front_end.src.front_end.region_creation.ae_region_creation import create_ae_regions
+from front_end.region_creation.ae_region_creation import create_ae_regions
 
 
 def kill_backend(back_end_address: str) -> None:
