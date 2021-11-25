@@ -3,6 +3,7 @@ from typing import Generator, Any
 from front_end.grpc.assignService_pb2 import Region
 from front_end.region_creation.input_streams import HashFile
 
+
 def bytes_to_int(byte_string) -> int:
     """
     :param byte_string: a string formatted like b'\xd4\x053K\xd8\xea'
@@ -13,7 +14,7 @@ def bytes_to_int(byte_string) -> int:
 
 
 def create_tttd_regions(minT: int, maxT: int, secondD: int, mainD: int, hash_file: HashFile) -> \
-        Generator[Region, Any, None]:
+    Generator[Region, Any, None]:
     """
         minT: minimum threshold (around 1 to 2 MB)
         maxT: maximum threshold (around 4 to 5 MB)
