@@ -22,3 +22,4 @@ spec:
             - name: SIMULATOR_MODE
               value: DEMO
       restartPolicy: Never
+      automountServiceAccountToken: false

@@ -41,7 +41,7 @@ def main(hello_world, run):
         os.environ['SIMULATOR_INPUT_DIR'] = './hash_files/'
         os.environ['SIMULATOR_OUTPUT_DIR'] = './logs/'
         os.environ['SIMULATOR_TRACES_LISTS_DIR'] = './simulator/front_end/src/traces/'
-        os.environ['SIMULATOR_TRACES_LISTS'] = 'fslhomes_2011-8kb-only_018,fslhomes_2012_018'
+        os.environ['SIMULATOR_TRACES_LISTS'] = 'fslhomes_2011-8kb-only_018'
         os.environ['SIMULATOR_REGION_ALGO'] = 'FIXED-SIZE'
         os.environ['SIMULATOR_REGION_SIZE'] = '4'
         os.environ['SIMULATOR_ROUTING'] = 'Q_LEARNING'
