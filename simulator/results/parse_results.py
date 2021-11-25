@@ -9,6 +9,7 @@ def nondupe_vs_total_count_by_domain(df, title):
     selected.index = selected.index.astype(int)
     ax = selected.plot.bar(stacked=True, logy=True)
     ax.set_title(title)
+    ax.set_ylabel('Count of Fingerprints per Domain')
     ax.set_xticks(ax.get_xticks()[::50])
     ax.set_ylim(10, 2500000000)
     plt.show()
@@ -21,7 +22,13 @@ def nondupe_vs_total_count_by_pod(df, group_by_func, title):
     ax = selected[[' non-dupe fp count', 'total region fp count']].plot.bar(stacked=True, logy=True)
     ax.set_title(title)
     ax.set_xlabel('Pod')
+    ax.set_ylabel('Count of Fingerprints per Pod')
     ax.set_ylim(10, 2500000000)
+    selected['ratio'] = (selected[' non-dupe fp count'] / (selected['total region fp count'] +
+                                                           selected[' non-dupe fp count'])
+                         ).round(3)
+    for i, v in enumerate(selected['ratio']):
+        ax.annotate(str(v), (i-0.1, 1000), fontsize=20)
     plt.show()
 
 
@@ -47,7 +54,7 @@ def nondupe_vs_total_bytes_by_pod(df, group_by_func, title):
 
 
 def hashes_per_user_per_day(df, title):
-    df = df[(df[' hash date'] > '2011-01-01') & (df[' hash date'] < '2012-03-01')]
+    # df = df[(df[' hash date'] > '2011-01-01') & (df[' hash date'] < '2012-03-01')]
     selected = df[[' user', ' hash date']].copy()
     selected['User'] = 1
     selected = selected.groupby([' hash date', ' user']).count()
@@ -63,10 +70,11 @@ def hashes_per_user_per_day(df, title):
     ax.set_xlabel(None)
     ax.set_title(f'Total 4MB Regions = {df.shape[0]}')
     # ax.set_xticks(ax.get_xticks()[::50])
+    plt.tight_layout()
     plt.show()
 
 
-def parse_file(file_name, title, outlier=None):
+def parse_file(file_name, title=None, outlier=None):
     environment_vars = {}
     col_index = {}
     with open(file_name, 'r') as f:
@@ -82,6 +90,11 @@ def parse_file(file_name, title, outlier=None):
 
     print(environment_vars)
     print(col_index)
+    duration = float(environment_vars['STOP_TIME']) - float(environment_vars['START_TIME'])
+    print(f'Duration was: {duration / 60} min')
+
+    if title is None:
+        title = environment_vars['SIMULATOR_RUN_NAME']
     num_domains = int(environment_vars['SIMULATOR_DOMAINS'])
 
     def group_by_pod(df, ind, col):
@@ -95,14 +108,14 @@ def parse_file(file_name, title, outlier=None):
         title += f'without outlier domain {outlier}'
 
     hashes_per_user_per_day(whole_log, title)
-    # nondupe_vs_total_count_by_domain(whole_log, title)
+    nondupe_vs_total_count_by_domain(whole_log, title)
     # nondupe_vs_total_bytes_by_domain(whole_log, title)
-    # nondupe_vs_total_count_by_pod(whole_log, group_by_pod, title)
+    nondupe_vs_total_count_by_pod(whole_log, group_by_pod, title)
     # nondupe_vs_total_bytes_by_pod(whole_log, group_by_pod, title)
 
 
 def main():
-    parse_file('./sample_results.csv', outlier=375)
+    parse_file('1637860767.csv')
 
 
 if __name__ == "__main__":
