@@ -7,7 +7,7 @@ oc run cs6620-fall21-dedup-nodes-front-end-ex0 --overrides='
                     "ports": [{ "containerPort": 50051 }],
                     "env": [{
                             "name": "SIMULATOR_RUN_NAME",
-                            "value": "ex0-run1"
+                            "value": "ex0-run2"
                     },{
                             "name": "SIMULATOR_MODE",
                             "value": "RUN"
@@ -19,13 +19,13 @@ oc run cs6620-fall21-dedup-nodes-front-end-ex0 --overrides='
                             "value": "FIXED-SIZE"
                     },{
                             "name": "SIMULATOR_REGION_SIZE",
-                            "value": "4"
+                            "value": "8"
                     },{
                             "name": "SIMULATOR_ROUTING",
-                            "value": "Q_LEARNING"
+                            "value": "FIRST_FINGERPRINT_7"
                     },{
                             "name": "SIMULATOR_DOMAINS",
-                            "value": "100"
+                            "value": "1"
                     },{
                             "name": "SIMULATOR_BACKEND_IPS",
                             "value": "'"$(oc get pods --selector app=cs6620-fall21-dedup-nodes-back-end-ex0 -o jsonpath='{range .items[:-1]}{.status.podIP}{","}{end}{.items[-1].status.podIP}')"'"

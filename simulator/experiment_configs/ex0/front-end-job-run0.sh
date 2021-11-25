@@ -25,7 +25,7 @@ oc run cs6620-fall21-dedup-nodes-front-end-ex0 --overrides='
                             "value": "FULL_HASH_7"
                     },{
                             "name": "SIMULATOR_DOMAINS",
-                            "value": "100"
+                            "value": "1"
                     },{
                             "name": "SIMULATOR_BACKEND_IPS",
                             "value": "'"$(oc get pods --selector app=cs6620-fall21-dedup-nodes-back-end-ex0 -o jsonpath='{range .items[:-1]}{.status.podIP}{","}{end}{.items[-1].status.podIP}')"'"

@@ -4,7 +4,7 @@ metadata:
   name: cs6620-fall21-dedup-nodes-back-end-ex0
   namespace: cs6620-fall21-intelligentassignment-dedupnodes
 spec:
-  parallelism: 5
+  parallelism: 1
   selector:
     app: cs6620-fall21-dedup-nodes-back-end-ex0
   template:
