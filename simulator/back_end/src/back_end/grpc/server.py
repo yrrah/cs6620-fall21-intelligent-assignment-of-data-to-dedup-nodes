@@ -13,6 +13,7 @@ from back_end.grpc import assignService_pb2_grpc, assignService_pb2
 from back_end.kv_store import RocksDBStore
 
 
+server = None
 class AssignToDomain(assignService_pb2_grpc.RegionReceiveServiceServicer):
     """
     This class is the server which is going to assign the regions to the backend of the domain.
@@ -24,7 +25,7 @@ class AssignToDomain(assignService_pb2_grpc.RegionReceiveServiceServicer):
         self.region_count = 0
 
     def AssignRegion(self, request, context):
-        self.region_count += 1
+        self.region_count += 1  # -> make region_count dynamic, send from the client.
         if self.region_count % 100 == 0:
             print(self.kv_store.domain_counts)
 
@@ -38,11 +39,16 @@ class AssignToDomain(assignService_pb2_grpc.RegionReceiveServiceServicer):
                                                  cpuPercent=psutil.cpu_percent())
     # TODO : Write some code for getting some stats from the domains.
 
+    def ShutDownPod(self, request, context):
+        global server
+        print('Shutting down the pod')
+        server.stop(grace=None)
 
 def serve():
     """
     Method that starts a server and listens to a port for client calls
     """
+    global server
     stop_event = threading.Event()
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
     assignService_pb2_grpc.add_RegionReceiveServiceServicer_to_server(AssignToDomain(stop_event), server)

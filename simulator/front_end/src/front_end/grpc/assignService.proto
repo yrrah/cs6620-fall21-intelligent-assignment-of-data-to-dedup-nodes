@@ -6,6 +6,7 @@ A service that receives a region and assigns it to a domain.
  */
 service RegionReceiveService{
   rpc AssignRegion(Region) returns (Acknowledgement) {}
+  rpc ShutDownPod(Empty) returns (ShutDownMessage){}
 }
 
 /**
@@ -32,4 +33,17 @@ message Acknowledgement{
   int32 nonDuplicatesSize = 1;
   int32 nonDuplicatesLength = 2;
   float cpuPercent = 3;
+}
+
+/**
+Empty messages represent a void call in GRPC.
+ */
+message Empty{
+}
+
+/**
+An acknowledgement message from the server that the server has been shut down.
+ */
+message ShutDownMessage{
+  string message = 1;
 }
