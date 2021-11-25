@@ -86,8 +86,10 @@ class Simulator:
         if self.OUTPUT_DIR is None:
             self.OUTPUT_DIR = '/var/output/'
         self.log_file = None
+        self.log_file_path = ''
         self.log_file_header = "domain, region bytes, non-dupe bytes, region fp count," \
                                " non-dupe fp count, route time, response time, user, hash date\n"
+        self.stop_time_offset = 0
         self.TRACES_WEBDIR = os.getenv('SIMULATOR_TRACES_WEBDIR')
         if self.TRACES_WEBDIR is None:
             self.TRACES_WEBDIR = 'https://tracer.filesystems.org/traces/'
@@ -122,12 +124,16 @@ class Simulator:
         if not os.path.exists(self.OUTPUT_DIR):
             os.makedirs(self.OUTPUT_DIR)
 
-        self.log_file = open(self.OUTPUT_DIR + str(int(time.time())) + '.csv', 'w')
+        self.log_file_path = self.OUTPUT_DIR + str(int(time.time())) + '.csv'
+        self.log_file = open(self.log_file_path, 'w')
         commas = ',' * 9
         self.log_file.writelines([f'{commas}{k}:{v}\n' for k, v in os.environ.items() if k.startswith('SIMULATOR_')])
-
+        start_time = time.time()
+        self.log_file.write(f'{commas}START_TIME:{start_time}\n')
+        self.log_file.write(f'{commas}STOP_TIME:')
+        self.stop_time_offset = self.log_file.tell()
+        self.log_file.write(f'{start_time}\n')
         self.log_file.write(self.log_file_header)
-        self.log_file.write(f'{commas}START_TIME:{time.time()}\n')
 
     def get_files(self):
         """
@@ -224,7 +230,12 @@ class Simulator:
         kill back_end pods
         save / process results
         """
-        self.log_file.write(f"{(',' * 9)}STOP_TIME:{time.time()}\n")
+        stop_time = time.time()
+        self.log_file.close()
+        with open(self.log_file_path, 'r+b') as f:
+            f.seek(self.stop_time_offset, 0)
+            f.write(bytes(f'{stop_time}\n', encoding='utf8'))
+
         for backend in self.back_end_ips:
             try:
                 kill_backend(backend + ':50051')
