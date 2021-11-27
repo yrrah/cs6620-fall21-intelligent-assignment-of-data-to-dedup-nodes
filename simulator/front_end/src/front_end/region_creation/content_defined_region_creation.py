@@ -1,7 +1,8 @@
 from typing import Generator, Any
 
-from front_end.grpc.assignService_pb2 import Region
+
 from front_end.region_creation.input_streams import HashFile
+from front_end.region_creation.region import Region
 
 
 def bytes_to_int(hex_string) -> int:

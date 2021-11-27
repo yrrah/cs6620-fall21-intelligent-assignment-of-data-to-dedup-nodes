@@ -50,6 +50,7 @@ class Simulator:
             else:
                 self.MIN_REGION_SIZE = int(self.MIN_REGION_SIZE)
                 self.MAX_REGION_SIZE = int(self.MAX_REGION_SIZE)
+                self.BIT_MASK = int(self.BIT_MASK)
 
         # Checking inputs for the TTTD algorithm
         # ******************************************** #
@@ -171,8 +172,8 @@ class Simulator:
             print(e)
             return
 
-        regions = region_factory(self.REGION_FORMATION, hash_file, self.REGION_SIZE, self.MAX_REGION_SIZE,
-                                 self.MIN_REGION_SIZE, self.BIT_MASK)
+        regions = region_factory(self.REGION_FORMATION, hash_file, self.REGION_SIZE,
+                                 self.MIN_REGION_SIZE, self.MAX_REGION_SIZE, self.BIT_MASK, self.MAIN_D, self.SECOND_D)
 
         # Calculate the number of domains we have and pass it to the assignment code.
         number_domains = self.DOMAINS * len(self.back_end_ips)

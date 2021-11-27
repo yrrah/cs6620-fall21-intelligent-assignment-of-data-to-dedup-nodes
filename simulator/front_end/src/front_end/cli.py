@@ -42,11 +42,14 @@ def main(hello_world, run):
         os.environ['SIMULATOR_OUTPUT_DIR'] = './logs/'
         os.environ['SIMULATOR_TRACES_LISTS_DIR'] = './simulator/front_end/src/traces/'
         os.environ['SIMULATOR_TRACES_LISTS'] = 'fslhomes_2011-8kb-only_018'
-        os.environ['SIMULATOR_REGION_ALGO'] = 'FIXED-SIZE'
+        os.environ['SIMULATOR_REGION_ALGO'] = 'CONTENT-DEFINED'
+        os.environ['SIMULATOR_MIN_REGION_SIZE'] = '2'
+        os.environ['SIMULATOR_MAX_REGION_SIZE'] = '6'
+        os.environ['SIMULATOR_BIT_MASK'] = '5'
         os.environ['SIMULATOR_REGION_SIZE'] = '4'
-        os.environ['SIMULATOR_ROUTING'] = 'Q_LEARNING'
+        os.environ['SIMULATOR_ROUTING'] = 'FIRST_FINGERPRINT_7'
         os.environ['SIMULATOR_DOMAINS'] = '100'
-        os.environ['SIMULATOR_BACKEND_IPS'] = 'localhost,localhost,localhost,localhost,localhost'
+        os.environ['SIMULATOR_BACKEND_IPS'] = 'localhost'
 
     # run a hello world test
     if os.environ['SIMULATOR_MODE'] == 'HELLO':

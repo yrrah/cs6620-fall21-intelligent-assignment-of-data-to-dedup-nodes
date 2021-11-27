@@ -28,16 +28,15 @@ def create_regions(algorithms: str, hash_file: HashFile):
         raise ValueError("Region is too full to accept fingerprint")
 
 
-def region_factory(algorithm: str, hash_file: HashFile, fingerprint_size=1, min_size=2, max_size=8, bit_mask=5,
-                   minT=2, maxT=4, mainD=3, secondD=0.5):
+def region_factory(algorithm: str, hash_file: HashFile, region_size, min_size, max_size, bit_mask, main_d, second_d):
     if algorithm == "FIXED-SIZE":
-        return create_fixed_regions(hash_file, fingerprint_size)
+        return create_fixed_regions(hash_file, region_size)
 
     if algorithm == "CONTENT-DEFINED":
         return create_content_defined_regions(min_size, max_size, bit_mask, hash_file)
 
     if algorithm == "TTTD":
-        return create_tttd_regions(minT, maxT, secondD, mainD, hash_file)
+        return create_tttd_regions(min_size, max_size, second_d, main_d, hash_file)
 
     if algorithm == "AE":
         return create_ae_regions(max_size, hash_file)
