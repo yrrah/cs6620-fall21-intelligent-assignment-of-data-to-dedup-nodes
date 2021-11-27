@@ -116,15 +116,7 @@ create_front_end () {
   '  --image=notused --restart=Never
 }
 
-
-exec < run_combinations.tsv
-for i in {1..2}; do read skip_these_lines; done;
-while IFS=$'\t' read -r run_num dedup_domains num_pods region_algo region_size min_region max_region bitmask_size assign_algo dataset results_file
-do
-  kill_old_pods
-  create_back_end
-  sleep 60
-  create_front_end
+print_all_params () {
   echo "run_num: $run_num"
   echo "dedup_domains: $dedup_domains"
   echo "num_pods: $num_pods"
@@ -137,7 +129,36 @@ do
   echo "dataset: $dataset"
   echo "results_file: $results_file"
   echo ""
-  if [ "$run_num" -eq 2 ]; then
+
+}
+
+exec < run_combinations.tsv
+for i in {1..1}; do read skip_these_lines; done;
+while IFS=$'\t' read -r run_num dedup_domains num_pods region_algo region_size min_region max_region bitmask_size assign_algo dataset results_file
+do
+  kill_old_pods
+  create_back_end
+  sleep 5
+
+  while [[ $(oc get pods --field-selector status.phase=Running) == *Terminating* ]]
+  do
+    echo "Waiting 5s for terminating pods..."
+    sleep 5
+  done
+
+  create_front_end
+  sleep 5
+
+  print_all_params
+
+  while [[ $(oc get pods --field-selector metadata.name=cs6620-fall21-dedup-nodes-front-end-ex0) != *Completed* ]]
+  do
+    echo "Waiting 60s for front_end to finish..."
+    sleep 60
+  done
+
+  ## stop early
+  if [ "$run_num" -eq 3 ]; then
     break
   fi
 done
