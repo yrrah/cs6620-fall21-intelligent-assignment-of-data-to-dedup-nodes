@@ -123,7 +123,11 @@ class Simulator:
         if not os.path.exists(self.OUTPUT_DIR):
             os.makedirs(self.OUTPUT_DIR)
 
-        self.log_file_path = self.OUTPUT_DIR + str(int(time.time())) + '.csv'
+        log_file_prefix = os.getenv("SIMULATOR_RUN_NAME")
+        if log_file_prefix is None:
+            log_file_prefix = ''
+
+        self.log_file_path = self.OUTPUT_DIR + log_file_prefix + str(int(time.time())) + '.csv'
         self.log_file = open(self.log_file_path, 'w')
         commas = ',' * 9
         self.log_file.writelines([f'{commas}{k}:{v}\n' for k, v in os.environ.items() if k.startswith('SIMULATOR_')])
