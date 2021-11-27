@@ -34,6 +34,16 @@ create_back_end () {
                                 "value": "DEMO"
                             }
                         ],
+                        "resources": {
+                            "limits": {
+                                    "cpu": "500m",
+                                    "memory": "1Gi"
+                            },
+                            "requests": {
+                                    "cpu": "500m",
+                                    "memory": "500Mi"
+                            }
+                        },
                         "image": "image-registry.openshift-image-registry.svc:5000/cs6620-fall21-intelligentassignment-dedupnodes/cs6620-fall21-dedup-nodes-back-end",
                         "name": "cs6620-fall21-dedup-nodes-back-end-ex0",
                         "ports": [
@@ -133,7 +143,7 @@ print_all_params () {
 }
 
 exec < run_combinations.tsv
-for i in {1..1}; do read skip_these_lines; done;
+for i in {1..6}; do read skip_these_lines; done;
 while IFS=$'\t' read -r run_num dedup_domains num_pods region_algo region_size min_region max_region bitmask_size assign_algo dataset results_file
 do
   kill_old_pods
@@ -143,6 +153,12 @@ do
   while [[ $(oc get pods --field-selector status.phase=Running) == *Terminating* ]]
   do
     echo "Waiting 5s for terminating pods..."
+    sleep 5
+  done
+
+  while [[ $(oc get pods --field-selector status.phase=Running) != *Running* ]]
+  do
+    echo "Waiting 5s for back_end to start..."
     sleep 5
   done
 
@@ -158,7 +174,7 @@ do
   done
 
   ## stop early
-  if [ "$run_num" -eq 3 ]; then
+  if [ "$run_num" -eq 12 ]; then
     break
   fi
 done
