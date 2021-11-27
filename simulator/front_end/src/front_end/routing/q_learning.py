@@ -102,7 +102,7 @@ class QLearning:
                     row += self.Q[domain]
                     domain += 1
                 print(f'pod {p}: {row}')
-            print(f'domain 364: {self.Q[364]}')
+            # print(f'domain 364: {self.Q[364]}')
             print(self.prev_reward_string)
             self.log_counter = self.log_interval
         else:
