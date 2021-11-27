@@ -14,12 +14,12 @@ def bytes_to_int(hex_string) -> int:
     return int.from_bytes(hex_string, "big")
 
 
-def create_content_defined_regions(min_region_size: int, max_region_size: int, mask: int, hash_file: HashFile) -> \
+def create_content_defined_regions(min_region_mb: int, max_region_mb: int, mask_bits: int, hash_file: HashFile) -> \
         Generator[Region, Any, None]:
     """
-    :param min_region_size: Minimum region size in MiB
-    :param max_region_size: Maximum region size in MiB
-    :param mask: mask bits to mask the chunks
+    :param min_region_mb: Minimum region size in MiB
+    :param max_region_mb: Maximum region size in MiB
+    :param mask_bits: mask bits to mask the chunks
     :param hash_file: A hash file object that can be read to extract hashes.
     :return: the region objects
 
@@ -32,9 +32,9 @@ def create_content_defined_regions(min_region_size: int, max_region_size: int, m
 
     """
 
-    max_region_size = (max_region_size * 1024 * 1024)
-    min_region_size = (min_region_size * 1024 * 1024)
-    mask = (mask * 1024 * 1024)  # 00001110100010 1/2^4 for 4 bits (probably 10 or so bits desired)
+    max_region_size = (max_region_mb * 1024 * 1024)
+    min_region_size = (min_region_mb * 1024 * 1024)
+    mask = (1 << mask_bits) - 1  # 00001111 1/2^4 for 4 bits (probably 10 or so bits desired)
     region = Region(max_region_size)
 
     while hash_file.num_files_processed < hash_file.total_files:
