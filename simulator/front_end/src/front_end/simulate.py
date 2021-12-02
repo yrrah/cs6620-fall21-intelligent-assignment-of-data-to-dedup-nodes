@@ -135,7 +135,7 @@ class Simulator:
         self.log_file.write(f'{commas}START_TIME:{start_time}\n')
         self.log_file.write(f'{commas}STOP_TIME:')
         self.stop_time_offset = self.log_file.tell()
-        self.log_file.write(f'{start_time}\n')
+        self.log_file.write(f'{start_time}0\n')
         self.log_file.write(self.log_file_header)
 
     def get_files(self):
@@ -237,7 +237,7 @@ class Simulator:
         self.log_file.close()
         with open(self.log_file_path, 'r+b') as f:
             f.seek(self.stop_time_offset, 0)
-            f.write(bytes(str(stop_time), encoding='utf8'))
+            f.write(bytes(f'{stop_time}\n', encoding='utf8'))
 
         for backend in self.back_end_ips:
             try:
