@@ -143,7 +143,7 @@ print_all_params () {
 }
 
 exec < run_combinations.tsv
-for i in {1..14}; do read skip_these_lines; done;
+for i in {1..69}; do read skip_these_lines; done;
 while IFS=$'\t' read -r run_num dedup_domains num_pods region_algo region_size min_region max_region bitmask_size assign_algo dataset results_file
 do
   kill_old_pods
@@ -174,7 +174,7 @@ do
   done
 
   ## stop early
-  if [ "$run_num" -eq 49 ]; then
+  if [ "$run_num" -eq 85 ]; then
     break
   fi
 done
