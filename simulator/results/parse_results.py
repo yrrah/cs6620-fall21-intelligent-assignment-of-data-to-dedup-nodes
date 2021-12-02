@@ -61,7 +61,7 @@ def process_directory(logs_path: str, save_plots: bool, show_plots: bool):
 
         dedup_per_user_per_day(log_dataframe, title, save_plots, show_plots)
         region_size = region_size_stats(log_dataframe, title, save_plots, show_plots)
-        hashes_per_user_per_day(log_dataframe, title, save_plots, show_plots)
+        # hashes_per_user_per_day(log_dataframe, title, save_plots, show_plots)
         region_count_by_domain(log_dataframe, num_domains, num_pods, title, save_plots, show_plots)
         # nondupe_vs_total_count_by_domain(log_dataframe, title, save_plots, show_plots)
         # nondupe_vs_total_count_by_pod(log_dataframe, group_by_pod, title, save_plots, show_plots)
@@ -80,7 +80,7 @@ def process_directory(logs_path: str, save_plots: bool, show_plots: bool):
 
 
 def main():
-    process_directory('./ex0/', save_plots=True, show_plots=False)
+    process_directory('/home/harry/Downloads/plot/', save_plots=True, show_plots=False)
 
 
 if __name__ == "__main__":
