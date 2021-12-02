@@ -37,12 +37,13 @@ def main(hello_world, run):
     if hello_world:
         os.environ['SIMULATOR_MODE'] = 'HELLO'
     if run:
+        os.environ['SIMULATOR_RUN_NAME'] = 'debug_test'
         os.environ['SIMULATOR_MODE'] = 'RUN'
         os.environ['SIMULATOR_INPUT_DIR'] = './hash_files/'
         os.environ['SIMULATOR_OUTPUT_DIR'] = './logs/'
         os.environ['SIMULATOR_TRACES_LISTS_DIR'] = './simulator/front_end/src/traces/'
         os.environ['SIMULATOR_TRACES_LISTS'] = 'fslhomes_2011-8kb-only_018'
-        os.environ['SIMULATOR_REGION_ALGO'] = 'CONTENT-DEFINED'
+        os.environ['SIMULATOR_REGION_ALGO'] = 'FIXED-SIZE'
         os.environ['SIMULATOR_MIN_REGION_SIZE'] = '2'
         os.environ['SIMULATOR_MAX_REGION_SIZE'] = '6'
         os.environ['SIMULATOR_BIT_MASK'] = '5'
