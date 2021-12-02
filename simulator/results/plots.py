@@ -2,6 +2,25 @@ import numpy as np
 from matplotlib import pyplot as plt
 
 
+def region_size_stats(df, title, save, show):
+    fig, ax = plt.subplots()
+    df.hist(column=' region bytes', ax=ax)
+    ax.set_title(f'Histogram of Region Sizes ({title})')
+    ax.set_ylabel('Count')
+    ax.set_xlabel('Bytes')
+    if save:
+        plt.savefig(f'{title}_region_sizes.png')
+    if show:
+        plt.show()
+    pass
+
+    min_region_bytes = df[' region bytes'].min()
+    max_region_bytes = df[' region bytes'].max()
+    mean_region_bytes = df[' region bytes'].mean()
+    std_region_bytes = df[' region bytes'].std()
+    return [min_region_bytes, max_region_bytes, mean_region_bytes, std_region_bytes]
+
+
 def region_count_by_domain(df, num_domains, num_pods, title, save, show):
     domains_per_pod = int(num_domains/num_pods)
     selected = df[['domain', ' non-dupe fp count']].copy()
