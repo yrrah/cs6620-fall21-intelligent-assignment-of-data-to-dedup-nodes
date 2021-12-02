@@ -74,7 +74,7 @@ def nondupe_vs_total_bytes_by_pod(df, group_by_func, title, save, show) -> [floa
         ax.set_xlabel('Pod')
         ax.set_ylabel('Total Bytes sent to Pod')
         for i, v in enumerate(by_pod['ratio']):
-            ax.annotate(f'{v}X', (i - 0.1, 1000), fontsize=20)
+            ax.annotate(f'{v}X', (i - 0.2, 1000), fontsize=10)
     if save:
         plt.savefig(f'{title}_nondupe_vs_total_bytes_by_pod.png')
     if show:
