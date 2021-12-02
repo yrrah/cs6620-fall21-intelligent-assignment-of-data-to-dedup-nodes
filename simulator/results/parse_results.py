@@ -25,7 +25,7 @@ def parse_file(file_name):
     whole_log = pd.read_csv(file_name,
                             skiprows=len(environment_vars),
                             parse_dates=[' hash date'])
-    whole_log.rename(columns={"omain": "domain"})
+    whole_log = whole_log.rename(columns={"omain": "domain"})
     return whole_log, environment_vars
 
 
@@ -70,7 +70,7 @@ def process_directory(logs_path: str, save_plots: bool, show_plots: bool):
 
 
 def main():
-    process_directory('./ex0/', save_plots=False, show_plots=True)
+    process_directory('./ex0/', save_plots=False, show_plots=False)
 
 
 if __name__ == "__main__":
