@@ -97,7 +97,7 @@ def nondupe_vs_total_bytes_by_domain(df, title, save, show) -> [float]:
     by_domain.index = by_domain.index.astype(int)
     max_value = by_domain[' region bytes'].max()
     if save or show:
-        ax = by_domain[[' non-dupe bytes', 'total region bytes']].plot.bar(stacked=True, logy=True)
+        ax = by_domain[[' non-dupe bytes', 'total region bytes']].plot.bar(stacked=True, logy=False)
         ax.set_title(title)
         ax.set_ylabel('Total Bytes sent to Domain')
         ax.set_xticks(ax.get_xticks()[::64])
@@ -181,5 +181,53 @@ def hashes_per_user_per_day(df, title, save, show):
         plt.tight_layout()
     if save:
         plt.savefig(f'{title}_hashes_per_user_per_day.png')
+    if show:
+        plt.show()
+
+
+def dedup_per_user_per_day(df, title, save, show):
+    # df = df[(df[' hash date'] > '2011-01-01') & (df[' hash date'] < '2012-03-01')]
+    selected = df[[' non-dupe bytes', ' region bytes', ' hash date', ' user']].copy()
+    selected = selected.groupby([' hash date', ' user']).sum()
+    selected['CumulativePhysicalBytes'] = selected[' region bytes'].cumsum()
+    selected['CumulativeLogicalBytes'] = selected[' non-dupe bytes'].cumsum()
+    selected['Dedup_User'] = selected[' region bytes'] / selected[' non-dupe bytes']
+    selected['Cumulative_Dedup_User'] = selected['CumulativePhysicalBytes'] / selected['CumulativeLogicalBytes']
+    selected['Weekly_Avg_Dedup_User'] = selected['Dedup_User'].expanding().mean()
+
+    instant = selected[['Dedup_User']]
+    instant = instant.unstack(fill_value=0)
+    table = str.maketrans(dict.fromkeys('\', ()'))
+    instant.columns = [' '.join(str(col)).translate(table) for col in instant.columns.values]
+    if save or show:
+        ax = instant.plot(linestyle='none', marker='o', logy=True)
+
+    avg = selected[['Cumulative_Dedup_User']]
+    avg = avg.unstack(fill_value=0)
+    table = str.maketrans(dict.fromkeys('\', ()'))
+    avg.columns = [' '.join(str(col)).translate(table) for col in avg.columns.values]
+    if save or show:
+        avg.plot(ax=ax)
+        ax.set_ylabel('Dedup (Logical / Physical)')
+        ax.set_xlabel(None)
+        ax.set_title(f'Instantaneous Daily Dedup ({title})')
+        plt.tight_layout()
+    if save:
+        plt.savefig(f'{title}_instant_dedup_per_user_per_day.png')
+    if show:
+        plt.show()
+
+    avg = selected[['Cumulative_Dedup_User']]
+    avg = avg.unstack(fill_value=0)
+    table = str.maketrans(dict.fromkeys('\', ()'))
+    avg.columns = [' '.join(str(col)).translate(table) for col in avg.columns.values]
+    if save or show:
+        ax = avg.plot()
+        ax.set_ylabel('Dedup (Logical / Physical)')
+        ax.set_xlabel(None)
+        ax.set_title(f'Cumulative Mean Dedup ({title})')
+        plt.tight_layout()
+    if save:
+        plt.savefig(f'{title}_cumavg_dedup_per_user_per_day.png')
     if show:
         plt.show()

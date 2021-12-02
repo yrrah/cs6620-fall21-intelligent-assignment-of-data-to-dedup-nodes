@@ -5,7 +5,7 @@ import pandas as pd
 
 from simulator.results.plots import nondupe_vs_total_bytes_by_domain, nondupe_vs_total_bytes_by_pod, \
     hashes_per_user_per_day, nondupe_vs_total_count_by_domain, nondupe_vs_total_count_by_pod, region_count_by_domain, \
-    region_size_stats
+    region_size_stats, dedup_per_user_per_day
 
 
 def parse_file(file_name):
@@ -47,28 +47,31 @@ def process_directory(logs_path: str, save_plots: bool, show_plots: bool):
          'pod5 dedup', 'pod6 dedup', 'pod7 dedup', 'pod8 dedup']]
 
     for file_name in files:
+        print(file_name)
         log_dataframe, env_vars = parse_file(logs_path + file_name)
 
         title = env_vars['SIMULATOR_RUN_NAME']
         num_pods = len(env_vars['SIMULATOR_BACKEND_IPS'].split(','))
         domains_per_pod = int(env_vars['SIMULATOR_DOMAINS'])
+        duration = (float(env_vars['STOP_TIME']) - float(env_vars['START_TIME'])) / 60
         num_domains = num_pods * domains_per_pod
 
         def group_by_pod(df, ind, col):
             return int(int(df[col].loc[ind]) / domains_per_pod)
 
-        print(file_name)
-        duration = (float(env_vars['STOP_TIME']) - float(env_vars['START_TIME'])) / 60
+        # dedup_per_user_per_day(log_dataframe, title, save_plots, show_plots)
+        region_size = region_size_stats(log_dataframe, title, save_plots, show_plots)
+        hashes_per_user_per_day(log_dataframe, title, save_plots, show_plots)
+        region_count_by_domain(log_dataframe, num_domains, num_pods, title, save_plots, show_plots)
+        # nondupe_vs_total_count_by_domain(log_dataframe, title, save_plots, show_plots)
+        # nondupe_vs_total_count_by_pod(log_dataframe, group_by_pod, title, save_plots, show_plots)
+        domain_stats = nondupe_vs_total_bytes_by_domain(log_dataframe, title, save_plots, show_plots)
+        pod_stats = nondupe_vs_total_bytes_by_pod(log_dataframe, group_by_pod, title, save_plots, show_plots)
+
         stats = [title, duration]
-        stats.extend(region_size_stats(log_dataframe, title, save_plots, show_plots))
-        # hashes_per_user_per_day(log_dataframe, title, save_plots, show_plots)
-        # region_count_by_domain(log_dataframe, num_domains, num_pods, title, save_plots, show_plots)
-        # # nondupe_vs_total_count_by_domain(log_dataframe, title, save_plots, show_plots)
-        # # nondupe_vs_total_count_by_pod(log_dataframe, group_by_pod, title, save_plots, show_plots)
-        # domain_stats = nondupe_vs_total_bytes_by_domain(log_dataframe, title, save_plots, show_plots)
-        # pod_stats = nondupe_vs_total_bytes_by_pod(log_dataframe, group_by_pod, title, save_plots, show_plots)
-        # stats.extend(domain_stats)
-        # stats.extend(pod_stats)
+        stats.extend(region_size)
+        stats.extend(domain_stats)
+        stats.extend(pod_stats)
         summary_results.append(stats)
 
     with open("summary.csv", "w", newline="") as f:
@@ -77,7 +80,7 @@ def process_directory(logs_path: str, save_plots: bool, show_plots: bool):
 
 
 def main():
-    process_directory('./ex0/', save_plots=False, show_plots=True)
+    process_directory('./ex0/', save_plots=True, show_plots=False)
 
 
 if __name__ == "__main__":
