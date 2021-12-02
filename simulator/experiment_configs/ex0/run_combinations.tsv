@@ -1,69 +1,85 @@
-Combination Number	Number of Dedup Domains	Number of Pods	Region Algorithm	Region Size MB (Fixed or Average Size)	Min Region MB	Max Region MB	Number of Mask Bits	Assignment Algorithm	Dataset	Results
-1	1	1	FIXED-SIZE	4	-	-	-	FIRST_FINGERPRINT_7	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018	1637860767.csv
-2	1	1	FIXED-SIZE	8	-	-	-	FIRST_FINGERPRINT_7	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018	
-3	1	1	CONTENT-DEFINED	4	2	6	10	FIRST_FINGERPRINT_7	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018	
-4	1	1	CONTENT-DEFINED	8	4	12	10	FIRST_FINGERPRINT_7	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018	
-5	1024	8	FIXED-SIZE	4	-	-	-	FIRST_FINGERPRINT_7	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018	
-6	1024	8	FIXED-SIZE	8	-	-	-	FIRST_FINGERPRINT_7	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018	
-7	1024	8	CONTENT-DEFINED	4	2	6	10	FIRST_FINGERPRINT_7	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018	
-8	1024	8	CONTENT-DEFINED	8	4	12	10	FIRST_FINGERPRINT_7	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018	
-9	128	8	FIXED-SIZE	4	-	-	-	FIRST_FINGERPRINT_7	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018	
-10	128	8	FIXED-SIZE	8	-	-	-	FIRST_FINGERPRINT_7	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018	
-11	128	8	CONTENT-DEFINED	4	2	6	10	FIRST_FINGERPRINT_7	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018	
-12	128	8	CONTENT-DEFINED	8	4	12	10	FIRST_FINGERPRINT_7	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018	
-29	1024	8	FIXED-SIZE	4	-	-	-	Q_LEARNING	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018	
-30	1024	8	FIXED-SIZE	8	-	-	-	Q_LEARNING	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018	
-31	1024	8	CONTENT-DEFINED	4	2	6	10	Q_LEARNING	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018	
-32	1024	8	CONTENT-DEFINED	8	4	12	10	Q_LEARNING	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018	
-33	128	8	FIXED-SIZE	4	-	-	-	Q_LEARNING	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018	
-34	128	8	FIXED-SIZE	8	-	-	-	Q_LEARNING	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018	
-35	128	8	CONTENT-DEFINED	4	2	6	10	Q_LEARNING	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018	
-36	128	8	CONTENT-DEFINED	8	4	12	10	Q_LEARNING	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018	
-37	128	8	TTTD	4	2	6	-	Q_LEARNING	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018	
-38	128	8	TTTD	8	4	12	-	Q_LEARNING	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018	
-39	128	8	AE	4	2	6	-	Q_LEARNING	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018	
-40	128	8	AE	8	4	12	-	Q_LEARNING	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018	
-41	1024	8	TTTD	4	2	6	-	FIRST_FINGERPRINT_7	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018	
-42	1024	8	TTTD	8	4	12	-	FIRST_FINGERPRINT_7	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018	
-43	1024	8	AE	4	2	6	-	FIRST_FINGERPRINT_7	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018	
-44	1024	8	AE	8	4	12	-	FIRST_FINGERPRINT_7	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018	
-45	128	8	TTTD	4	2	6	-	FIRST_FINGERPRINT_7	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018	
-46	128	8	TTTD	8	4	12	-	FIRST_FINGERPRINT_7	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018	
-47	128	8	AE	4	2	6	-	FIRST_FINGERPRINT_7	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018	
-48	128	8	AE	8	4	12	-	FIRST_FINGERPRINT_7	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018	
-49	1024	8	TTTD	4	2	6	-	MIN_HASH_7	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018	
-50	1024	8	TTTD	8	4	12	-	MIN_HASH_7	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018	
-51	1024	8	AE	4	2	6	-	MIN_HASH_7	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018	
-52	1024	8	AE	8	4	12	-	MIN_HASH_7	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018	
-53	128	8	TTTD	4	2	6	-	MIN_HASH_7	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018	
-54	128	8	TTTD	8	4	12	-	MIN_HASH_7	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018	
-55	128	8	AE	4	2	6	-	MIN_HASH_7	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018	
-56	128	8	AE	8	4	12	-	MIN_HASH_7	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018	
-57	1024	8	TTTD	4	2	6	-	MAX_HASH_7	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018	
-58	1024	8	TTTD	8	4	12	-	MAX_HASH_7	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018	
-59	1024	8	AE	4	2	6	-	MAX_HASH_7	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018	
-60	1024	8	AE	8	4	12	-	MAX_HASH_7	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018	
-61	128	8	TTTD	4	2	6	-	MAX_HASH_7	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018	
-62	128	8	TTTD	8	4	12	-	MAX_HASH_7	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018	
-63	128	8	AE	4	2	6	-	MAX_HASH_7	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018	
-64	128	8	AE	8	4	12	-	MAX_HASH_7	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018	
-65	1024	8	TTTD	4	2	6	-	Q_LEARNING	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018	
-66	1024	8	TTTD	8	4	12	-	Q_LEARNING	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018	
-67	1024	8	AE	4	2	6	-	Q_LEARNING	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018	
-68	1024	8	AE	8	4	12	-	Q_LEARNING	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018	
-13	1024	8	FIXED-SIZE	4	-	-	-	MIN_HASH_7	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018	
-14	1024	8	FIXED-SIZE	8	-	-	-	MIN_HASH_7	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018	
-15	1024	8	CONTENT-DEFINED	4	2	6	10	MIN_HASH_7	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018	
-16	1024	8	CONTENT-DEFINED	8	4	12	10	MIN_HASH_7	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018	
-17	128	8	FIXED-SIZE	4	-	-	-	MIN_HASH_7	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018	
-18	128	8	FIXED-SIZE	8	-	-	-	MIN_HASH_7	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018	
-19	128	8	CONTENT-DEFINED	4	2	6	10	MIN_HASH_7	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018	
-20	128	8	CONTENT-DEFINED	8	4	12	10	MIN_HASH_7	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018	
-21	1024	8	FIXED-SIZE	4	-	-	-	MAX_HASH_7	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018	
-22	1024	8	FIXED-SIZE	8	-	-	-	MAX_HASH_7	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018	
-23	1024	8	CONTENT-DEFINED	4	2	6	10	MAX_HASH_7	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018	
-24	1024	8	CONTENT-DEFINED	8	4	12	10	MAX_HASH_7	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018	
-25	128	8	FIXED-SIZE	4	-	-	-	MAX_HASH_7	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018	
-26	128	8	FIXED-SIZE	8	-	-	-	MAX_HASH_7	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018	
-27	128	8	CONTENT-DEFINED	4	2	6	10	MAX_HASH_7	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018	
-28	128	8	CONTENT-DEFINED	8	4	12	10	MAX_HASH_7	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018	
+Combination Number	Number of Dedup Domains Per Pod	Number of Pods	Region Algorithm	Region Size MB (Fixed or Average Size)	Min Region MB	Max Region MB	Number of Mask Bits	Assignment Algorithm	Dataset	Results	
+1	1	1	FIXED-SIZE	4	-	-	-	FIRST_FINGERPRINT_7	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018	ex0-run11638056469.csv	
+2	1	1	FIXED-SIZE	8	-	-	-	FIRST_FINGERPRINT_7	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018	ex0-run21638056719.csv	
+3	1	1	CONTENT-DEFINED	4	2	6	10	FIRST_FINGERPRINT_7	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018	ex0-run31638056971.csv	
+4	1	1	CONTENT-DEFINED	8	4	12	10	FIRST_FINGERPRINT_7	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018	ex0-run41638057221.csv	
+5	1024	8	FIXED-SIZE	4	-	-	-	FIRST_FINGERPRINT_7	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018	ex0-run51638057488.csv	
+6	1024	8	FIXED-SIZE	8	-	-	-	FIRST_FINGERPRINT_7	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018	ex0-run61638057800.csv	
+7	1024	8	CONTENT-DEFINED	4	2	6	10	FIRST_FINGERPRINT_7	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018	ex0-run71638058105.csv	failing -> some parsing error
+8	1024	8	CONTENT-DEFINED	8	4	12	10	FIRST_FINGERPRINT_7	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018	ex0-run81638058358.csv	
+9	128	8	FIXED-SIZE	4	-	-	-	FIRST_FINGERPRINT_7	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018	ex0-run91638058607.csv	
+10	128	8	FIXED-SIZE	8	-	-	-	FIRST_FINGERPRINT_7	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018	ex0-run101638058917.csv	
+11	128	8	CONTENT-DEFINED	4	2	6	10	FIRST_FINGERPRINT_7	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018	ex0-run111638059229.csv	
+12	128	8	CONTENT-DEFINED	8	4	12	10	FIRST_FINGERPRINT_7	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018	ex0-run121638059496.csv	
+13	1024	8	FIXED-SIZE	4	-	-	-	MIN_FINGERPRINT	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018		
+14	1024	8	FIXED-SIZE	8	-	-	-	MIN_FINGERPRINT	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018		
+15	1024	8	CONTENT-DEFINED	4	2	6	10	MIN_FINGERPRINT	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018		
+16	1024	8	CONTENT-DEFINED	8	4	12	10	MIN_FINGERPRINT	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018		
+17	128	8	FIXED-SIZE	4	-	-	-	MIN_FINGERPRINT	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018		
+18	128	8	FIXED-SIZE	8	-	-	-	MIN_FINGERPRINT	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018		
+19	128	8	CONTENT-DEFINED	4	2	6	10	MIN_FINGERPRINT	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018		
+20	128	8	CONTENT-DEFINED	8	4	12	10	MIN_FINGERPRINT	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018		
+21	1024	8	FIXED-SIZE	4	-	-	-	MAX_FINGERPRINT	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018		
+22	1024	8	FIXED-SIZE	8	-	-	-	MAX_FINGERPRINT	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018		
+23	1024	8	CONTENT-DEFINED	4	2	6	10	MAX_FINGERPRINT	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018		
+24	1024	8	CONTENT-DEFINED	8	4	12	10	MAX_FINGERPRINT	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018		
+25	128	8	FIXED-SIZE	4	-	-	-	MAX_FINGERPRINT	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018		
+26	128	8	FIXED-SIZE	8	-	-	-	MAX_FINGERPRINT	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018		
+27	128	8	CONTENT-DEFINED	4	2	6	10	MAX_FINGERPRINT	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018		
+28	128	8	CONTENT-DEFINED	8	4	12	10	MAX_FINGERPRINT	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018		
+29	1024	8	FIXED-SIZE	4	-	-	-	Q_LEARNING	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018		
+30	1024	8	FIXED-SIZE	8	-	-	-	Q_LEARNING	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018	ex0-run301638392589.csv	
+31	1024	8	CONTENT-DEFINED	4	2	6	10	Q_LEARNING	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018	ex0-run311638392898.csv	
+32	1024	8	CONTENT-DEFINED	8	4	12	10	Q_LEARNING	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018	ex0-run321638393180.csv	
+33	128	8	FIXED-SIZE	4	-	-	-	Q_LEARNING	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018	ex0-run331638393445.csv	
+34	128	8	FIXED-SIZE	8	-	-	-	Q_LEARNING	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018	ex0-run341638393765.csv	
+35	128	8	CONTENT-DEFINED	4	2	6	10	Q_LEARNING	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018	ex0-run351638394073.csv	
+36	128	8	CONTENT-DEFINED	8	4	12	10	Q_LEARNING	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018	ex0-run361638394346.csv	
+37	128	8	TTTD	4	2	6	-	Q_LEARNING	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018		
+38	128	8	TTTD	8	4	12	-	Q_LEARNING	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018		
+39	128	8	AE	4	2	6	-	Q_LEARNING	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018		
+40	128	8	AE	8	4	12	-	Q_LEARNING	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018		
+41	1024	8	TTTD	4	2	6	-	FIRST_FINGERPRINT_7	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018		
+42	1024	8	TTTD	8	4	12	-	FIRST_FINGERPRINT_7	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018		
+43	1024	8	AE	4	2	6	-	FIRST_FINGERPRINT_7	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018		
+44	1024	8	AE	8	4	12	-	FIRST_FINGERPRINT_7	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018		
+45	128	8	TTTD	4	2	6	-	FIRST_FINGERPRINT_7	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018		
+46	128	8	TTTD	8	4	12	-	FIRST_FINGERPRINT_7	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018		
+47	128	8	AE	4	2	6	-	FIRST_FINGERPRINT_7	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018		
+48	128	8	AE	8	4	12	-	FIRST_FINGERPRINT_7	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018		
+49	1024	8	TTTD	4	2	6	-	MIN_FINGERPRINT	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018		
+50	1024	8	TTTD	8	4	12	-	MIN_FINGERPRINT	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018		
+51	1024	8	AE	4	2	6	-	MIN_FINGERPRINT	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018		
+52	1024	8	AE	8	4	12	-	MIN_FINGERPRINT	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018		
+53	128	8	TTTD	4	2	6	-	MIN_FINGERPRINT	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018		
+54	128	8	TTTD	8	4	12	-	MIN_FINGERPRINT	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018		
+55	128	8	AE	4	2	6	-	MIN_FINGERPRINT	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018		
+56	128	8	AE	8	4	12	-	MIN_FINGERPRINT	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018		
+57	1024	8	TTTD	4	2	6	-	MAX_FINGERPRINT	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018		
+58	1024	8	TTTD	8	4	12	-	MAX_FINGERPRINT	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018		
+59	1024	8	AE	4	2	6	-	MAX_FINGERPRINT	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018		
+60	1024	8	AE	8	4	12	-	MAX_FINGERPRINT	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018		
+61	128	8	TTTD	4	2	6	-	MAX_FINGERPRINT	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018		
+62	128	8	TTTD	8	4	12	-	MAX_FINGERPRINT	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018		
+63	128	8	AE	4	2	6	-	MAX_FINGERPRINT	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018		
+64	128	8	AE	8	4	12	-	MAX_FINGERPRINT	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018		
+65	1024	8	TTTD	4	2	6	-	Q_LEARNING	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018		
+66	1024	8	TTTD	8	4	12	-	Q_LEARNING	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018		
+67	1024	8	AE	4	2	6	-	Q_LEARNING	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018		
+68	1024	8	AE	8	4	12	-	Q_LEARNING	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018		
+69	16	8	FIXED-SIZE	4	-	-	-	FIRST_FINGERPRINT_7	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018		
+70	16	8	FIXED-SIZE	8	-	-	-	FIRST_FINGERPRINT_7	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018		
+71	16	8	CONTENT-DEFINED	4	2	6	10	FIRST_FINGERPRINT_7	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018		
+72	16	8	CONTENT-DEFINED	8	4	12	10	FIRST_FINGERPRINT_7	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018		
+73	16	8	FIXED-SIZE	4	-	-	-	MIN_FINGERPRINT	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018		
+74	16	8	FIXED-SIZE	8	-	-	-	MIN_FINGERPRINT	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018		
+75	16	8	CONTENT-DEFINED	4	2	6	10	MIN_FINGERPRINT	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018		
+76	16	8	CONTENT-DEFINED	8	4	12	10	MIN_FINGERPRINT	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018		
+77	16	8	FIXED-SIZE	4	-	-	-	MAX_FINGERPRINT	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018		
+78	16	8	FIXED-SIZE	8	-	-	-	MAX_FINGERPRINT	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018		
+79	16	8	CONTENT-DEFINED	4	2	6	10	MAX_FINGERPRINT	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018		
+80	16	8	CONTENT-DEFINED	8	4	12	10	MAX_FINGERPRINT	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018		
+81	16	8	FIXED-SIZE	4	-	-	-	Q_LEARNING	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018		
+82	16	8	FIXED-SIZE	8	-	-	-	Q_LEARNING	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018		
+83	16	8	CONTENT-DEFINED	4	2	6	10	Q_LEARNING	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018		
+84	16	8	CONTENT-DEFINED	8	4	12	10	Q_LEARNING	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018		
