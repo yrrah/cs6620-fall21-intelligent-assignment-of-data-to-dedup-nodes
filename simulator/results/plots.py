@@ -9,7 +9,7 @@ def region_size_stats(df, title, save, show):
     ax.set_ylabel('Count')
     ax.set_xlabel('Bytes')
     if save:
-        plt.savefig(f'{title}_region_sizes.png')
+        plt.savefig(f'{title}_region_sizes.svg', format='svg')
     if show:
         plt.show()
     pass
@@ -22,7 +22,7 @@ def region_size_stats(df, title, save, show):
 
 
 def region_count_by_domain(df, num_domains, num_pods, title, save, show):
-    domains_per_pod = int(num_domains/num_pods)
+    domains_per_pod = int(num_domains / num_pods)
     selected = df[['domain', ' non-dupe fp count']].copy()
     selected = selected.groupby(['domain']).count()
     domain_counts = np.zeros(num_domains)
@@ -30,7 +30,7 @@ def region_count_by_domain(df, num_domains, num_pods, title, save, show):
         domain_counts[domain] = selected[' non-dupe fp count'][domain]
 
     domain_grid = domain_counts.reshape((num_pods, domains_per_pod))
-    domain_grid = np.repeat(domain_grid, int(domains_per_pod/num_pods), axis=0)
+    domain_grid = np.repeat(domain_grid, int(domains_per_pod / num_pods), axis=0)
     fig, ax = plt.subplots()
     im = ax.imshow(domain_grid, cmap='nipy_spectral')
     fig.colorbar(im, ax=ax)
@@ -46,7 +46,7 @@ def region_count_by_domain(df, num_domains, num_pods, title, save, show):
     #     ax.set_xticks(ax.get_xticks()[::64])
     #     # ax.set_ylim(10, 2500000000)
     if save:
-        plt.savefig(f'{title}_region_count_by_domain.png')
+        plt.savefig(f'{title}_region_count_by_domain.svg', format='svg')
     if show:
         plt.show()
     pass
@@ -64,7 +64,7 @@ def nondupe_vs_total_count_by_domain(df, title, save, show):
         ax.set_xticks(ax.get_xticks()[::64])
         # ax.set_ylim(10, 2500000000)
     if save:
-        plt.savefig(f'{title}_nondupe_vs_total_count_by_domain.png')
+        plt.savefig(f'{title}_nondupe_vs_total_count_by_domain.svg', format='svg')
     if show:
         plt.show()
 
@@ -83,7 +83,7 @@ def nondupe_vs_total_count_by_pod(df, group_by_func, title, save, show):
         for i, v in enumerate(selected['ratio']):
             ax.annotate(f'{v}X', (i - 0.1, 1000), fontsize=20)
     if save:
-        plt.savefig(f'{title}_nondupe_vs_total_count_by_pod.png')
+        plt.savefig(f'{title}_nondupe_vs_total_count_by_pod.svg', format='svg')
     if show:
         plt.show()
     return selected['ratio'].values
@@ -102,9 +102,9 @@ def nondupe_vs_total_bytes_by_domain(df, title, save, show) -> [float]:
         ax.set_ylabel('Total Bytes sent to Domain')
         ax.set_xticks(ax.get_xticks()[::64])
         ax.set_ylim(0, max_value)
-    print(f"{title} {by_domain['total region bytes'].min()}")
+    # print(f"{title} {by_domain['total region bytes'].min()}")
     if save:
-        plt.savefig(f'{title}_nondupe_vs_total_bytes_by_domain.png')
+        plt.savefig(f'{title}_nondupe_vs_total_bytes_by_domain.svg', format='svg')
     if show:
         plt.show()
     mean_domain_phys = by_domain[' non-dupe bytes'].mean()
@@ -135,9 +135,9 @@ def nondupe_vs_total_bytes_by_pod(df, group_by_func, title, save, show) -> [floa
         ax.set_ylabel('Total Bytes sent to Pod')
         ax.set_ylim(0, max_value)
         for i, v in enumerate(by_pod['ratio']):
-            ax.annotate(f'{v}X', (i - 0.2, max_value/2), fontsize=10)
+            ax.annotate(f'{v}X', (i - 0.2, max_value / 2), fontsize=10)
     if save:
-        plt.savefig(f'{title}_nondupe_vs_total_bytes_by_pod.png')
+        plt.savefig(f'{title}_nondupe_vs_total_bytes_by_pod.svg', format='svg')
     if show:
         plt.show()
 
@@ -180,7 +180,7 @@ def hashes_per_user_per_day(df, title, save, show):
         # ax.set_xticks(ax.get_xticks()[::50])
         plt.tight_layout()
     if save:
-        plt.savefig(f'{title}_hashes_per_user_per_day.png')
+        plt.savefig(f'{title}_hashes_per_user_per_day.svg', format='svg')
     if show:
         plt.show()
 
@@ -213,7 +213,7 @@ def dedup_per_user_per_day(df, title, save, show):
         ax.set_title(f'Instantaneous Daily Dedup ({title})')
         plt.tight_layout()
     if save:
-        plt.savefig(f'{title}_instant_dedup_per_user_per_day.png')
+        plt.savefig(f'{title}_instant_dedup_per_user_per_day.svg', format='svg')
     if show:
         plt.show()
 
@@ -228,6 +228,6 @@ def dedup_per_user_per_day(df, title, save, show):
         ax.set_title(f'Cumulative Mean Dedup ({title})')
         plt.tight_layout()
     if save:
-        plt.savefig(f'{title}_cumavg_dedup_per_user_per_day.png')
+        plt.savefig(f'{title}_cumavg_dedup_per_user_per_day.svg', format='svg')
     if show:
         plt.show()
