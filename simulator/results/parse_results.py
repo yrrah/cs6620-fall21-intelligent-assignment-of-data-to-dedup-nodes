@@ -80,7 +80,7 @@ def process_directory(logs_path: str, save_plots: bool, show_plots: bool):
 
 
 def main():
-    process_directory('/home/harry/Downloads/plot/', save_plots=True, show_plots=False)
+    process_directory('./ex0/', save_plots=False, show_plots=False)
 
 
 if __name__ == "__main__":
