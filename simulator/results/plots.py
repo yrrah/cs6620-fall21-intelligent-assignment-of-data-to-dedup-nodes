@@ -1,5 +1,6 @@
 import numpy as np
 from matplotlib import pyplot as plt
+import pandas as pd
 
 
 def region_size_stats(df, title, save, show):
@@ -189,11 +190,12 @@ def dedup_per_user_per_day(df, title, save, show):
     # df = df[(df[' hash date'] > '2011-01-01') & (df[' hash date'] < '2012-03-01')]
     selected = df[[' non-dupe bytes', ' region bytes', ' hash date', ' user']].copy()
     selected = selected.groupby([' hash date', ' user']).sum()
-    selected['CumulativePhysicalBytes'] = selected[' region bytes'].cumsum()
-    selected['CumulativeLogicalBytes'] = selected[' non-dupe bytes'].cumsum()
+    summed = selected.groupby(level=1).cumsum()
+    summed.rename(columns={' non-dupe bytes': 'CumulativePhysicalBytes',
+                           ' region bytes': 'CumulativeLogicalBytes'}, inplace=True)
+    selected = pd.concat([selected, summed], axis=1)
     selected['Dedup_User'] = selected[' region bytes'] / selected[' non-dupe bytes']
-    selected['Cumulative_Dedup_User'] = selected['CumulativePhysicalBytes'] / selected['CumulativeLogicalBytes']
-    selected['Weekly_Avg_Dedup_User'] = selected['Dedup_User'].expanding().mean()
+    selected['Cumulative_Dedup_User'] = selected['CumulativeLogicalBytes'] / selected['CumulativePhysicalBytes']
 
     instant = selected[['Dedup_User']]
     instant = instant.unstack(fill_value=0)
@@ -201,16 +203,22 @@ def dedup_per_user_per_day(df, title, save, show):
     instant.columns = [' '.join(str(col)).translate(table) for col in instant.columns.values]
     if save or show:
         ax = instant.plot(linestyle='none', marker='o', logy=True)
+        handles1, _ = ax.get_legend_handles_labels()
 
-    avg = selected[['Cumulative_Dedup_User']]
-    avg = avg.unstack(fill_value=0)
-    table = str.maketrans(dict.fromkeys('\', ()'))
-    avg.columns = [' '.join(str(col)).translate(table) for col in avg.columns.values]
-    if save or show:
+        avg = selected[['Cumulative_Dedup_User']]
+        avg = avg.unstack(fill_value=0)
+        table = str.maketrans(dict.fromkeys('\', ()'))
+        avg.columns = [' '.join(str(col)).translate(table) for col in avg.columns.values]
         avg.plot(ax=ax)
         ax.set_ylabel('Dedup (Logical / Physical)')
         ax.set_xlabel(None)
         ax.set_title(f'Instantaneous Daily Dedup ({title})')
+        handles2, _ = ax.get_legend_handles_labels()
+        num_users = len(handles1)
+        handles2[0:num_users] = handles1
+        for i, handle in enumerate(handles2[num_users:]):
+            handle.set_color(handles1[i].get_color())
+        ax.legend(handles=handles2)
         plt.tight_layout()
     if save:
         plt.savefig(f'{title}_instant_dedup_per_user_per_day.svg', format='svg')
