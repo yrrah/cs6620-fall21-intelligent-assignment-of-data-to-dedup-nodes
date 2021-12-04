@@ -11,7 +11,6 @@
 ,,,,,,,,,SIMULATOR_MODE:RUN
 ,,,,,,,,,START_TIME:1638588465.4352748
 ,,,,,,,,,STOP_TIME:1638589159.354853
-0
 domain, region bytes, non-dupe bytes, region fp count, non-dupe fp count, route time, response time, user, hash date
 657,11419902,5016768,1287,693,5.72E-04,4.37E-02,014,2011-09-16
 427,4760132,2998717,537,412,1.64E-04,2.25E-02,014,2011-09-16
