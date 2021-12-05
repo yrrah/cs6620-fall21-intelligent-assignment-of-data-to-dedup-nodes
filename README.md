@@ -7,18 +7,19 @@ For installation and usage directions, see README in [/simulator](https://github
 
 ## 1.   Vision and Goals Of The Project:
 
-We will create a storage simulator that will run as multiple containers in an orchestration environment. 
-The simulator will process a prepared dataset of hashes (data segment fingerprints). The network of containers 
-forms a distributed key-value store where checking of fingerprints takes place. It is necessary to trade-off 
-leveraging parallelism for throughput of data vs storage of duplicate data. We want to maximize space saving 
+To create a storage simulator that will run as multiple containers in an orchestration environment. 
+The simulator processes a prepared dataset of hashes (data segment fingerprints). The cluster of containers 
+forms a distributed key-value store where checking of fingerprints takes place. The purpose of the simulator is 
+to run many algorithms and configurations in order to investigate trade-offs between leveraging parallelism for 
+throughput of data vs minimizing storage of duplicate data. We want to maximize space saving 
 while achieving balanced use of the dedup nodes. 
 
-The main output of this project will be collection of performance data. We will collect data on several 
-configurations of our file storage simulator. Deduplication space savings will be measured for each node 
-and across the cluster and compute efficiency will be considered. Configuration variations:  
- - scale up to ~1,000 dedup domains
- - implement several algorithms<sup>[1](#bottleneck)</sup> for intelligent assignment of regions to pods
- - compare settings for region size (~1MB-8MB)     
+The main output of this project is performance data and statistics. Deduplication space savings was measured for 
+each domain, each cluster pod, and overall. Configuration variations include:  
+ - varying from 1 to 1000+ dedup domains
+ - varying from 1MB to 8MB region size (a region is a unit of deduplication work)  
+ - several algorithms for region creation: fixed-size, content-defined chunking<sup>[5](#content_defined)</sup>, TTTD<sup>[4](#TTTD)</sup>, AE<sup>[3](#ae_regions)</sup>
+ - several algorithms for intelligent assignment<sup>[1](#bottleneck)</sup> of regions to pods 
 
 We will draw conclusions on how to balance the trade-offs of data deduplication in a cloud environment. 
 
@@ -40,7 +41,7 @@ Fingerprinted segments are grouped into regions. These regions act as a unit of 
 
 The Key-Value store contains the collection of fingerprints (which are the keys) which points to values addressing the actual chunks of data stored.
 
-The diagram depicts one of each component required for deduplication. To increase data throughput, a dedup system can be replicated as multiple dedup domains. This way the domains evenly share the work of deduplication. Our solution for this is described in [Section 5](#5-solution-concept). 
+The diagram depicts one of each component required for deduplication. To increase data throughput, multiple such systems can be run in parallel. Our simulator runs one deduplication node per OpenShift pod. Dedup domains are virtual locations used by routing algorithms to evenly distribute the deduplication work. For example a system may have 8 worker pods, 1024 dedup domains, with 128 domains per pod. Our solution for this is described in [Section 5](#5-solution-concept). 
 ** **
 
 ## 3. Users/Personas Of The Project:
@@ -49,7 +50,7 @@ Enterprise data storage architects need to understand how to scale deduplication
 
 Data center operators need to minimize storage of duplicate data to minimize cost. 
 
-- Team users, the files systems shared by a big team will be benefited from this project. If multiple versions of files are existing, and we want to reduce the memory usage on duplicate data. Also, as data is frequently modified, the inline back of the data is necessary with efficient performance. An intelligent assignment of pods will be helpful for such users for improved performance. 
+- Team users, the files systems shared by a big team will be benefited from this project. If multiple versions of files are existing, and we want to reduce the memory usage on duplicate data. Also, as data is frequently modified, the inline backup of the data is necessary with efficient performance. An intelligent assignment of pods will be helpful for such users for improved performance. 
 - Virtual Desktop Deployment (VDI), the organization which must manage multiple VDI, this project will be applicable as it will automatically scale the VDIs and their data backups. 
 - In virtualized backup applications, such as cloud storage infrastructures, this project will be helpful for such organizations in intelligently backing up the data with better performance. 
 
@@ -59,12 +60,12 @@ Data center operators need to minimize storage of duplicate data to minimize cos
 ## 4.   Scope and Features Of The Project:
 
 Out of scope:
-- Data ingestion (segmentation and fingerprinting)
-- Creation of fingerprint trace datasets (will use existing data set)
+- Raw file data ingestion (segmentation and fingerprinting already done)
+- Creation of fingerprint trace datasets (using existing data set)
 - Rebalancing of domains between pods (future work)
 
 Within scope: 
-- Creation of cloud native, scalable, containerized, file storage simulator
+- Creation of cloud native, containerized, file storage simulator
 - Selecting size of regions that group together fingerprints
 - Testing techniques to form regions
 - Testing algorithms for intelligent assignment of regions to dedup domains
@@ -77,58 +78,60 @@ Global Architectural Structure Of the Project:
 ![Conceptual Diagram](https://github.com/yrrah/cs6620-fall21-intelligent-assignment-of-data-to-dedup-nodes/blob/main/conceptual-diagram.png)
 
 We will use fingerprint data from https://tracer.filesystems.org/ representing real world storage of files.      
-Physical size of hashes representing many TBs of logical data...   
+```
+Physical size of dataset representing many TBs of logical data...   
 2.879 TB : /traces/fslhomes
 - 81.860 GB : /traces/fslhomes/2011-8kb-only/   
 - 26.645 GB : /traces/fslhomes/2012-8kb-only/	  
 - 1.287 TB : /traces/fslhomes/2012/	  
 - 373.241 GB : /traces/fslhomes/2013/	  
 - 1.120 TB : /traces/fslhomes/2014/	  
-- 2.102 GB : /traces/fslhomes/2015/	  
+- 2.102 GB : /traces/fslhomes/2015/
+```
 
-We will create a containerized, parallel version of the system described in [Section 2](#2-background). 
+We created a containerized, parallel version of the system described in [Section 2](#2-background). 
 
-The storage simulator will be made up of client/server modules...  
+The storage simulator is made up of a one frontend client and multiple backend server modules...  
 
 Frontend (FE) Module
  - assign fingerprints to regions 
  - assign regions to dedup domains
  - gRPC Client code
- - instrument for performance metrics
- - instrument for deduplication and balance metrics
+   * send regions to backend pod
+   * recieve acknowledgement with performance, deduplication and balance metrics
 
 Backend (BE) Module
  - Lookup into FP index (KV store)
  - Insert into FP index (KV store)
  - gRPC server code
- - instrument for performance metrics
- - instrument for deduplication and balance metrics
+   * recieve regions from frontend pod
+   * send acknowledgement with performance, deduplication and balance metrics
  
-The algorithms we plan to use will be manipulating the fingerprint segment metadata and the region metadata 
-mapping segments->regions. Algorithms will smartly assign regions to dedup domains. The domains are distributed across
+The algorithms manipulate the fingerprint segment metadata and the region metadata 
+mapping segments->regions. The algorithms smartly assign regions to dedup domains. The domains are distributed across
 pods, with many domains per pod.   
 
-It will be necessary to allow some duplication across domains to avoid strictly checking every 
-fingerprint against a single global key store. We will be comparing various algorithms and evaluating the amount 
-of duplication that occurs.  We will also investigate manipulating region size to find the optimal performance.
+It is necessary to allow some duplication across domains to avoid strictly checking every 
+fingerprint against a single global key store (only 1 dedup domain). We compared various algorithms and evaluated the amount 
+of duplication that occured.  We investigated manipulating region size to find the optimal performance.
 
 ## 6. Acceptance criteria
 
-Deliver a repeatable test configuration that can be used for different algorithms. 
+**(done)** Deliver a repeatable test configuration that can be used for different algorithms. 
 - Scalable for testing cloud workload
 - Uses containers and kubernetes to scale independent of hardware 
 
-Implement two algorithms for creation of regions. 
+**(done)** Implement two algorithms for creation of regions. 
  - "Variable length [regions]* are essential for deduplication of the shifted content of backup images"<sup>[1](#bottleneck)</sup>
  - "A well-designed duplication storage system should have the smallest [region]* size possible given the throughput and capacity requirements"<sup>[1](#bottleneck)</sup>  
  
-    \*We expect that principles found for segment formation will also apply to region formation.
+    \*We expect that principles found for segment formation also apply to region formation.
 
-Implement two distribution algorithms of regions to domains.
-- Collect data on optimal size of regions for each algorithm  
-- Collect data on rate of duplication for each algorithm. The ideal case of deduplication would be implemented by directing everything to a single dedup domain, so we will compare to this baseline.
-- Collect data on how balanced usage of the dedup domains are. Goal is to minimize skew.
-- Evaluate the compute efficiency of each algorithm
+**(done)** Implement two distribution algorithms of regions to domains.
+- **(done)** Collect data on optimal size of regions for each algorithm  
+- **(done)** Collect data on rate of duplication for each algorithm. The ideal case of deduplication would be implemented by directing everything to a single dedup domain, so we will compare to this baseline.
+- **(done)** Collect data on how balanced usage of the dedup domains are. Goal is to minimize skew.
+- **(future work)** Evaluate the compute efficiency of each algorithm
 
 ## 7.  Release Planning:
 
