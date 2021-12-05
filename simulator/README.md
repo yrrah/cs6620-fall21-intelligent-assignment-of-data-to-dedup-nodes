@@ -1,24 +1,35 @@
-## 💪 Getting Started
-
-> https://docs.google.com/document/d/1-H0h2GN-14Hcp5mWwOrwPcTCV1HYhRVE1y7BR9VXs4U/edit#
-> https://github.com/cthoyt/cookiecutter-snekpack  
-> Python package structure based on this tutorial
-
-### Command Line Interface
-
-```shell
-$ python -m back_end --help
-$ python -m front_end --help
-```
-
-> TODO show the most useful thing the CLI does! The CLI will have documentation auto-generated
-by `sphinx`.
-
 ## 🚀 Installation
 
-The back_end depends on https://twmht.github.io/python-rocksdb/index.html which builds rocksdb from c++ source when 
-it is installed. The requirements are slightly different for each OS https://github.com/facebook/rocksdb/blob/main/INSTALL.md
-`simulator/back_end_dependencies` contains a Docker file which prepares a centos7 image with all dependencies installed. 
+<details>
+  <summary>A. Local Installation </summary>  
+   .  
+  
+The back_end depends on [python-rocksdb](https://twmht.github.io/python-rocksdb/index.html) which builds rocksdb from c++ source when 
+it is installed. A C++ compiler, compression libraries, and gflags must be available. The requirements for [building rocksdb](https://github.com/facebook/rocksdb/blob/main/INSTALL.md) are slightly different for each OS.  
+   `/simulator/back_end_dependencies` contains a Docker file which prepares a centos7 image with all dependencies installed. 
+   
+</details>
+
+<details>
+  <summary>B. Local Openshift Installation</summary>
+  
+  ## Heading
+  1. A numbered
+  2. list
+     * With some
+     * Sub bullets
+</details>
+
+<details>
+  <summary>C. Cloud Openshift Installation </summary>
+  
+  ## Heading
+  1. A numbered
+  2. list
+     * With some
+     * Sub bullets
+</details>
+
 
 The most recent code and data can be installed directly from GitHub with:
 
@@ -38,6 +49,22 @@ $ cd cs6620-fall21-intelligent-assignment-of-data-to-dedup-nodes
 $ pip install -e simulator/front_end
 $ pip install -e simulator/back_end
 ```
+
+## 💪 Getting Started
+
+> https://docs.google.com/document/d/1-H0h2GN-14Hcp5mWwOrwPcTCV1HYhRVE1y7BR9VXs4U/edit#
+> https://github.com/cthoyt/cookiecutter-snekpack  
+> Python package structure based on this tutorial
+
+### Command Line Interface
+
+```shell
+$ python -m back_end --help
+$ python -m front_end --help
+```
+
+> TODO show the most useful thing the CLI does! The CLI will have documentation auto-generated
+by `sphinx`.
 
 ### ⚖️ License
 
