@@ -50,6 +50,13 @@ The diagram depicts one of each component required for deduplication. To increas
 3. TTTD<sup>[3](#TTTD)</sup>
 4. AE<sup>[4](#ae_regions)</sup>
 
+### Region Assignment to Domain Algorithms
+1. First Fingerprint     
+Look at the first fingerprint within a region. Convert the first n bytes of the fingerprint to an integer. Take modulo by number of domains to get assignment.
+3. Min / Max Fingerprint    
+Scan first m MB of region, convert the first n bytes of each fingerprint to an integer. Take the minimum or maximum fingerprint, modulo by number of domains to get assignment.
+5. First Fingerprint + Reinforcement Learning 
+
 
 ** **
 
