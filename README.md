@@ -133,7 +133,7 @@ of duplication that occured.  We investigated manipulating region size to find t
 - **(done)** Collect data on how balanced usage of the dedup domains are. Goal is to minimize skew.
 - **(future work)** Evaluate the compute efficiency of each algorithm
 
-## 7.  Release Planning:
+## 7.  Releases:
 
 Detailed user stories and plans are on the Taiga board: https://tree.taiga.io/project/amanbatra-cs6620-fall21-intelligent-assignment-of-data-to-dedup-nodes
 
@@ -152,7 +152,8 @@ Week 11: Nov 15 - 19 Sprint 4 Demo
 Week 13: Nov 29 - Dec 3 Sprint 5 Demo
 - Video: [download MP4](https://github.com/yrrah/cs6620-fall21-intelligent-assignment-of-data-to-dedup-nodes/blob/main/report_5.mp4)   
 
-Final projects due: Dec 7th
+Week 14: Dec 8th Final project due
+- Video:
 
 
 
