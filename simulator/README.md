@@ -2,10 +2,11 @@
 
 <details>
   <summary>A. Local Installation </summary>  
-   . 
+.    
+  
 The back_end depends on [python-rocksdb](https://twmht.github.io/python-rocksdb/index.html) which builds rocksdb from c++ source when 
-it is installed. A C++ compiler, compression libraries, and gflags must be available. The requirements for [building rocksdb](https://github.com/facebook/rocksdb/blob/main/INSTALL.md) are slightly different for each OS.  
-  .  
+it is installed. A C++ compiler, compression libraries, and gflags must be available. The requirements for [building rocksdb](https://github.com/facebook/rocksdb/blob/main/INSTALL.md) are slightly different for each OS.
+     
 Once rocksdb requirements are met, the most recent code can be installed directly from GitHub with:
 
 ```bash
@@ -52,7 +53,7 @@ Authenticate on [Mass Open Cloud](https://massopen.cloud/) and get a token to lo
 `/simulator/back_end_dependencies` contains a Docker file which prepares a centos7 image with all dependencies installed.  
  Use the two YAML files in this directory to create a buildstream location and build configuration on OpenShift for the image.   
 .    
-`/simulator/back_end` contains a Docker file which references the image stream set up in the previous step.  Use the two YAML files in this directory to create a buildstream location and build configuration on OpenShift for the image. This build config uses the OpenShift Source2Image(s2i) feature to copy the latest back_end source from this repository into the image, then it runs the cli.py file.    
+`/simulator/back_end` contains a Docker file which references the image stream from the previous step.  Use the two YAML files in this directory to create a buildstream location and build configuration on OpenShift for the image. This build config uses the OpenShift Source2Image(s2i) feature to copy the latest back_end source from this repository into the image, then it runs the cli.py file.    
 .    
 `/simulator/front_end` does not use a Docker file because there are fewer dependencies. Instead the build configuration directly uses a pre-built python s2i image. Use the two YAML files in this directory to create a buildstream location and build configuration on OpenShift for the image.
   
