@@ -1,4 +1,4 @@
-For installation and usage directions, see README in [./simulator](https://github.com/yrrah/cs6620-fall21-intelligent-assignment-of-data-to-dedup-nodes/tree/main/simulator) directory.  
+For installation and usage directions, see README in [/simulator](https://github.com/yrrah/cs6620-fall21-intelligent-assignment-of-data-to-dedup-nodes/tree/main/simulator) directory.  
 
 ** **
 ## CS6620-Fall21 Intelligent Assignment of Data to Dedup Nodes  
