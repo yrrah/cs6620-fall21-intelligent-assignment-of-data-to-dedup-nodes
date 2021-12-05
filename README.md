@@ -156,7 +156,10 @@ Final projects due: Dec 7th
 ** **
 
 ## 8. References
-<a name="bottleneck">1</a>: https://www.usenix.org/conference/fast-08/avoiding-disk-bottleneck-data-domain-deduplication-file-system   
-<a name="tradeoffs">2</a>: https://www.usenix.org/conference/fast11/tradeoffs-scalable-data-routing-deduplication-clusters  
+<a name="bottleneck">1</a>: [Benjamin Zhu, Kai Li, and Hugo Patterson. 2008. Avoiding the disk bottleneck in the data domain deduplication file system. In Proceedings of the 6th USENIX Conference on File and Storage Technologies (FAST'08). USENIX Association, USA, Article 18, 1–14.](https://www.usenix.org/conference/fast-08/avoiding-disk-bottleneck-data-domain-deduplication-file-system)     
+<a name="tradeoffs">2</a>: [Wei Dong, Fred Douglis, Kai Li, Hugo Patterson, Sazzala Reddy, and Philip Shilane. 2011. Tradeoffs in scalable data routing for deduplication clusters. In Proceedings of the 9th USENIX conference on File and stroage technologies (FAST'11). USENIX Association, USA, 2.](https://www.usenix.org/conference/fast11/tradeoffs-scalable-data-routing-deduplication-clusters)     
+<a name="ae_regions">3</a>: [Y. Zhang et al., "AE: An Asymmetric Extremum content defined chunking algorithm for fast and bandwidth-efficient data deduplication," 2015 IEEE Conference on Computer Communications (INFOCOM), 2015, pp. 1337-1345, doi: 10.1109/INFOCOM.2015.7218510.](https://ieeexplore.ieee.org/document/7218510)   
+<a name="TTTD">4</a>: [Eshghi, Kave & Tang, H.. (2005). A Framework for Analyzing and Improving Content-Based Chunking Algorithms.](https://www.hpl.hp.com/techreports/2005/HPL-2005-30R1.html)    
+<a name="content_defined">5</a>: [C. Zhang, D. Qi, W. Li and J. Guo, "Function of Content Defined Chunking Algorithms in Incremental Synchronization," in IEEE Access, vol. 8, pp. 5316-5330, 2020, doi: 10.1109/ACCESS.2019.2963625.](https://ieeexplore.ieee.org/document/8949536)   
 
 
