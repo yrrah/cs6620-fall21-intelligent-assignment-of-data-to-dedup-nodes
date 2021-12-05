@@ -1,3 +1,4 @@
+(click sections to expand)   
 ## 🚀 Installation
 
 <details>
