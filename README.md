@@ -1,4 +1,4 @@
-Sprint 5 Demo Video: [download MP4](https://github.com/yrrah/cs6620-fall21-intelligent-assignment-of-data-to-dedup-nodes/blob/main/report_5.mp4)   
+For installation and usage directions, see README in [./simulator](https://github.com/yrrah/cs6620-fall21-intelligent-assignment-of-data-to-dedup-nodes/tree/main/simulator) directory.  
 
 ** **
 ## CS6620-Fall21 Intelligent Assignment of Data to Dedup Nodes  
@@ -135,7 +135,7 @@ Implement two distribution algorithms of regions to domains.
 Detailed user stories and plans are on the Taiga board: https://tree.taiga.io/project/amanbatra-cs6620-fall21-intelligent-assignment-of-data-to-dedup-nodes
 
 Week 5: Oct 4 - 8 Sprint 1 Demo  
- - Video: https://youtu.be/l5Yt3aOgk84 or [download MP4](https://github.com/yrrah/cs6620-fall21-intelligent-assignment-of-data-to-dedup-nodes/blob/main/report_1.mp4)
+ - Video: [download MP4](https://github.com/yrrah/cs6620-fall21-intelligent-assignment-of-data-to-dedup-nodes/blob/main/report_1.mp4)
 
 Week 7: Oct 18 -21 Sprint 2 Demo  
  - Video: [download MP4](https://github.com/yrrah/cs6620-fall21-intelligent-assignment-of-data-to-dedup-nodes/blob/main/report_2.mp4)
