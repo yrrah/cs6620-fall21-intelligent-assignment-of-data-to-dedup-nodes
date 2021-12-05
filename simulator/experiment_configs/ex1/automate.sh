@@ -31,7 +31,7 @@ create_back_end () {
                         "env": [
                             {
                                 "name": "SIMULATOR_MODE",
-                                "value": "DEMO"
+                                "value": "RUN"
                             }
                         ],
                         "resources": {

@@ -23,7 +23,7 @@ __all__ = [
   "main",
 ]
 
-from back_end.grpc.hello_world_demo.greeter_client import run
+from back_end.grpc.hello_world_demo.greeter_client import run as hello
 from back_end.grpc.server import serve
 
 logger = logging.getLogger(__name__)
@@ -31,12 +31,12 @@ logger = logging.getLogger(__name__)
 
 @click.command()
 @click.version_option()
-@click.option('--demo', 'demo', flag_value=True)
+@click.option('--run', 'run', flag_value=True)
 @click.option('--hello_world', 'hello_world', flag_value=True)
-def main(demo, hello_world):
+def main(run, hello_world):
     """CLI for back_end."""
-    if demo:
-        os.environ['SIMULATOR_MODE'] = 'DEMO'
+    if run:
+        os.environ['SIMULATOR_MODE'] = 'RUN'
 
     if hello_world:
         os.environ['SIMULATOR_MODE'] = 'HELLO'
@@ -44,12 +44,12 @@ def main(demo, hello_world):
 
     if os.environ['SIMULATOR_MODE'] == 'HELLO':
         print(f"Hello Client running on back_end.")
-        run()
-    elif os.environ['SIMULATOR_MODE'] == 'DEMO':
-        print(f"Demo Server running on back_end.")
+        hello()
+    elif os.environ['SIMULATOR_MODE'] == 'RUN':
+        print(f"Server running on back_end.")
         serve()
     else:
-        print("No back_end demo :(")
+        print("No back_end running :(")
 
 
 if __name__ == "__main__":
