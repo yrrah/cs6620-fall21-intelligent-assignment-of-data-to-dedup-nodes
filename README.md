@@ -18,8 +18,9 @@ The main output of this project is performance data and statistics. Deduplicatio
 each domain, each cluster pod, and overall. Configuration variations include:  
  - varying from 1 to 1000+ dedup domains
  - varying from 1MB to 8MB region size (a region is a unit of deduplication work)  
- - several algorithms for region creation: fixed-size, content-defined chunking<sup>[5](#content_defined)</sup>, TTTD<sup>[4](#TTTD)</sup>, AE<sup>[3](#ae_regions)</sup>
  - several algorithms for intelligent assignment<sup>[1](#bottleneck)</sup> of regions to pods 
+ - several algorithms for region creation: fixed-size, content-defined chunking<sup>[2](#content_defined)</sup>, TTTD<sup>[3](#TTTD)</sup>, AE<sup>[4](#ae_regions)</sup>
+ 
 
 We will draw conclusions on how to balance the trade-offs of data deduplication in a cloud environment. 
 
@@ -27,7 +28,7 @@ We will draw conclusions on how to balance the trade-offs of data deduplication 
 
 ## 2. Background:  
 
-Data deduplication techniques are crucial for modern cloud-scale storage systems. Key attributes<sup>[2](#tradeoffs)</sup> required include:
+Data deduplication techniques are crucial for modern cloud-scale storage systems. Key attributes<sup>[5](#tradeoffs)</sup> required include:
 - high throughput, typically over 100 MB/sec to complete a backup quickly  
 - high compression of data by deduplication to make disk cost equivalent to tape storage  
 - use of commodity hardware (cannot store entire dedup index in RAM)
@@ -42,6 +43,14 @@ Fingerprinted segments are grouped into regions. These regions act as a unit of 
 The Key-Value store contains the collection of fingerprints (which are the keys) which points to values addressing the actual chunks of data stored.
 
 The diagram depicts one of each component required for deduplication. To increase data throughput, multiple such systems can be run in parallel. Our simulator runs one deduplication node per OpenShift pod. Dedup domains are virtual locations used by routing algorithms to evenly distribute the deduplication work. For example a system may have 8 worker pods, 1024 dedup domains, with 128 domains per pod. Our solution for this is described in [Section 5](#5-solution-concept). 
+
+### Region Creation Algorithms
+1. Fixed-Size
+2. Content-Defined<sup>[2](#content_defined)</sup>
+3. TTTD<sup>[3](#TTTD)</sup>
+4. AE<sup>[4](#ae_regions)</sup>
+
+
 ** **
 
 ## 3. Users/Personas Of The Project:
@@ -135,7 +144,7 @@ of duplication that occured.  We investigated manipulating region size to find t
 
 ## 7.  Releases:
 
-Detailed user stories and plans are on the Taiga board: https://tree.taiga.io/project/amanbatra-cs6620-fall21-intelligent-assignment-of-data-to-dedup-nodes
+Detailed user stories and plans are on the [Taiga board](https://tree.taiga.io/project/amanbatra-cs6620-fall21-intelligent-assignment-of-data-to-dedup-nodes):
 
 Week 5: Oct 4 - 8 Sprint 1 Demo  
  - Video: [download MP4](https://github.com/yrrah/cs6620-fall21-intelligent-assignment-of-data-to-dedup-nodes/blob/main/report_1.mp4)
@@ -160,10 +169,14 @@ Week 14: Dec 8th Final project due
 ** **
 
 ## 8. References
-<a name="bottleneck">1</a>: [Benjamin Zhu, Kai Li, and Hugo Patterson. 2008. Avoiding the disk bottleneck in the data domain deduplication file system. In Proceedings of the 6th USENIX Conference on File and Storage Technologies (FAST'08). USENIX Association, USA, Article 18, 1–14.](https://www.usenix.org/conference/fast-08/avoiding-disk-bottleneck-data-domain-deduplication-file-system)     
-<a name="tradeoffs">2</a>: [Wei Dong, Fred Douglis, Kai Li, Hugo Patterson, Sazzala Reddy, and Philip Shilane. 2011. Tradeoffs in scalable data routing for deduplication clusters. In Proceedings of the 9th USENIX conference on File and stroage technologies (FAST'11). USENIX Association, USA, 2.](https://www.usenix.org/conference/fast11/tradeoffs-scalable-data-routing-deduplication-clusters)     
-<a name="ae_regions">3</a>: [Y. Zhang et al., "AE: An Asymmetric Extremum content defined chunking algorithm for fast and bandwidth-efficient data deduplication," 2015 IEEE Conference on Computer Communications (INFOCOM), 2015, pp. 1337-1345, doi: 10.1109/INFOCOM.2015.7218510.](https://ieeexplore.ieee.org/document/7218510)   
-<a name="TTTD">4</a>: [Eshghi, Kave & Tang, H.. (2005). A Framework for Analyzing and Improving Content-Based Chunking Algorithms.](https://www.hpl.hp.com/techreports/2005/HPL-2005-30R1.html)    
-<a name="content_defined">5</a>: [C. Zhang, D. Qi, W. Li and J. Guo, "Function of Content Defined Chunking Algorithms in Incremental Synchronization," in IEEE Access, vol. 8, pp. 5316-5330, 2020, doi: 10.1109/ACCESS.2019.2963625.](https://ieeexplore.ieee.org/document/8949536)   
+<a name="bottleneck">1</a>: [Benjamin Zhu, Kai Li, and Hugo Patterson. 2008. Avoiding the disk bottleneck in the data domain deduplication file system. In Proceedings of the 6th USENIX Conference on File and Storage Technologies (FAST'08). USENIX Association, USA, Article 18, 1–14.](https://www.usenix.org/conference/fast-08/avoiding-disk-bottleneck-data-domain-deduplication-file-system)        
+
+<a name="content_defined">2</a>: [C. Zhang, D. Qi, W. Li and J. Guo, "Function of Content Defined Chunking Algorithms in Incremental Synchronization," in IEEE Access, vol. 8, pp. 5316-5330, 2020, doi: 10.1109/ACCESS.2019.2963625.](https://ieeexplore.ieee.org/document/8949536)        
+
+<a name="ae_regions">3</a>: [Y. Zhang et al., "AE: An Asymmetric Extremum content defined chunking algorithm for fast and bandwidth-efficient data deduplication," 2015 IEEE Conference on Computer Communications (INFOCOM), 2015, pp. 1337-1345, doi: 10.1109/INFOCOM.2015.7218510.](https://ieeexplore.ieee.org/document/7218510)      
+
+<a name="TTTD">4</a>: [Eshghi, Kave & Tang, H.. (2005). A Framework for Analyzing and Improving Content-Based Chunking Algorithms.](https://www.hpl.hp.com/techreports/2005/HPL-2005-30R1.html)                
+
+<a name="tradeoffs">5</a>: [Wei Dong, Fred Douglis, Kai Li, Hugo Patterson, Sazzala Reddy, and Philip Shilane. 2011. Tradeoffs in scalable data routing for deduplication clusters. In Proceedings of the 9th USENIX conference on File and stroage technologies (FAST'11). USENIX Association, USA, 2.](https://www.usenix.org/conference/fast11/tradeoffs-scalable-data-routing-deduplication-clusters)          
 
 
