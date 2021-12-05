@@ -4,16 +4,16 @@ import pandas as pd
 
 
 def region_size_stats(df, title, save, show):
-    fig, ax = plt.subplots()
-    df.hist(column=' region bytes', ax=ax)
-    ax.set_title(f'Histogram of Region Sizes ({title})')
-    ax.set_ylabel('Count')
-    ax.set_xlabel('Bytes')
+    if save or show:
+        fig, ax = plt.subplots()
+        df.hist(column=' region bytes', ax=ax)
+        ax.set_title(f'Histogram of Region Sizes ({title})')
+        ax.set_ylabel('Count')
+        ax.set_xlabel('Bytes')
     if save:
         plt.savefig(f'{title}_region_sizes.svg', format='svg')
     if show:
         plt.show()
-    pass
 
     min_region_bytes = df[' region bytes'].min()
     max_region_bytes = df[' region bytes'].max()
@@ -32,25 +32,18 @@ def region_count_by_domain(df, num_domains, num_pods, title, save, show):
 
     domain_grid = domain_counts.reshape((num_pods, domains_per_pod))
     domain_grid = np.repeat(domain_grid, int(domains_per_pod / num_pods), axis=0)
-    fig, ax = plt.subplots()
-    im = ax.imshow(domain_grid, cmap='nipy_spectral')
-    fig.colorbar(im, ax=ax)
-    ax.set_yticklabels([])
-    ax.set_ylabel('Pods')
-    ax.set_xlabel('Domains per Pod')
-    ax.set_title(f'Total Regions sent to each Domain ({title})')
-    # selected.index = selected.index.astype(int)
-    # if save or show:
-    #     ax = selected.plot.bar(stacked=True)
-    #     ax.set_title(title)
-    #     ax.set_ylabel('Count of Fingerprints per Domain')
-    #     ax.set_xticks(ax.get_xticks()[::64])
-    #     # ax.set_ylim(10, 2500000000)
+    if save or show:
+        fig, ax = plt.subplots()
+        im = ax.imshow(domain_grid, cmap='nipy_spectral')
+        fig.colorbar(im, ax=ax)
+        ax.set_yticklabels([])
+        ax.set_ylabel('Pods')
+        ax.set_xlabel('Domains per Pod')
+        ax.set_title(f'Total Regions sent to each Domain ({title})')
     if save:
         plt.savefig(f'{title}_region_count_by_domain.svg', format='svg')
     if show:
         plt.show()
-    pass
 
 
 def nondupe_vs_total_count_by_domain(df, title, save, show):
