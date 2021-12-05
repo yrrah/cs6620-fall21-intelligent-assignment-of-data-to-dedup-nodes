@@ -65,6 +65,11 @@ class Simulator:
                     f'MAIN_D:{self.MAIN_D}'
                     f'SECOND_D:{self.SECOND_D}'
                 )
+            else:
+                self.MIN_REGION_SIZE = int(self.MIN_REGION_SIZE)
+                self.MAX_REGION_SIZE = int(self.MAX_REGION_SIZE)
+                self.MAIN_D = int(self.MAIN_D)
+                self.SECOND_D = int(self.SECOND_D)
 
         # ********************************************** #
 
@@ -75,6 +80,8 @@ class Simulator:
                     f'Environment variable not set for the AE algorithms: '
                     f'MAX_REGION_SIZE":{self.MAX_REGION_SIZE}'
                 )
+            else:
+                self.MAX_REGION_SIZE = int(self.MAX_REGION_SIZE)
 
         # Trace File Location Config
         # *****************************************
