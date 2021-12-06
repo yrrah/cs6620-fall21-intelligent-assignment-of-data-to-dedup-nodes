@@ -92,7 +92,16 @@ create_front_end () {
                       },{
                               "name": "SIMULATOR_BIT_MASK",
                               "value": "'"$bitmask_size"'"
-                      },{
+                      },
+                      {
+                                "name" : "SIMULATOR_MAIN_D",
+                                "value" : "'"$main_d"'"
+                      },
+                      {
+                                "name" : "SIMULATOR_SECOND_D",
+                                "value" : "'"$second_d"'"
+                      },
+                      {
                               "name": "SIMULATOR_ROUTING",
                               "value": "'"$assign_algo"'"
                       },{
@@ -138,13 +147,15 @@ print_all_params () {
   echo "assign_algo: $assign_algo"
   echo "dataset: $dataset"
   echo "results_file: $results_file"
+  echo "main_d : $main_d"
+  echo "second_d : $second_d"
   echo ""
 
 }
 
 exec < run_combinations.tsv
 for i in {1..27}; do read skip_these_lines; done;
-while IFS=$'\t' read -r run_num dedup_domains num_pods region_algo region_size min_region max_region bitmask_size assign_algo dataset results_file
+while IFS=$'\t' read -r run_num dedup_domains num_pods region_algo region_size min_region max_region main_d second_d bitmask_size assign_algo dataset results_file
 do
   kill_old_pods
   create_back_end
