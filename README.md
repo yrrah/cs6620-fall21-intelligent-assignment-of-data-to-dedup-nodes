@@ -203,4 +203,4 @@ Week 14: Dec 8th Final Demo
 
 <a name="tradeoffs">5</a>: [Wei Dong, Fred Douglis, Kai Li, Hugo Patterson, Sazzala Reddy, and Philip Shilane. 2011. Tradeoffs in scalable data routing for deduplication clusters. In Proceedings of the 9th USENIX conference on File and stroage technologies (FAST'11). USENIX Association, USA, 2.](https://www.usenix.org/conference/fast11/tradeoffs-scalable-data-routing-deduplication-clusters)          
 
-
+<a name="dedup_survey">6</a>: [Jannen, William. “Deduplication: Concepts and Techniques.” (2020).](http://www.cs.williams.edu/~jannen/teaching/s20/cs333/meetings/dedup-survey.pdf)
