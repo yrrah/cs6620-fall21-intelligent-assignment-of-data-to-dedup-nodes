@@ -155,20 +155,37 @@ Detailed user stories and plans are on the [Taiga board](https://tree.taiga.io/p
 
 Week 5: Oct 4 - 8 Sprint 1 Demo  
  - Video: [download MP4](https://github.com/yrrah/cs6620-fall21-intelligent-assignment-of-data-to-dedup-nodes/blob/main/report_1.mp4)
+ - met with project mentors to understand the problem and read relevant papers   
+ - got familiar with project technologies (OpenShift, gRPC, etc)    
+ - learned how to read the trace files dataset    
 
 Week 7: Oct 18 -21 Sprint 2 Demo  
  - Video: [download MP4](https://github.com/yrrah/cs6620-fall21-intelligent-assignment-of-data-to-dedup-nodes/blob/main/report_2.mp4)
+ - implemented fixed region formation    
+ - implemented first fingerprint routing    
+ - got a gRPC demo working    
 
 Week 9: Nov 1 - 5 Sprint 3 Demo  
  - Video: [download MP4](https://github.com/yrrah/cs6620-fall21-intelligent-assignment-of-data-to-dedup-nodes/blob/main/report_3.mp4)
+ - ran code on OpenShift for first time   
+ - connected frontend and backend apps with gRPC    
+ - replaced in-memory KV store with RocksDB   
 
 Week 11: Nov 15 - 19 Sprint 4 Demo
- - Video: [download MP4](https://github.com/yrrah/cs6620-fall21-intelligent-assignment-of-data-to-dedup-nodes/blob/main/report_4.mp4)   
+ - Video: [download MP4](https://github.com/yrrah/cs6620-fall21-intelligent-assignment-of-data-to-dedup-nodes/blob/main/report_4.mp4)
+ - decided on statistics and data to be collected   
+ - added use of persistent storage on OpenShift for trace files & logs    
+ - added support for running multiple backend pods
+ - added reinforcement learning routing algorithm   
+ - added TTTD region creation algorithm 
 
 Week 13: Nov 29 - Dec 3 Sprint 5 Demo
-- Video: [download MP4](https://github.com/yrrah/cs6620-fall21-intelligent-assignment-of-data-to-dedup-nodes/blob/main/report_5.mp4)   
+- Video: [download MP4](https://github.com/yrrah/cs6620-fall21-intelligent-assignment-of-data-to-dedup-nodes/blob/main/report_5.mp4)  
+- added AE region creation algorithm
+- added min/max fingerprint routing algorithms
+- collected experiment results
 
-Week 14: Dec 8th Final project due
+Week 14: Dec 8th Final Demo
 - Video:
 
 
