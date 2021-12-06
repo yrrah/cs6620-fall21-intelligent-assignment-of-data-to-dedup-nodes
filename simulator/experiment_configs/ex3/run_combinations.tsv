@@ -1,0 +1,20 @@
+Combination Number	Number of Dedup Domains Per Pod	Number of Pods	Region Algorithm	Region Size MB (Fixed or Average Size)	Min Region MB	Max Region MB	Main Devisor  	Second Devisor  	Number of Mask Bits	Assignment Algorithm	Add Q Learning	Dataset	Results
+153	16	8	CONTENT-DEFINED	4	2	6	-	-	10	MAX_FINGERPRINT	True	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018	
+154	16	8	CONTENT-DEFINED	8	4	12	-	-	10	MAX_FINGERPRINT	True	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018	
+155	32	8	CONTENT-DEFINED	4	2	6	-	-	10	MAX_FINGERPRINT	True	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018	
+156	32	8	CONTENT-DEFINED	8	4	12	-	-	10	MAX_FINGERPRINT	True	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018	
+157	128	8	CONTENT-DEFINED	4	2	6	-	-	10	MAX_FINGERPRINT	True	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018	
+158	128	8	CONTENT-DEFINED	8	4	12	-	-	10	MAX_FINGERPRINT	True	fslhomes_2011-8kb-only_018,fslhomes_2012-8kb-only_018	
+159	16	8	CONTENT-DEFINED	4	2	6	-	-	10	MAX_FINGERPRINT	True	fslhomes_2011-8kb-only_014018019	
+160	16	8	CONTENT-DEFINED	8	4	12	-	-	10	MAX_FINGERPRINT	True	fslhomes_2011-8kb-only_014018019	
+161	32	8	CONTENT-DEFINED	4	2	6	-	-	10	MAX_FINGERPRINT	True	fslhomes_2011-8kb-only_014018019	
+162	32	8	CONTENT-DEFINED	8	4	12	-	-	10	MAX_FINGERPRINT	True	fslhomes_2011-8kb-only_014018019	
+163	128	8	CONTENT-DEFINED	4	2	6	-	-	10	MAX_FINGERPRINT	True	fslhomes_2011-8kb-only_014018019	
+164	128	8	CONTENT-DEFINED	8	4	12	-	-	10	MAX_FINGERPRINT	True	fslhomes_2011-8kb-only_014018019	
+165	16	8	CONTENT-DEFINED	4	2	6	-	-	10	MAX_FINGERPRINT	True	fslhomes_2011-8kb-only_014018019028,fslhomes_2012-8kb-only_014018019028	
+166	16	8	CONTENT-DEFINED	8	4	12	-	-	10	MAX_FINGERPRINT	True	fslhomes_2011-8kb-only_014018019028,fslhomes_2012-8kb-only_014018019028	
+167	32	8	CONTENT-DEFINED	4	2	6	-	-	10	MAX_FINGERPRINT	True	fslhomes_2011-8kb-only_014018019028,fslhomes_2012-8kb-only_014018019028	
+168	32	8	CONTENT-DEFINED	8	4	12	-	-	10	MAX_FINGERPRINT	True	fslhomes_2011-8kb-only_014018019028,fslhomes_2012-8kb-only_014018019028	
+169	128	8	CONTENT-DEFINED	4	2	6	-	-	10	MAX_FINGERPRINT	True	fslhomes_2011-8kb-only_014018019028,fslhomes_2012-8kb-only_014018019028	
+170	128	8	CONTENT-DEFINED	8	4	12	-	-	10	MAX_FINGERPRINT	True	fslhomes_2011-8kb-only_014018019028,fslhomes_2012-8kb-only_014018019028	
+171													
