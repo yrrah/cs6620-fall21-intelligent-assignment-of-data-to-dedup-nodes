@@ -115,10 +115,13 @@ class Simulator:
         self.domains_to_pod = dict()
         self.back_end_ips = os.environ['SIMULATOR_BACKEND_IPS'].split(',')
         # choose function to do the routing
-        self.ROUTING = os.environ['SIMULATOR_ROUTING']
-        self.Q_LEARNING = os.getenv('SIMULATOR_Q_LEARNING')
+        routing = os.environ['SIMULATOR_ROUTING']
+        q_learning = os.getenv('SIMULATOR_Q_LEARNING')
+        epsilon = os.getenv('SIMULATOR_EPSILON')
+        if epsilon is not None:
+            epsilon = float(epsilon)
         self.routing_function, self.learning_function = get_routing(
-            self.ROUTING, self.Q_LEARNING, self.DOMAINS, len(self.back_end_ips))
+            routing, q_learning, epsilon, self.DOMAINS, len(self.back_end_ips))
         # Assign the domain ids to specific ip addresses -> each of them represent a service.
         self.assign_domains_to_pods()
 

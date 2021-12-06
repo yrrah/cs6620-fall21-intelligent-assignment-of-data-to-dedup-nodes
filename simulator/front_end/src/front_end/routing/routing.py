@@ -6,12 +6,13 @@ from front_end.routing.q_learning import QLearning
 from front_end.routing.stateless import full_hash_7, first_fingerprint_7, min_fingerprint, max_fingerprint
 
 
-def get_routing(function_name: str, q_learning: str or None, domains_per_pod: int,
+def get_routing(function_name: str, q_learning: str or None, epsilon: float or None, domains_per_pod: int,
                 num_pods: int) -> Tuple[Callable[[Region, int], int],
                                         Callable[[Region, Acknowledgement], None] or None]:
     """
     @param function_name: name of the desired routing algorithm
     @param q_learning: True/False string -- modify the routing with Q_learning?
+    @param epsilon: choose random action with probability
     @param domains_per_pod:
     @param num_pods:
     @return: Returns a tuple of (routing function, learning function)
@@ -29,7 +30,10 @@ def get_routing(function_name: str, q_learning: str or None, domains_per_pod: in
         raise ValueError(f"Invalid routing algorithm specified: {function_name}")
 
     if q_learning == "True" or function_name == "Q_LEARNING":
-        q = QLearning(routing_function, domains_per_pod, num_pods)
+        if epsilon is not None:
+            q = QLearning(routing_function, domains_per_pod, num_pods, epsilon=epsilon)
+        else:
+            q = QLearning(routing_function, domains_per_pod, num_pods)
         return q.route, q.learn
     else:
         return routing_function, None
