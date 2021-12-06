@@ -1,6 +1,6 @@
 from typing import Generator, Any
 
-from front_end.grpc.assignService_pb2 import Region
+from front_end.region_creation.region import Region
 from front_end.region_creation.input_streams import HashFile
 
 
