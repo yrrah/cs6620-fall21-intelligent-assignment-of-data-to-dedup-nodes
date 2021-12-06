@@ -75,12 +75,14 @@ class Simulator:
 
         # Check inputs for the AE algorithm -
         if self.REGION_FORMATION == "AE":
-            if self.MAX_REGION_SIZE is None:
+            if self.MIN_REGION_SIZE is None or self.MAX_REGION_SIZE is None:
                 raise ValueError(
                     f'Environment variable not set for the AE algorithms: '
-                    f'MAX_REGION_SIZE":{self.MAX_REGION_SIZE}'
+                    f'MIN_REGION_SIZE:{self.MIN_REGION_SIZE} '
+                    f'MAX_REGION_SIZE:{self.MAX_REGION_SIZE} '
                 )
             else:
+                self.MIN_REGION_SIZE = int(self.MIN_REGION_SIZE)
                 self.MAX_REGION_SIZE = int(self.MAX_REGION_SIZE)
 
         # Trace File Location Config
