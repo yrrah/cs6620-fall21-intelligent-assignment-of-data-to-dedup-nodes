@@ -55,7 +55,9 @@ def nondupe_vs_total_count_by_domain(df, title, save, show):
         ax = selected.plot.bar(stacked=True)
         ax.set_title(title)
         ax.set_ylabel('Count of Fingerprints per Domain')
-        ax.set_xticks(ax.get_xticks()[::64])
+        all_ticks = ax.get_xticks()
+        tick_freq = np.max([int(len(all_ticks) / 16), 1])
+        ax.set_xticks(all_ticks[::tick_freq])
         # ax.set_ylim(10, 2500000000)
     if save:
         plt.savefig(f'{title}_nondupe_vs_total_count_by_domain.svg', format='svg')
@@ -94,7 +96,9 @@ def nondupe_vs_total_bytes_by_domain(df, title, save, show) -> [float]:
         ax = by_domain[[' non-dupe bytes', 'total region bytes']].plot.bar(stacked=True, logy=False)
         ax.set_title(title)
         ax.set_ylabel('Total Bytes sent to Domain')
-        ax.set_xticks(ax.get_xticks()[::64])
+        all_ticks = ax.get_xticks()
+        tick_freq = np.max([int(len(all_ticks) / 16), 1])
+        ax.set_xticks(all_ticks[::tick_freq])
         ax.set_ylim(0, max_value)
     # print(f"{title} {by_domain['total region bytes'].min()}")
     if save:
@@ -162,16 +166,12 @@ def hashes_per_user_per_day(df, title, save, show):
     selected = selected.unstack(fill_value=0)
     table = str.maketrans(dict.fromkeys('\', ()'))
     selected.columns = [' '.join(str(col)).translate(table) for col in selected.columns.values]
-    # selected = selected.reset_index()
-    # selected = selected.set_index(' hash date', ' user').reset_index()
-    # selected = selected.groupby(' hash date').max()
-    # print(df.index)
+
     if save or show:
         ax = selected.plot(linestyle='none', marker='o')
         ax.set_ylabel('4MB Regions per Day')
         ax.set_xlabel(None)
         ax.set_title(f'Total 4MB Regions = {df.shape[0]}')
-        # ax.set_xticks(ax.get_xticks()[::50])
         plt.tight_layout()
     if save:
         plt.savefig(f'{title}_hashes_per_user_per_day.svg', format='svg')
