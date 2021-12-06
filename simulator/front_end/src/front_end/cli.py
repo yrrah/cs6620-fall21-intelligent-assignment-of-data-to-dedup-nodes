@@ -48,8 +48,9 @@ def main(hello_world, run):
         os.environ['SIMULATOR_MAX_REGION_SIZE'] = '6'
         os.environ['SIMULATOR_BIT_MASK'] = '5'
         os.environ['SIMULATOR_REGION_SIZE'] = '4'
-        os.environ['SIMULATOR_ROUTING'] = 'MIN_FINGERPRINT'
-        os.environ['SIMULATOR_DOMAINS'] = '100'
+        os.environ['SIMULATOR_ROUTING'] = 'MAX_FINGERPRINT'
+        os.environ['SIMULATOR_Q_LEARNING'] = 'True'
+        os.environ['SIMULATOR_DOMAINS'] = '1'
         os.environ['SIMULATOR_BACKEND_IPS'] = 'localhost'
 
     # run a hello world test

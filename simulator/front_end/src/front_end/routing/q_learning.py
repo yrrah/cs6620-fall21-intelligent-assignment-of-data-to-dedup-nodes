@@ -9,10 +9,7 @@ from front_end.region_creation.region import Region
 
 def argmax_random(arr: Sequence[float], rng: type(np.random.Generator)) -> int:
     """Argmax that breaks ties randomly
-
     Takes in a list of values and returns the index of the item with the highest value, breaking ties randomly.
-
-    Note: np.argmax returns the first index that matches the maximum, so we define this method to use in EpsilonGreedy and UCB agents.
     Args:
         :param arr: sequence of values
         :param rng: numpy random number generator for making choices
@@ -27,10 +24,6 @@ def argmax_random(arr: Sequence[float], rng: type(np.random.Generator)) -> int:
 
 def create_epsilon_policy(q_values: Dict[int, ndarray], epsilon: float) -> Callable:
     """Creates an epsilon soft policy from Q values.
-
-    A policy is represented as a function here because the policies are simple. More complex policies can be
-    represented using classes.
-
     Args:
         @param epsilon: softness parameter
         @param q_values: current Q-values
@@ -42,11 +35,10 @@ def create_epsilon_policy(q_values: Dict[int, ndarray], epsilon: float) -> Calla
     rng = np.random.default_rng()
 
     def get_action(state: int) -> int:
-        # You can reuse code from ex1
-        # Make sure to break ties arbitrarily
+        # Take a random action with probability epsilon
         if epsilon > 0 and np.random.random() < epsilon:
             return rng.choice(range(0, num_actions))
-
+        # break ties arbitrarily
         return argmax_random(q_values[state], rng)
 
     return get_action
@@ -63,7 +55,9 @@ def default_q_value(domains_per_pod: int, num_pods: int):
 
 class QLearning:
 
-    def __init__(self, domains_per_pod, num_pods, gamma: float = 0.9, epsilon: float = 0.01, step_size: float = 0.5):
+    def __init__(self, routing_function: Callable[[Region, int], int], domains_per_pod, num_pods,
+                 gamma: float = 0.9, epsilon: float = 0.01, step_size: float = 0.5):
+        self.routing_function = routing_function
         self.gamma = gamma
         self.epsilon = epsilon
         self.step_size = step_size
@@ -81,8 +75,8 @@ class QLearning:
         self.log_counter = self.log_interval
 
     def route(self, region: Region, number_domains: int):
-        # use a simple routing algo to limit state space to number of domains
-        state = int.from_bytes(region.fingerprints[0].fingerPrint[:7], "little") % number_domains
+        # use a stateless routing algo to limit state space to number of domains
+        state = self.routing_function(region, number_domains)
         default_pod = int(state / self.domains_per_pod)
         policy_pod = self.policy(state)
 
