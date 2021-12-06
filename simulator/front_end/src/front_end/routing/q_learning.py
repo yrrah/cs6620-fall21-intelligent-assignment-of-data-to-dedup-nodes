@@ -1,3 +1,4 @@
+import collections
 from typing import Callable, Sequence, Dict
 
 import numpy as np
@@ -73,20 +74,36 @@ class QLearning:
         self.prev_reward_string = ''
         self.log_interval = 1000
         self.log_counter = self.log_interval
+        self.penalties = False
+        self.load_reward = None
+        self.pod_history = None
+        self.stateless_algo_reward = None
+
+    def init_q_penalty(self):
+        self.penalties = True
+        num_pods = self.action_space
+        avg_history_freq = 1000
+        history_length = avg_history_freq * num_pods
+        a = 0.1
+        b = np.log(10) / history_length
+
+        def load_reward(frequency: int):
+            if frequency < avg_history_freq:
+                return 1
+            else:
+                return a * np.exp(b * frequency)
+
+        self.load_reward = load_reward
+        self.pod_history = [collections.deque(maxlen=history_length) for _ in range(num_pods)]
+
+        def stateless_algo_reward(stateless_pod: int, new_pod: int):
+            modulo_dist = abs(stateless_pod - new_pod)
+            modulo_dist = min(num_pods - modulo_dist, modulo_dist)
+            return 1 - (modulo_dist / num_pods)
+
+        self.stateless_algo_reward = stateless_algo_reward
 
     def route(self, region: Region, number_domains: int):
-        # use a stateless routing algo to limit state space to number of domains
-        state = self.routing_function(region, number_domains)
-        default_pod = int(state / self.domains_per_pod)
-        policy_pod = self.policy(state)
-
-        best_action = argmax_random(self.Q[state], self.rng)
-        self.Q[self.prev_state][self.prev_action] += self.step_size * (
-                self.prev_reward + (self.gamma * self.Q[state][best_action]) - self.Q[self.prev_state][
-                self.prev_action])
-
-        self.prev_state = state
-        self.prev_action = policy_pod
 
         if self.log_counter == 0:
             domain = 0
@@ -96,18 +113,41 @@ class QLearning:
                     row += self.Q[domain]
                     domain += 1
                 print(f'pod {p}: {row}')
-            # print(f'domain 364: {self.Q[364]}')
             print(self.prev_reward_string)
             self.log_counter = self.log_interval
         else:
             self.log_counter -= 1
 
+        # use a stateless routing algo to limit state space to number of domains
+        state = self.routing_function(region, number_domains)
+        default_pod = int(state / self.domains_per_pod)
+        policy_pod = self.policy(state)
+
+        best_action = argmax_random(self.Q[state], self.rng)
+        self.Q[self.prev_state][self.prev_action] += self.step_size * (
+            self.prev_reward + (self.gamma * self.Q[state][best_action]) - self.Q[self.prev_state][self.prev_action])
+
+        self.prev_state = state
+        self.prev_action = policy_pod
+        self.prev_reward = 1
+        self.prev_reward_string = 'prev_reward = '
+
+        if self.penalties:
+            for i, history in enumerate(self.pod_history):
+                history.append(int(i == policy_pod))
+
+            lr = self.load_reward(sum(self.pod_history[policy_pod]))
+            sar = self.stateless_algo_reward(default_pod, policy_pod)
+            self.prev_reward = self.prev_reward * lr * sar
+            self.prev_reward_string += f'(load reward: {lr}) * (default reward: {sar}) * '
+
         # use selected action to redirect region to a better pod
         return state + (policy_pod - default_pod) * self.domains_per_pod
 
     def learn(self, region: Region, ack: Acknowledgement):
-        self.prev_reward = 1 - (ack.nonDuplicatesLength / len(region.fingerprints))
-        self.prev_reward_string = f'prev_reward = {(1 - (ack.nonDuplicatesLength / len(region.fingerprints)))}'
+        dedup_reward = 1 - (ack.nonDuplicatesLength / len(region.fingerprints))
+        self.prev_reward = self.prev_reward * dedup_reward
+        self.prev_reward_string += f'(dedup_reward = {dedup_reward})'
 
         # self.prev_reward = (1 - (ack.nonDuplicatesLength / len(region.fingerprints))) * (1 - (ack.cpuPercent / 100))
         # self.prev_reward_string = f'prev_reward = {(1 - (ack.nonDuplicatesLength / len(region.fingerprints)))} ' \

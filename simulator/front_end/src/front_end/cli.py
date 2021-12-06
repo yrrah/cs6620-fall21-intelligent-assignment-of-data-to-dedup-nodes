@@ -50,6 +50,7 @@ def main(hello_world, run):
         os.environ['SIMULATOR_REGION_SIZE'] = '4'
         os.environ['SIMULATOR_ROUTING'] = 'MAX_FINGERPRINT'
         os.environ['SIMULATOR_Q_LEARNING'] = 'True'
+        os.environ['SIMULATOR_Q_PENALTY'] = 'True'
         os.environ['SIMULATOR_DOMAINS'] = '1'
         os.environ['SIMULATOR_BACKEND_IPS'] = 'localhost'
 

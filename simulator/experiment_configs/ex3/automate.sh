@@ -108,6 +108,9 @@ create_front_end () {
                               "name": "SIMULATOR_EPSILON",
                               "value": "'"$epsilon"'"
                       },{
+                              "name": "SIMULATOR_Q_PENALTY",
+                              "value": "'"$q_penalty"'"
+                      },{
                               "name": "SIMULATOR_DOMAINS",
                               "value": "'"$dedup_domains"'"
                       },{
@@ -152,6 +155,7 @@ print_all_params () {
   echo "assign_algo: $assign_algo"
   echo "q_learning: $q_learning"
   echo "epsilon: $epsilon"
+  echo "q_penalty: $q_penalty"
   echo "dataset: $dataset"
   echo "results_file: $results_file"
   echo "main_d : $main_d"
@@ -161,8 +165,8 @@ print_all_params () {
 }
 
 exec < run_combinations.tsv
-for i in {1..12}; do read skip_these_lines; done;
-while IFS=$'\t' read -r run_num dedup_domains num_pods region_algo region_size min_region max_region main_d second_d bitmask_size assign_algo q_learning epsilon dataset results_file
+for i in {1..31}; do read skip_these_lines; done;
+while IFS=$'\t' read -r run_num dedup_domains num_pods region_algo region_size min_region max_region main_d second_d bitmask_size assign_algo q_learning epsilon q_penalty dataset results_file
 do
   kill_old_pods
   create_back_end
@@ -192,7 +196,7 @@ do
   done
 
   ## stop early
-  if [ "$run_num" -eq 200 ]; then
+  if [ "$run_num" -eq 201 ]; then
     break
   fi
 done
