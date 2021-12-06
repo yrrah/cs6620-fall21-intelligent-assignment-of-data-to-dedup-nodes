@@ -36,7 +36,6 @@ def create_tttd_regions(minT: int, maxT: int, secondD: int, mainD: int, hash_fil
         hash_file.hashfile_next_file()
         while hash_file.num_hashes_processed_current_file < hash_file.current_file_total_chunks:
             fingerprint, compression, current_chunk_size = hash_file.hashfile_next_chunk()
-            print(fingerprint)
             if currentP < minT:
                 region.add_fingerprint(fingerprint, current_chunk_size)
                 currentP += current_chunk_size
