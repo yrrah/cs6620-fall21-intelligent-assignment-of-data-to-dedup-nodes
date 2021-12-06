@@ -39,7 +39,7 @@ def region_factory(algorithm: str, hash_file: HashFile, region_size, min_size, m
         return create_tttd_regions(min_size, max_size, second_d, main_d, hash_file)
 
     if algorithm == "AE":
-        return create_ae_regions(max_size, hash_file)
+        return create_ae_regions(min_size, max_size, hash_file)
 
     else:
         raise ValueError("Please enter a correct region formation algorithm!")
