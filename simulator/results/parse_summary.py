@@ -39,6 +39,57 @@ def plot_regions(df):
     plot_reversed(ax)
 
 
+def plot_dedup(df, dataset: int):
+    ax = df[(df['dataset'] == dataset)] \
+        .sort_values(['overall_dedup'], ascending=False) \
+        .plot.barh(x='run_combo', y='overall_dedup', figsize=(12, 20))
+    ax.set_title(f'Dataset {dataset} Overall De-duplication')
+    # ax.set_xlabel('Minutes')
+    # ax.get_legend().remove()
+    plot_reversed(ax)
+
+
+def plot_skew_scatter(df, dataset: int, column: str, cv=False):
+    std_col = f'std_{column}'
+    mean_col = f'mean_{column}'
+    if cv:
+        std_col_cv = f'{std_col}_cv'
+        df[std_col_cv] = df[std_col] / df[mean_col]
+        std_col = std_col_cv
+    df['color'] = np.where(df['q_learning'] == 'w/Q', 'red', 'blue')
+    df['q_label'] = 'Data' + df['dataset'].astype(str) + ', ' + (df['domains_per_pod'] * df['num_pods']).astype(
+        str) + ' domains, ' + df['region_size'].astype(str) + 'MB ' + df['region_algo'] + ', ' + \
+        df['assign_algo']
+    filtered = df[(df['dataset'] == dataset) & (df['region_size'] == 4) & (df['eps'] == '') ]
+    filtered = filtered.groupby('q_label').filter(lambda x: len(x) >= 2)
+    filtered = filtered.sort_values(['run_combo'], ascending=False)
+    ax = filtered.plot.scatter(x='overall_dedup', y=std_col, figsize=(12, 8), color=filtered['color'])
+    # annotate points in axis
+    for idx, row in filtered.iterrows():
+        ax.annotate((row['q_learning'] + row['q_penalty']), (row['overall_dedup'], row[std_col]))
+
+    grouped = filtered.groupby('q_label')
+    for label, df in grouped:
+        df.plot(x='overall_dedup', y=std_col, ax=ax, label=label)
+    return ax
+
+
+def plot_pod_skew_logical_scatter(df, dataset: int):
+    ax = plot_skew_scatter(df, dataset, 'pod_logical')
+    ax.set_title(f'Dataset {dataset} Overall Pod Logical Skew')
+    ax.set_xlabel('Overall Deduplication (----> More is Better)')
+    ax.set_ylabel('(<---- Less is Better) Standard Deviation of Total Pod Logical Bytes')
+    plt.show()
+
+
+def plot_pod_skew_physical_scatter(df, dataset: int):
+    ax = plot_skew_scatter(df, dataset, 'pod_phys')
+    ax.set_title(f'Dataset {dataset} Overall Pod Physical Skew')
+    ax.set_xlabel('Overall Deduplication (----> More is Better)')
+    ax.set_ylabel('(<---- Less is Better) Standard Deviation of Total Pod Physical Bytes')
+    plt.show()
+
+
 def summary_plots(file_name: str):
     df = pd.read_csv(file_name)
     df['q_learning'] = np.where(df['q_learning'] == 'True', 'w/Q', '')
@@ -48,10 +99,20 @@ def summary_plots(file_name: str):
         str) + ' domains, ' + df['region_size'].astype(str) + 'MB ' + df['region_algo'] + ', ' + \
         df['assign_algo'] + ' ' + df['q_learning'] + df['eps'] + df['q_penalty']
 
-    # plot_times(df.copy(), 1)
-    # plot_times(df.copy(), 2)
-    # plot_times(df.copy(), 3)
-    # plot_regions(df)
+    # plot_times(df.copy(), dataset=1)
+    # plot_times(df.copy(), dataset=2)
+    # plot_times(df.copy(), dataset=3)
+    # plot_regions(df.copy())
+    # plot_dedup(df.copy(), dataset=1)
+    # plot_dedup(df.copy(), dataset=2)
+    # plot_dedup(df.copy(), dataset=3)
+    # plot_pod_skew(df.copy(), dataset=1)
+    plot_pod_skew_logical_scatter(df.copy(), dataset=1)
+    plot_pod_skew_logical_scatter(df.copy(), dataset=2)
+    plot_pod_skew_logical_scatter(df.copy(), dataset=3)
+    plot_pod_skew_physical_scatter(df.copy(), dataset=1)
+    plot_pod_skew_physical_scatter(df.copy(), dataset=2)
+    plot_pod_skew_physical_scatter(df.copy(), dataset=3)
 
 
 def main():
