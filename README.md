@@ -54,11 +54,14 @@ The diagram depicts one of each component required for deduplication. To increas
 4. AE<sup>[4](#ae_regions)</sup>
 
 ### Region Assignment to Domain Algorithms
+#### Stateless
 1. First Fingerprint     
 Look at the first fingerprint within a region. Convert the first n bytes of the fingerprint to an integer. Take modulo by number of domains to get assignment.
-3. Min / Max Fingerprint    
+2. Min / Max Fingerprint    
 Scan first m MB of region, convert the first n bytes of each fingerprint to an integer. Take the minimum or maximum fingerprint, modulo by number of domains to get assignment.
-5. First Fingerprint + Reinforcement Learning 
+#### Stateful
+1. Stateless + Reinforcement Learning    
+Any stateless algorithm can be augmented with a reinforcement learning algorithm. The algorithm learns a value function based on rewards from the amount of duplication being achieved. The algorithm has a small randomness factor so that it searches other possible region-->pod assignments for higher reward values. Rewards can be scaled to favor balanced pod usage or to favor maximum deduplication.
 
 
 ** **
