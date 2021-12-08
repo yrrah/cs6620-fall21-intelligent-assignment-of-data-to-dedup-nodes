@@ -155,7 +155,14 @@ of duplication that occured.  We investigated manipulating region size to find t
 - **(done)** Collect data on how balanced usage of the dedup domains are. Goal is to minimize skew.
 - **(future work)** Evaluate the compute efficiency of each algorithm
 
-## 7.  Releases:
+
+## 7.  Results:
+All of our collected data is saved in [/simulator/results](https://github.com/yrrah/cs6620-fall21-intelligent-assignment-of-data-to-dedup-nodes/tree/main/simulator/results). Each experiment has a .csv with a line for each region processed. There is a [combined file](https://github.com/yrrah/cs6620-fall21-intelligent-assignment-of-data-to-dedup-nodes/blob/main/simulator/results/summary/combined_summary_stats.csv) with summary statistics. And a directory containing overall results for each dataset at [/simulator/results/summary_plots](https://github.com/yrrah/cs6620-fall21-intelligent-assignment-of-data-to-dedup-nodes/tree/main/simulator/results/summary_plots)   
+
+
+
+
+## 8.  Releases:
 
 Detailed user stories and plans are on the [Taiga board](https://tree.taiga.io/project/amanbatra-cs6620-fall21-intelligent-assignment-of-data-to-dedup-nodes):
 
@@ -196,7 +203,7 @@ Week 14: Dec 8th Final Demo
 
 ** **
 
-## 8. References
+## 9. References
 <a name="bottleneck">1</a>: [Benjamin Zhu, Kai Li, and Hugo Patterson. 2008. Avoiding the disk bottleneck in the data domain deduplication file system. In Proceedings of the 6th USENIX Conference on File and Storage Technologies (FAST'08). USENIX Association, USA, Article 18, 1–14.](https://www.usenix.org/conference/fast-08/avoiding-disk-bottleneck-data-domain-deduplication-file-system)        
 
 <a name="content_defined">2</a>: [C. Zhang, D. Qi, W. Li and J. Guo, "Function of Content Defined Chunking Algorithms in Incremental Synchronization," in IEEE Access, vol. 8, pp. 5316-5330, 2020, doi: 10.1109/ACCESS.2019.2963625.](https://ieeexplore.ieee.org/document/8949536)        
