@@ -52,6 +52,19 @@ def plot_dedup(df, dataset: int, save, show):
     plot_reversed(ax, save, show, f'dataset{dataset}_deduplication')
 
 
+def plot_skew(df, dataset: int, save, show):
+    df['q_label'] = 'Data' + df['dataset'].astype(str) + ', ' + (df['domains_per_pod'] * df['num_pods']).astype(
+        str) + ' domains, ' + df['region_algo'] + ', ' + df['assign_algo']
+    df['run_combo'] = df['run_combo'].str[:-18]
+    ax = df[(df['dataset'] == dataset) & (df['assign_algo'] == 'MAX_FINGERPRINT') & (df['q_learning'] != 'w/Q')] \
+        .sort_values(['domains_per_pod'], ascending=False).set_index('q_label') \
+        .plot.barh(x='run_combo', y='std_pod_phys', figsize=(10, 5))
+    ax.set_title(f'Dataset {dataset} Pod Physical Skew 4MB vs 8MB')
+    ax.set_xlabel('Bytes')
+    ax.get_legend().remove()
+    plot_reversed(ax, save, show, f'dataset{dataset}_pod_phys_skew')
+
+
 def plot_skew_scatter(df, dataset: int, column: str, cv=False):
     std_col = f'std_{column}'
     mean_col = f'mean_{column}'
@@ -63,13 +76,13 @@ def plot_skew_scatter(df, dataset: int, column: str, cv=False):
     df['q_label'] = 'Data' + df['dataset'].astype(str) + ', ' + (df['domains_per_pod'] * df['num_pods']).astype(
         str) + ' domains, ' + df['region_size'].astype(str) + 'MB ' + df['region_algo'] + ', ' + \
         df['assign_algo']
-    filtered = df[(df['dataset'] == dataset) & (df['region_size'] == 4) & (df['eps'] == '') ]
+    filtered = df[(df['dataset'] == dataset) & (df['region_size'] == 4)]
     filtered = filtered.groupby('q_label').filter(lambda x: len(x) >= 2)
     filtered = filtered.sort_values(['run_combo'], ascending=False)
     ax = filtered.plot.scatter(x='overall_dedup', y=std_col, figsize=(12, 8), color=filtered['color'])
     # annotate points in axis
     for idx, row in filtered.iterrows():
-        ax.annotate((row['q_learning'] + row['q_penalty']), (row['overall_dedup'], row[std_col]))
+        ax.annotate((str(row['run_num']) + row['q_learning'] + row['eps'] + row['q_penalty']), (row['overall_dedup'], row[std_col]))
 
     grouped = filtered.groupby('q_label')
     for label, df in grouped:
@@ -108,23 +121,24 @@ def summary_plots(file_name: str, save, show):
         str) + ' domains, ' + df['region_size'].astype(str) + 'MB ' + df['region_algo'] + ', ' + \
         df['assign_algo'] + ' ' + df['q_learning'] + df['eps'] + df['q_penalty']
 
-    plot_times(df.copy(), 1, save, show)
-    plot_times(df.copy(), 2, save, show)
-    plot_times(df.copy(), 3, save, show)
-    plot_regions(df.copy(), save, show)
-    plot_dedup(df.copy(), 1, save, show)
-    plot_dedup(df.copy(), 2, save, show)
-    plot_dedup(df.copy(), 3, save, show)
-    plot_pod_skew_logical_scatter(df.copy(), 1, save, show)
-    plot_pod_skew_logical_scatter(df.copy(), 2, save, show)
-    plot_pod_skew_logical_scatter(df.copy(), 3, save, show)
-    plot_pod_skew_physical_scatter(df.copy(), 1, save, show)
-    plot_pod_skew_physical_scatter(df.copy(), 2, save, show)
-    plot_pod_skew_physical_scatter(df.copy(), 3, save, show)
+    # plot_times(df.copy(), 1, save, show)
+    # plot_times(df.copy(), 2, save, show)
+    # plot_times(df.copy(), 3, save, show)
+    # plot_regions(df.copy(), save, show)
+    # plot_dedup(df.copy(), 1, save, show)
+    # plot_dedup(df.copy(), 1, save, show)
+    # plot_dedup(df.copy(), 3, save, show)
+    # plot_pod_skew_logical_scatter(df.copy(), 1, save, show)
+    # plot_pod_skew_logical_scatter(df.copy(), 2, save, show)
+    # plot_pod_skew_logical_scatter(df.copy(), 3, save, show)
+    # plot_pod_skew_physical_scatter(df.copy(), 1, save, show)
+    # plot_pod_skew_physical_scatter(df.copy(), 2, save, show)
+    # plot_pod_skew_physical_scatter(df.copy(), 3, save, show)
+    plot_skew(df.copy(), 1, save, show)
 
 
 def main():
-    summary_plots('combined_summary_stats.csv', save=True, show=False)
+    summary_plots('./summary/combined_summary_stats.csv', save=False, show=True)
 
 
 if __name__ == "__main__":
