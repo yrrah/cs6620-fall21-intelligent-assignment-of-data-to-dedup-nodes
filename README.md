@@ -1,3 +1,6 @@
+Final Project Demo Video (20 minute summary of project)  
+https://www.youtube.com/watch?v=7JytOpo1gUY
+
 For installation and usage directions, see README in [/simulator](https://github.com/yrrah/cs6620-fall21-intelligent-assignment-of-data-to-dedup-nodes/tree/main/simulator) directory.  
 
 ** **
@@ -186,9 +189,7 @@ Week 13: Nov 29 - Dec 3 Sprint 5 Demo
 - collected experiment results
 
 Week 14: Dec 8th Final Demo
-- Video:
-
-
+- Video: https://www.youtube.com/watch?v=7JytOpo1gUY
 
 ** **
 
