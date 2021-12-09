@@ -49,6 +49,29 @@ The diagram depicts one of each component required for deduplication. To increas
 
 
 
+
+### Technology Overview
+
+Technologies being used for this project:
+* gRPc
+* RocksDB
+* Openshift
+* Programming in Python
+
+
+1. gRPc:
+
+   grpc is an open source, high performance remote procedure call, developed by Google. It provides services such as: authentication, bidirectional streaming, flow control, blocking/non blocking bindings etc. Generates client-server bindings for many languages such as java, python, c++, etc. This has advantages over rest such as it provides bidirectional stream and also google provides the updates for client rather than clients building patches for their need.
+
+2. RocksDB:
+
+   Rocks db, It is a high performance key-value data storage system, and , it has capability to store data persistently over some other options available such as redis. Alos, It has python packages for API calls which best suitable for us as we are developing our project in Python.
+
+3. Openshift:
+
+   Openshift is an container platform which built on docker and kubernetes. It allows users to create and manage containers. Also, it provides the option such as to create, modify, and deploy the application on demand. It can host any type of applications, it can be an back end application and a front end application. 
+
+
 ### Region Creation Algorithms
 #### What is a region: 
 A region is collection of fingerprints and formation of a super chunk. It help in improving deduplication performance by reducing the time to check each chunk in the region when there no change in the chunks of particular section of data. So, we do not need to check each individual chunk when there is no modification.
