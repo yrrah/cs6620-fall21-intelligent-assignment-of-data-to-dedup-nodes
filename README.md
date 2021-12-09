@@ -159,7 +159,12 @@ of duplication that occured.  We investigated manipulating region size to find t
 ## 7.  Results:
 All of our collected data is saved in [/simulator/results](https://github.com/yrrah/cs6620-fall21-intelligent-assignment-of-data-to-dedup-nodes/tree/main/simulator/results). Each experiment has a .csv with a line for each region processed. There is a [combined file](https://github.com/yrrah/cs6620-fall21-intelligent-assignment-of-data-to-dedup-nodes/blob/main/simulator/results/summary/combined_summary_stats.csv) with summary statistics. And a directory containing overall results for each dataset at [/simulator/results/summary_plots](https://github.com/yrrah/cs6620-fall21-intelligent-assignment-of-data-to-dedup-nodes/tree/main/simulator/results/summary_plots)   
 
-
+##### Findings:
+As expected content defined algorithms worked better than the fixed region ones. On Q-learning we found that although the total dedup took a hit, the skew across the pods was better. Listed down are the best performing configs when it came to total deduplication.
+- Pods : 8; Domains : 1024 per pod; Region Creation Alogrithm : Content Defined; Average region size : 8MB; max_size : 12MB; min_size : 4; Assignment = Max FingerPrint Total Dedup : 19.8. Good dedup, but distribution unbalanced because of large number of domains.
+- Pods : 8; Domains :16/pod; Region Creation Algorithm: TTTD; Average region size : 8MB; min region size : 	4MB; 	max region size : 12MB; Assignment Algorithm : Max Fingerprnt; Total Dedup : 20. Great overall performance and balance of distribution across the pods.
+- Pods :8; Domains : 128/pod; Region creation algo : TTTD; Average Region size : 8MB; min region size : 	4MB; 	max region size : 12MB; Assignment Algorithm : Max Fingerprnt; Total Dedup : 19.8. Great overall performance and balance of distribution across the pods.
+- Pods : 8; Domains : 16/pod; Region creation algorithm : CONTENT-DEFINED; Average region size : 8MB; 	min region size : 	4MB; 	max region size : 12MB; Assignment Algo : MAX_FINGERPRINT; Total dedup : 20.2. Great overall performance and balance of distribution across the pods, with a few hotspots where the data is routed to.
 
 
 ## 8.  Releases:
@@ -202,6 +207,7 @@ Week 14: Dec 8th Final Demo
 - Video: https://www.youtube.com/watch?v=7JytOpo1gUY
 
 ** **
+
 
 ## 9. References
 <a name="bottleneck">1</a>: [Benjamin Zhu, Kai Li, and Hugo Patterson. 2008. Avoiding the disk bottleneck in the data domain deduplication file system. In Proceedings of the 6th USENIX Conference on File and Storage Technologies (FAST'08). USENIX Association, USA, Article 18, 1–14.](https://www.usenix.org/conference/fast-08/avoiding-disk-bottleneck-data-domain-deduplication-file-system)        
