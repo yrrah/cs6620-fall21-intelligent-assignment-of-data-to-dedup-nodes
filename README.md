@@ -47,11 +47,40 @@ The Key-Value store contains the collection of fingerprints (which are the keys)
 
 The diagram depicts one of each component required for deduplication. To increase data throughput, multiple such systems can be run in parallel. Our simulator runs one deduplication node per OpenShift pod. Dedup domains are virtual locations used by routing algorithms to evenly distribute the deduplication work. For example a system may have 8 worker pods, 1024 dedup domains, with 128 domains per pod. Our solution for this is described in [Section 5](#5-solution-concept). 
 
+
+
 ### Region Creation Algorithms
-1. Fixed-Size
+#### What is a region: 
+A region is collection of fingerprints and formation of a super chunk. It help in improving deduplication performance by reducing the time to check each chunk in the region when there no change in the chunks of particular section of data. So, we do not need to check each individual chunk when there is no modification.
+
+1. Fixed-Size Region:
+
+   The first and very simple region creation algorithms is to create a fixed size region, where we define a fixed size for the region say 4mb and when the region size reaches the maximum size we create the region. However, the deduplication is not bevery efficient in such regions because it does not take the contents of the chunk into consideration and any change in the overlapping chunk between two regions will replace the whole two regions(known as [bounary shift problem](#BSW)) which might cause inefficient deduplication. 
+
 2. Content-Defined<sup>[2](#content_defined)</sup>
-3. TTTD<sup>[3](#TTTD)</sup>
-4. AE<sup>[4](#ae_regions)</sup>
+
+   In this algorithm we take actual content of the chunk into considerationWe. We define a minimum and maximum region size to avoid very small and very large region size. To check the actual content of the finegerprint(hash) of the chunk we set a fixed max value. The we perfom the bitwise operation on the hash code of the chunk with fixed mask and if the result of calculation is equal to the preset(mask) value, the cutoff point(region boundary) is set. Otherwise, we keep adding the chunk to the region until the cut-off points and repeat the process until all the chunks are assigned to the regions. 
+
+3. Two Thresholds Two Divisors (TTTD)<sup>[3](#TTTD)</sup>
+
+   There is a disadvantage of General content defined algorithm, since in that we do bitwise operation on a fixed mask, there might be the cases when there is no match is found with the given mask so in that case  for most of the cases this algorithm will also work like a fixed size region creation algorithm.
+
+   So, the Two Thresholds Two Divisors (TTTD) Algorithm is improvement over Content defined region creation . This algorithm uses four parameters, the maximum threshold, the minimum threshold, the main divisor, and the second divisor, to avoid the problems boundary shift problem of the content defined algorithm and fixed size region creation algorithm.
+
+   The maximum and minimum thresholds are used to eliminate very large-sized and very small-sized chunks in order to control the variations of region-size. The main divisor plays the same role as the content defined algorithm and can be used to make the region-size close to our expected region-size. In usual, the value of the second divisor is half of the main divisor. Due to its higher probability, second divisor assists algorithm to determine a backup breakpoint for chunks in case the algorithm cannot find any breakpoint by main
+   divisor. 
+
+4. Asymmetric Extremum algorithm (AE)<sup>[4](#ae_regions)</sup>
+
+    Asymmetric Extremum chunking algorithm (AE), a new content defined algorithm that significantly improves the chunking throughput of the above existing algorithms while providing comparable deduplication efficiency by using the local extreme value in a variablesized asymmetric window to overcome the aforementioned boundaries-shift problem. With a variable-sized asymmetric window, instead of a fix-sized symmetric window. In this algorithms, we don't have a fixed foundry but rather we find the maximum fingerpint hash, and baased on the maximum chunk hash found till now we define the boudary for the region. This ensures that if there is any change in the chunks then the local maximum of the region of a particular region is changed for which there is any modification of chunk or insertion of new chunk. This way it ensures that the regions are replaced only wfor the regions which local maximum is changed.
+
+    Aasymmetric local breakpoint(maxima) means that there is no fixed size boundary defined for the regions and sizes can vary based on the maximum hash value found till now while creating the regions.
+
+
+#### <a name="BSW">Boundary Shifting Problem in region creation algorithms</a>: 
+Region creation algorithms face the boundary shifting problem
+due to the data modifications. When users only insert or delete one byte, the whole file chunking will result in two different hash values between the modified chunk and the original chunk, even if most of the data remain unchanged. In same situation, after one-byte modification happens, the fixed-size region creation will generate totally different
+results for all the subsequent chunks even though most of the data in the file are unchanged. This problem is called as the boundary shifting problem. 
 
 ### Region Assignment to Domain Algorithms
 #### Stateless
@@ -214,9 +243,11 @@ Week 14: Dec 8th Final Demo
 
 <a name="content_defined">2</a>: [C. Zhang, D. Qi, W. Li and J. Guo, "Function of Content Defined Chunking Algorithms in Incremental Synchronization," in IEEE Access, vol. 8, pp. 5316-5330, 2020, doi: 10.1109/ACCESS.2019.2963625.](https://ieeexplore.ieee.org/document/8949536)        
 
-<a name="ae_regions">3</a>: [Y. Zhang et al., "AE: An Asymmetric Extremum content defined chunking algorithm for fast and bandwidth-efficient data deduplication," 2015 IEEE Conference on Computer Communications (INFOCOM), 2015, pp. 1337-1345, doi: 10.1109/INFOCOM.2015.7218510.](https://ieeexplore.ieee.org/document/7218510)      
+<a name="TTTD">3</a>: [Chang, BingChun. (2009). A running time improvement for two thresholds two divisors algorithm.](https://scholarworks.sjsu.edu/cgi/viewcontent.cgi?article=1041&context=etd_projects)   
 
-<a name="TTTD">4</a>: [Eshghi, Kave & Tang, H.. (2005). A Framework for Analyzing and Improving Content-Based Chunking Algorithms.](https://www.hpl.hp.com/techreports/2005/HPL-2005-30R1.html)                
+<a name="ae_regions">4</a>: [Y. Zhang et al., "AE: An Asymmetric Extremum content defined chunking algorithm for fast and bandwidth-efficient data deduplication," 2015 IEEE Conference on Computer Communications (INFOCOM), 2015, pp. 1337-1345, doi: 10.1109/INFOCOM.2015.7218510.](https://ieeexplore.ieee.org/document/7218510)      
+
+             
 
 <a name="tradeoffs">5</a>: [Wei Dong, Fred Douglis, Kai Li, Hugo Patterson, Sazzala Reddy, and Philip Shilane. 2011. Tradeoffs in scalable data routing for deduplication clusters. In Proceedings of the 9th USENIX conference on File and stroage technologies (FAST'11). USENIX Association, USA, 2.](https://www.usenix.org/conference/fast11/tradeoffs-scalable-data-routing-deduplication-clusters)          
 
