@@ -21,7 +21,7 @@ The main output of this project is performance data and statistics. Deduplicatio
 each domain, each cluster pod, and overall. Configuration variations include:  
  - varying from 1 to 1000+ dedup domains
  - varying from 1MB to 8MB region size (a region is a unit of deduplication work)  
- - several algorithms for intelligent assignment<sup>[1](#bottleneck)</sup> of regions to pods 
+ - several algorithms for intelligent assignment<sup>[1](#tradeoffs)</sup> of regions to pods 
  - several algorithms for region creation: fixed-size, content-defined chunking<sup>[2](#content_defined)</sup>, TTTD<sup>[3](#TTTD)</sup>, AE<sup>[4](#ae_regions)</sup>
  
 
@@ -31,7 +31,7 @@ We will draw conclusions on how to balance the trade-offs of data deduplication 
 
 ## 2. Background:  
 
-Data deduplication techniques are crucial for modern cloud-scale storage systems. Key attributes<sup>[5](#tradeoffs)</sup> required include:
+Data deduplication techniques are crucial for modern cloud-scale storage systems. Key attributes<sup>[5](#bottleneck)</sup> required include:
 - high throughput, typically over 100 MB/sec to complete a backup quickly  
 - high compression of data by deduplication to make disk cost equivalent to tape storage  
 - use of commodity hardware (cannot store entire dedup index in RAM)
@@ -196,8 +196,8 @@ of duplication that occured.  We investigated manipulating region size to find t
 - Uses containers and kubernetes to scale independent of hardware 
 
 **(done)** Implement two algorithms for creation of regions. 
- - "Variable length [regions]* are essential for deduplication of the shifted content of backup images"<sup>[1](#bottleneck)</sup>
- - "A well-designed duplication storage system should have the smallest [region]* size possible given the throughput and capacity requirements"<sup>[1](#bottleneck)</sup>  
+ - "Variable length [regions]* are essential for deduplication of the shifted content of backup images"<sup>[5](#bottleneck)</sup>
+ - "A well-designed duplication storage system should have the smallest [region]* size possible given the throughput and capacity requirements"<sup>[5](#bottleneck)</sup>  
  
     \*We expect that principles found for segment formation also apply to region formation.
 
@@ -213,7 +213,7 @@ All of our collected data is saved in [/simulator/results](https://github.com/yr
 
 ##### Findings:
 As expected content defined algorithms worked better than the fixed region ones. On Q-learning we found that although the total dedup took a hit, the skew across the pods was better. Listed down are the best performing configs when it came to total deduplication.
-- Pods : 8; Domains : 1024 per pod; Region Creation Alogrithm : Content Defined; Average region size : 8MB; max_size : 12MB; min_size : 4; Assignment = Max FingerPrint Total Dedup : 19.8. Good dedup, but distribution unbalanced because of large number of domains.
+- Pods : 8;    Domains : 1024 per pod;    Region Creation Alogrithm : Content Defined;   Average region size : 8MB; max_size : 12MB; min_size : 4;   Assignment = Max FingerPrint   Total Dedup : 19.8. Good dedup, but distribution unbalanced because of large number of domains.   
 - Pods : 8; Domains :16/pod; Region Creation Algorithm: TTTD; Average region size : 8MB; min region size : 	4MB; 	max region size : 12MB; Assignment Algorithm : Max Fingerprnt; Total Dedup : 20. Great overall performance and balance of distribution across the pods.
 - Pods :8; Domains : 128/pod; Region creation algo : TTTD; Average Region size : 8MB; min region size : 	4MB; 	max region size : 12MB; Assignment Algorithm : Max Fingerprnt; Total Dedup : 19.8. Great overall performance and balance of distribution across the pods.
 - Pods : 8; Domains : 16/pod; Region creation algorithm : CONTENT-DEFINED; Average region size : 8MB; 	min region size : 	4MB; 	max region size : 12MB; Assignment Algo : MAX_FINGERPRINT; Total dedup : 20.2. Great overall performance and balance of distribution across the pods, with a few hotspots where the data is routed to.
@@ -262,16 +262,15 @@ Week 14: Dec 8th Final Demo
 
 
 ## 9. References
-<a name="bottleneck">1</a>: [Benjamin Zhu, Kai Li, and Hugo Patterson. 2008. Avoiding the disk bottleneck in the data domain deduplication file system. In Proceedings of the 6th USENIX Conference on File and Storage Technologies (FAST'08). USENIX Association, USA, Article 18, 1–14.](https://www.usenix.org/conference/fast-08/avoiding-disk-bottleneck-data-domain-deduplication-file-system)        
+<a name="tradeoffs">1</a>: [Wei Dong, Fred Douglis, Kai Li, Hugo Patterson, Sazzala Reddy, and Philip Shilane. 2011. Tradeoffs in scalable data routing for deduplication clusters. In Proceedings of the 9th USENIX conference on File and stroage technologies (FAST'11). USENIX Association, USA, 2.](https://www.usenix.org/conference/fast11/tradeoffs-scalable-data-routing-deduplication-clusters)          
 
 <a name="content_defined">2</a>: [C. Zhang, D. Qi, W. Li and J. Guo, "Function of Content Defined Chunking Algorithms in Incremental Synchronization," in IEEE Access, vol. 8, pp. 5316-5330, 2020, doi: 10.1109/ACCESS.2019.2963625.](https://ieeexplore.ieee.org/document/8949536)        
 
 <a name="TTTD">3</a>: [Chang, BingChun. (2009). A running time improvement for two thresholds two divisors algorithm.](https://scholarworks.sjsu.edu/cgi/viewcontent.cgi?article=1041&context=etd_projects)   
 
-<a name="ae_regions">4</a>: [Y. Zhang et al., "AE: An Asymmetric Extremum content defined chunking algorithm for fast and bandwidth-efficient data deduplication," 2015 IEEE Conference on Computer Communications (INFOCOM), 2015, pp. 1337-1345, doi: 10.1109/INFOCOM.2015.7218510.](https://ieeexplore.ieee.org/document/7218510)      
+<a name="ae_regions">4</a>: [Y. Zhang et al., "AE: An Asymmetric Extremum content defined chunking algorithm for fast and bandwidth-efficient data deduplication," 2015 IEEE Conference on Computer Communications (INFOCOM), 2015, pp. 1337-1345, doi: 10.1109/INFOCOM.2015.7218510.](https://ieeexplore.ieee.org/document/7218510)                 
 
-             
+<a name="bottleneck">5</a>: [Benjamin Zhu, Kai Li, and Hugo Patterson. 2008. Avoiding the disk bottleneck in the data domain deduplication file system. In Proceedings of the 6th USENIX Conference on File and Storage Technologies (FAST'08). USENIX Association, USA, Article 18, 1–14.](https://www.usenix.org/conference/fast-08/avoiding-disk-bottleneck-data-domain-deduplication-file-system)        
 
-<a name="tradeoffs">5</a>: [Wei Dong, Fred Douglis, Kai Li, Hugo Patterson, Sazzala Reddy, and Philip Shilane. 2011. Tradeoffs in scalable data routing for deduplication clusters. In Proceedings of the 9th USENIX conference on File and stroage technologies (FAST'11). USENIX Association, USA, 2.](https://www.usenix.org/conference/fast11/tradeoffs-scalable-data-routing-deduplication-clusters)          
 
 <a name="dedup_survey">6</a>: [Jannen, William. “Deduplication: Concepts and Techniques.” (2020).](http://www.cs.williams.edu/~jannen/teaching/s20/cs333/meetings/dedup-survey.pdf)
