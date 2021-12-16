@@ -1,3 +1,6 @@
+Final Project Demo Video (20 minute summary of project)  
+https://www.youtube.com/watch?v=7JytOpo1gUY
+
 For installation and usage directions, see README in [/simulator](https://github.com/yrrah/cs6620-fall21-intelligent-assignment-of-data-to-dedup-nodes/tree/main/simulator) directory.  
 
 ** **
@@ -18,7 +21,7 @@ The main output of this project is performance data and statistics. Deduplicatio
 each domain, each cluster pod, and overall. Configuration variations include:  
  - varying from 1 to 1000+ dedup domains
  - varying from 1MB to 8MB region size (a region is a unit of deduplication work)  
- - several algorithms for intelligent assignment<sup>[1](#bottleneck)</sup> of regions to pods 
+ - several algorithms for intelligent assignment<sup>[1](#tradeoffs)</sup> of regions to pods 
  - several algorithms for region creation: fixed-size, content-defined chunking<sup>[2](#content_defined)</sup>, TTTD<sup>[3](#TTTD)</sup>, AE<sup>[4](#ae_regions)</sup>
  
 
@@ -28,7 +31,7 @@ We will draw conclusions on how to balance the trade-offs of data deduplication 
 
 ## 2. Background:  
 
-Data deduplication techniques are crucial for modern cloud-scale storage systems. Key attributes<sup>[5](#tradeoffs)</sup> required include:
+Data deduplication techniques are crucial for modern cloud-scale storage systems. Key attributes<sup>[5](#bottleneck)</sup> required include:
 - high throughput, typically over 100 MB/sec to complete a backup quickly  
 - high compression of data by deduplication to make disk cost equivalent to tape storage  
 - use of commodity hardware (cannot store entire dedup index in RAM)
@@ -44,18 +47,73 @@ The Key-Value store contains the collection of fingerprints (which are the keys)
 
 The diagram depicts one of each component required for deduplication. To increase data throughput, multiple such systems can be run in parallel. Our simulator runs one deduplication node per OpenShift pod. Dedup domains are virtual locations used by routing algorithms to evenly distribute the deduplication work. For example a system may have 8 worker pods, 1024 dedup domains, with 128 domains per pod. Our solution for this is described in [Section 5](#5-solution-concept). 
 
+
+
+
+### Technology Overview
+
+Technologies being used for this project:
+* gRPc
+* RocksDB
+* Openshift
+* Programming in Python
+
+
+1. gRPc:
+
+   grpc is an open source, high performance remote procedure call, developed by Google. It provides services such as: authentication, bidirectional streaming, flow control, blocking/non blocking bindings etc. Generates client-server bindings for many languages such as java, python, c++, etc. This has advantages over rest such as it provides bidirectional stream and also google provides the updates for client rather than clients building patches for their need.
+
+2. RocksDB:
+
+   Rocks db, It is a high performance key-value data storage system, and , it has capability to store data persistently over some other options available such as redis. Alos, It has python packages for API calls which best suitable for us as we are developing our project in Python.
+
+3. Openshift:
+
+   Openshift is an container platform which built on docker and kubernetes. It allows users to create and manage containers. Also, it provides the option such as to create, modify, and deploy the application on demand. It can host any type of applications, it can be an back end application and a front end application. 
+
+
 ### Region Creation Algorithms
-1. Fixed-Size
+#### What is a region: 
+A region is collection of fingerprints and formation of a super chunk. It help in improving deduplication performance by reducing the time to check each chunk in the region when there no change in the chunks of particular section of data. So, we do not need to check each individual chunk when there is no modification.
+
+1. Fixed-Size Region:
+
+   The first and very simple region creation algorithms is to create a fixed size region, where we define a fixed size for the region say 4mb and when the region size reaches the maximum size we create the region. However, the deduplication is not bevery efficient in such regions because it does not take the contents of the chunk into consideration and any change in the overlapping chunk between two regions will replace the whole two regions(known as [bounary shift problem](#BSW)) which might cause inefficient deduplication. 
+
 2. Content-Defined<sup>[2](#content_defined)</sup>
-3. TTTD<sup>[3](#TTTD)</sup>
-4. AE<sup>[4](#ae_regions)</sup>
+
+   In this algorithm we take actual content of the chunk into considerationWe. We define a minimum and maximum region size to avoid very small and very large region size. To check the actual content of the finegerprint(hash) of the chunk we set a fixed max value. The we perfom the bitwise operation on the hash code of the chunk with fixed mask and if the result of calculation is equal to the preset(mask) value, the cutoff point(region boundary) is set. Otherwise, we keep adding the chunk to the region until the cut-off points and repeat the process until all the chunks are assigned to the regions. 
+
+3. Two Thresholds Two Divisors (TTTD)<sup>[3](#TTTD)</sup>
+
+   There is a disadvantage of General content defined algorithm, since in that we do bitwise operation on a fixed mask, there might be the cases when there is no match is found with the given mask so in that case  for most of the cases this algorithm will also work like a fixed size region creation algorithm.
+
+   So, the Two Thresholds Two Divisors (TTTD) Algorithm is improvement over Content defined region creation . This algorithm uses four parameters, the maximum threshold, the minimum threshold, the main divisor, and the second divisor, to avoid the problems boundary shift problem of the content defined algorithm and fixed size region creation algorithm.
+
+   The maximum and minimum thresholds are used to eliminate very large-sized and very small-sized chunks in order to control the variations of region-size. The main divisor plays the same role as the content defined algorithm and can be used to make the region-size close to our expected region-size. In usual, the value of the second divisor is half of the main divisor. Due to its higher probability, second divisor assists algorithm to determine a backup breakpoint for chunks in case the algorithm cannot find any breakpoint by main
+   divisor. 
+
+4. Asymmetric Extremum algorithm (AE)<sup>[4](#ae_regions)</sup>
+
+    Asymmetric Extremum chunking algorithm (AE), a new content defined algorithm that significantly improves the chunking throughput of the above existing algorithms while providing comparable deduplication efficiency by using the local extreme value in a variablesized asymmetric window to overcome the aforementioned boundaries-shift problem. With a variable-sized asymmetric window, instead of a fix-sized symmetric window. In this algorithms, we don't have a fixed foundry but rather we find the maximum fingerpint hash, and baased on the maximum chunk hash found till now we define the boudary for the region. This ensures that if there is any change in the chunks then the local maximum of the region of a particular region is changed for which there is any modification of chunk or insertion of new chunk. This way it ensures that the regions are replaced only wfor the regions which local maximum is changed.
+
+    Aasymmetric local breakpoint(maxima) means that there is no fixed size boundary defined for the regions and sizes can vary based on the maximum hash value found till now while creating the regions.
+
+
+#### <a name="BSW">Boundary Shifting Problem in region creation algorithms</a>: 
+Region creation algorithms face the boundary shifting problem
+due to the data modifications. When users only insert or delete one byte, the whole file chunking will result in two different hash values between the modified chunk and the original chunk, even if most of the data remain unchanged. In same situation, after one-byte modification happens, the fixed-size region creation will generate totally different
+results for all the subsequent chunks even though most of the data in the file are unchanged. This problem is called as the boundary shifting problem. 
 
 ### Region Assignment to Domain Algorithms
+#### Stateless
 1. First Fingerprint     
 Look at the first fingerprint within a region. Convert the first n bytes of the fingerprint to an integer. Take modulo by number of domains to get assignment.
-3. Min / Max Fingerprint    
+2. Min / Max Fingerprint    
 Scan first m MB of region, convert the first n bytes of each fingerprint to an integer. Take the minimum or maximum fingerprint, modulo by number of domains to get assignment.
-5. First Fingerprint + Reinforcement Learning 
+#### Stateful
+1. Stateless + Reinforcement Learning    
+Any stateless algorithm can be augmented with a reinforcement learning algorithm. The algorithm learns a value function based on rewards from the amount of duplication being achieved. The algorithm has a small randomness factor so that it searches other possible region-->pod assignments for higher reward values. Rewards can be scaled to favor balanced pod usage or to favor maximum deduplication.
 
 
 ** **
@@ -138,8 +196,8 @@ of duplication that occured.  We investigated manipulating region size to find t
 - Uses containers and kubernetes to scale independent of hardware 
 
 **(done)** Implement two algorithms for creation of regions. 
- - "Variable length [regions]* are essential for deduplication of the shifted content of backup images"<sup>[1](#bottleneck)</sup>
- - "A well-designed duplication storage system should have the smallest [region]* size possible given the throughput and capacity requirements"<sup>[1](#bottleneck)</sup>  
+ - "Variable length [regions]* are essential for deduplication of the shifted content of backup images"<sup>[5](#bottleneck)</sup>
+ - "A well-designed duplication storage system should have the smallest [region]* size possible given the throughput and capacity requirements"<sup>[5](#bottleneck)</sup>  
  
     \*We expect that principles found for segment formation also apply to region formation.
 
@@ -149,7 +207,19 @@ of duplication that occured.  We investigated manipulating region size to find t
 - **(done)** Collect data on how balanced usage of the dedup domains are. Goal is to minimize skew.
 - **(future work)** Evaluate the compute efficiency of each algorithm
 
-## 7.  Releases:
+
+## 7.  Results:
+All of our collected data is saved in [/simulator/results](https://github.com/yrrah/cs6620-fall21-intelligent-assignment-of-data-to-dedup-nodes/tree/main/simulator/results). Each experiment has a .csv with a line for each region processed. There is a [combined file](https://github.com/yrrah/cs6620-fall21-intelligent-assignment-of-data-to-dedup-nodes/blob/main/simulator/results/summary/combined_summary_stats.csv) with summary statistics. And a directory containing overall results for each dataset at [/simulator/results/summary_plots](https://github.com/yrrah/cs6620-fall21-intelligent-assignment-of-data-to-dedup-nodes/tree/main/simulator/results/summary_plots)   
+
+##### Findings:
+As expected content defined algorithms worked better than the fixed region ones. On Q-learning we found that although the total dedup took a hit, the skew across the pods was better. Listed down are the best performing configs when it came to total deduplication.
+- Pods : 8;    Domains : 1024 per pod;    Region Creation Alogrithm : Content Defined;   Average region size : 8MB; max_size : 12MB; min_size : 4;   Assignment = Max FingerPrint   Total Dedup : 19.8. Good dedup, but distribution unbalanced because of large number of domains.   
+- Pods : 8; Domains :16/pod; Region Creation Algorithm: TTTD; Average region size : 8MB; min region size : 	4MB; 	max region size : 12MB; Assignment Algorithm : Max Fingerprnt; Total Dedup : 20. Great overall performance and balance of distribution across the pods.
+- Pods :8; Domains : 128/pod; Region creation algo : TTTD; Average Region size : 8MB; min region size : 	4MB; 	max region size : 12MB; Assignment Algorithm : Max Fingerprnt; Total Dedup : 19.8. Great overall performance and balance of distribution across the pods.
+- Pods : 8; Domains : 16/pod; Region creation algorithm : CONTENT-DEFINED; Average region size : 8MB; 	min region size : 	4MB; 	max region size : 12MB; Assignment Algo : MAX_FINGERPRINT; Total dedup : 20.2. Great overall performance and balance of distribution across the pods, with a few hotspots where the data is routed to.
+
+
+## 8.  Releases:
 
 Detailed user stories and plans are on the [Taiga board](https://tree.taiga.io/project/amanbatra-cs6620-fall21-intelligent-assignment-of-data-to-dedup-nodes):
 
@@ -186,21 +256,21 @@ Week 13: Nov 29 - Dec 3 Sprint 5 Demo
 - collected experiment results
 
 Week 14: Dec 8th Final Demo
-- Video:
-
-
+- Video: https://www.youtube.com/watch?v=7JytOpo1gUY
 
 ** **
 
-## 8. References
-<a name="bottleneck">1</a>: [Benjamin Zhu, Kai Li, and Hugo Patterson. 2008. Avoiding the disk bottleneck in the data domain deduplication file system. In Proceedings of the 6th USENIX Conference on File and Storage Technologies (FAST'08). USENIX Association, USA, Article 18, 1–14.](https://www.usenix.org/conference/fast-08/avoiding-disk-bottleneck-data-domain-deduplication-file-system)        
+
+## 9. References
+<a name="tradeoffs">1</a>: [Wei Dong, Fred Douglis, Kai Li, Hugo Patterson, Sazzala Reddy, and Philip Shilane. 2011. Tradeoffs in scalable data routing for deduplication clusters. In Proceedings of the 9th USENIX conference on File and stroage technologies (FAST'11). USENIX Association, USA, 2.](https://www.usenix.org/conference/fast11/tradeoffs-scalable-data-routing-deduplication-clusters)          
 
 <a name="content_defined">2</a>: [C. Zhang, D. Qi, W. Li and J. Guo, "Function of Content Defined Chunking Algorithms in Incremental Synchronization," in IEEE Access, vol. 8, pp. 5316-5330, 2020, doi: 10.1109/ACCESS.2019.2963625.](https://ieeexplore.ieee.org/document/8949536)        
 
-<a name="ae_regions">3</a>: [Y. Zhang et al., "AE: An Asymmetric Extremum content defined chunking algorithm for fast and bandwidth-efficient data deduplication," 2015 IEEE Conference on Computer Communications (INFOCOM), 2015, pp. 1337-1345, doi: 10.1109/INFOCOM.2015.7218510.](https://ieeexplore.ieee.org/document/7218510)      
+<a name="TTTD">3</a>: [Chang, BingChun. (2009). A running time improvement for two thresholds two divisors algorithm.](https://scholarworks.sjsu.edu/cgi/viewcontent.cgi?article=1041&context=etd_projects)   
 
-<a name="TTTD">4</a>: [Eshghi, Kave & Tang, H.. (2005). A Framework for Analyzing and Improving Content-Based Chunking Algorithms.](https://www.hpl.hp.com/techreports/2005/HPL-2005-30R1.html)                
+<a name="ae_regions">4</a>: [Y. Zhang et al., "AE: An Asymmetric Extremum content defined chunking algorithm for fast and bandwidth-efficient data deduplication," 2015 IEEE Conference on Computer Communications (INFOCOM), 2015, pp. 1337-1345, doi: 10.1109/INFOCOM.2015.7218510.](https://ieeexplore.ieee.org/document/7218510)                 
 
-<a name="tradeoffs">5</a>: [Wei Dong, Fred Douglis, Kai Li, Hugo Patterson, Sazzala Reddy, and Philip Shilane. 2011. Tradeoffs in scalable data routing for deduplication clusters. In Proceedings of the 9th USENIX conference on File and stroage technologies (FAST'11). USENIX Association, USA, 2.](https://www.usenix.org/conference/fast11/tradeoffs-scalable-data-routing-deduplication-clusters)          
+<a name="bottleneck">5</a>: [Benjamin Zhu, Kai Li, and Hugo Patterson. 2008. Avoiding the disk bottleneck in the data domain deduplication file system. In Proceedings of the 6th USENIX Conference on File and Storage Technologies (FAST'08). USENIX Association, USA, Article 18, 1–14.](https://www.usenix.org/conference/fast-08/avoiding-disk-bottleneck-data-domain-deduplication-file-system)        
+
 
 <a name="dedup_survey">6</a>: [Jannen, William. “Deduplication: Concepts and Techniques.” (2020).](http://www.cs.williams.edu/~jannen/teaching/s20/cs333/meetings/dedup-survey.pdf)
