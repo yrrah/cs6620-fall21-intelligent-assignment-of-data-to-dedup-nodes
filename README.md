@@ -61,41 +61,41 @@ Technologies being used for this project:
 
 1. gRPc:
 
-   grpc is an open source, high performance remote procedure call, developed by Google. It provides services such as: authentication, bidirectional streaming, flow control, blocking/non blocking bindings etc. Generates client-server bindings for many languages such as java, python, c++, etc. This has advantages over rest such as it provides bidirectional stream and also google provides the updates for client rather than clients building patches for their need.
+   grpc is an open source, high performance remote procedure call, developed by Google. It provides services such as: authentication, bidirectional streaming, flow control, blocking/non blocking bindings etc. Generates client-server bindings for many languages such as java, python, c++, etc. This has advantages over REST such as bidirectional streaming and google provides client updates.
 
 2. RocksDB:
 
-   Rocks db, It is a high performance key-value data storage system, and , it has capability to store data persistently over some other options available such as redis. Alos, It has python packages for API calls which best suitable for us as we are developing our project in Python.
+   RocksDB is a high performance key-value data storage system with the capability to store data persistently. This is an advantage over some other options such as Redis. It also has python packages for API calls which is suitable for our project.
 
 3. Openshift:
 
-   Openshift is an container platform which built on docker and kubernetes. It allows users to create and manage containers. Also, it provides the option such as to create, modify, and deploy the application on demand. It can host any type of applications, it can be an back end application and a front end application. 
+   Openshift is an container platform built on Docker and Kubernetes. It allows users to create and manage containers. Also, it provides the option to create, modify, and deploy the application on demand. It can host any type of application, be it a back end application or front end application. 
 
 
 ### Region Creation Algorithms
 #### What is a region: 
-A region is collection of fingerprints and formation of a super chunk. It help in improving deduplication performance by reducing the time to check each chunk in the region when there no change in the chunks of particular section of data. So, we do not need to check each individual chunk when there is no modification.
+A region is a collection of fingerprints and forms a super chunk. It helps in improving deduplication performance by reducing the time to check each chunk in the region when there no change in the chunks of a particular section of data. So, we do not need to check each individual chunk when there is no modification.
 
 1. Fixed-Size Region:
 
-   The first and very simple region creation algorithms is to create a fixed size region, where we define a fixed size for the region say 4mb and when the region size reaches the maximum size we create the region. However, the deduplication is not bevery efficient in such regions because it does not take the contents of the chunk into consideration and any change in the overlapping chunk between two regions will replace the whole two regions(known as [bounary shift problem](#BSW)) which might cause inefficient deduplication. 
+   The first and very simple region creation algorithms is to create a fixed size region, where we define a fixed size for the region say 4mb and when the region size reaches the maximum size we create the region. However, the deduplication is not very efficient in such regions because it does not take the contents of the chunk into consideration and any change in the overlapping chunk between two regions will replace the whole two regions(known as [bounary shift problem](#BSW)) which might cause inefficient deduplication. 
 
 2. Content-Defined<sup>[2](#content_defined)</sup>
 
-   In this algorithm we take actual content of the chunk into considerationWe. We define a minimum and maximum region size to avoid very small and very large region size. To check the actual content of the finegerprint(hash) of the chunk we set a fixed max value. The we perfom the bitwise operation on the hash code of the chunk with fixed mask and if the result of calculation is equal to the preset(mask) value, the cutoff point(region boundary) is set. Otherwise, we keep adding the chunk to the region until the cut-off points and repeat the process until all the chunks are assigned to the regions. 
+   In this algorithm we take actual content of the chunk into consideration. We define a minimum and maximum region size to avoid very small and very large region sizes. To check the actual content of the finegerprint(hash) of the chunk we set a fixed max value. Then we perfom the bitwise operation on the hash code of the chunk with fixed mask and if the result of calculation is equal to the preset(mask) value, the cutoff point(region boundary) is set. Otherwise, we keep adding the chunk to the region until the cut-off point and repeat the process until all the chunks are assigned to the regions. 
 
 3. Two Thresholds Two Divisors (TTTD)<sup>[3](#TTTD)</sup>
 
-   There is a disadvantage of General content defined algorithm, since in that we do bitwise operation on a fixed mask, there might be the cases when there is no match is found with the given mask so in that case  for most of the cases this algorithm will also work like a fixed size region creation algorithm.
+   There is a disadvantage in the general content defined algorithm, since we do bitwise operation on a fixed mask, there might be cases when there is no match found with the given mask.  In that case this algorithm will also work like a fixed size region creation algorithm.
 
-   So, the Two Thresholds Two Divisors (TTTD) Algorithm is improvement over Content defined region creation . This algorithm uses four parameters, the maximum threshold, the minimum threshold, the main divisor, and the second divisor, to avoid the problems boundary shift problem of the content defined algorithm and fixed size region creation algorithm.
+   So, the Two Thresholds Two Divisors (TTTD) Algorithm is improvement over Content-Defined region creation. This algorithm uses four parameters, the maximum threshold, the minimum threshold, the main divisor, and the second divisor, to avoid the boundary shift problem of the content defined algorithm and fixed size region creation algorithm.
 
-   The maximum and minimum thresholds are used to eliminate very large-sized and very small-sized chunks in order to control the variations of region-size. The main divisor plays the same role as the content defined algorithm and can be used to make the region-size close to our expected region-size. In usual, the value of the second divisor is half of the main divisor. Due to its higher probability, second divisor assists algorithm to determine a backup breakpoint for chunks in case the algorithm cannot find any breakpoint by main
+   The maximum and minimum thresholds are used to eliminate very large-sized and very small-sized chunks in order to control the variations of region-size. The main divisor plays the same role as the content defined algorithm and can be used to make the region-size close to our expected region-size. In usual, the value of the second divisor is half of the main divisor. Due to its higher probability, the second divisor assists the algorithm with determining a backup breakpoint for chunks in case the algorithm cannot find any breakpoint by the main
    divisor. 
 
 4. Asymmetric Extremum algorithm (AE)<sup>[4](#ae_regions)</sup>
 
-    Asymmetric Extremum chunking algorithm (AE), a new content defined algorithm that significantly improves the chunking throughput of the above existing algorithms while providing comparable deduplication efficiency by using the local extreme value in a variablesized asymmetric window to overcome the aforementioned boundaries-shift problem. With a variable-sized asymmetric window, instead of a fix-sized symmetric window. In this algorithms, we don't have a fixed foundry but rather we find the maximum fingerpint hash, and baased on the maximum chunk hash found till now we define the boudary for the region. This ensures that if there is any change in the chunks then the local maximum of the region of a particular region is changed for which there is any modification of chunk or insertion of new chunk. This way it ensures that the regions are replaced only wfor the regions which local maximum is changed.
+    Asymmetric Extremum chunking algorithm (AE) is a new content defined algorithm that significantly improves the chunking throughput of the above existing algorithms while providing comparable deduplication efficiency by using the local extreme value in a variable sized asymmetric window to overcome the aforementioned boundaries-shift problem. With a variable-sized asymmetric window, instead of a fix-sized symmetric window. In this algorithms, we don't have a fixed boundary but rather we find the maximum fingerpint hash, and based on the maximum chunk hash found till now we define the boudary for the region. This ensures that if there is any change in the chunks then the local maximum of a particular region is changed for which there is any modification of the chunk or insertion of a new chunk. This way it ensures that the regions are replaced only for regions in which the local maximum is changed.
 
     Aasymmetric local breakpoint(maxima) means that there is no fixed size boundary defined for the regions and sizes can vary based on the maximum hash value found till now while creating the regions.
 
